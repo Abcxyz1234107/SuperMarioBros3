@@ -148,6 +148,8 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BGBush.cpp" />
+    <ClCompile Include="BGCloud.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -157,6 +159,7 @@
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PipeBody.cpp" />
     <ClCompile Include="PipeHead.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -174,6 +177,8 @@
     <ClInclude Include="AnimationFrame.h" />
     <ClInclude Include="Animations.h" />
     <ClInclude Include="AssetIDs.h" />
+    <ClInclude Include="BGBush.h" />
+    <ClInclude Include="BGCloud.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
@@ -183,6 +188,7 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Pipe.h" />
     <ClInclude Include="PipeBody.h" />
     <ClInclude Include="PipeHead.h" />
     <ClInclude Include="Platform.h" />

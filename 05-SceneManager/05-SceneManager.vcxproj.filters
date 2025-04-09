@@ -84,6 +84,15 @@
     <ClCompile Include="PipeBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BGCloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BGBush.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -159,6 +168,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PipeBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BGCloud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BGBush.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,8 +5,8 @@
 
 #define ID_ANI_PIPEHEAD 10011
 #define PIPEHEAD_WIDTH 16
-#define PIPEBODY_BBOX_WIDTH 32
-#define PIPEBODY_BBOX_HEIGHT 16
+#define PIPEHEAD_BBOX_WIDTH 32
+#define PIPEHEAD_BBOX_HEIGHT 16
 
 class CPipeHead :
     public CGameObject

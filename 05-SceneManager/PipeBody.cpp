@@ -17,7 +17,7 @@ void CPipeBody::Render()
         yy += this->cellHeight;
     }
 
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CPipeBody::GetBoundingBox(float& l, float& t, float& r, float& b)
