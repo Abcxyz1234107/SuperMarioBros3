@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
 
@@ -9,8 +9,9 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-#include "PipeBody.h"
-#include "PipeHead.h"
+#include "Pipe.h"
+#include "BGCloud.h"
+#include "BGBush.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -121,23 +122,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_PIPEHEAD: obj = new CPipeHead(x, y); break;
-	case OBJECT_TYPE_PIPEBODY: 
+	case OBJECT_TYPE_PIPE: 
 	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite = atoi(tokens[6].c_str());
+		int length = atoi(tokens[3].c_str());
 
-		obj = new CPipeBody(
-			x, y,
-			cell_width, cell_height, length,
-			sprite
-		);
+		CPipe* pipe = new CPipe(x, y, length);
+		objects.push_back(pipe->GetHead());
+		objects.push_back(pipe->GetBody());
+
+		obj = pipe;
 
 		break;
 	}
-
+	case OBJECT_TYPE_BGCLOUD: obj = new CBGCloud(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -152,6 +149,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+	case OBJECT_TYPE_BGBUSH:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+
+		obj = new CBGBush(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin
 		);
 
 		break;
