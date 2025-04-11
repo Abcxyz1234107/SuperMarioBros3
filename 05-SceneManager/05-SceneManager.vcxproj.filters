@@ -182,26 +182,5 @@
     <ClInclude Include="PipeBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BGCloud.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGBush.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pipe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGTreeHead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGTreeBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGTreeEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
