@@ -150,6 +150,10 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BGBush.cpp" />
     <ClCompile Include="BGCloud.cpp" />
+    <ClCompile Include="BGTree.cpp" />
+    <ClCompile Include="BGTreeBody.cpp" />
+    <ClCompile Include="BGTreeEdge.cpp" />
+    <ClCompile Include="BGTreeHead.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -179,6 +183,10 @@
     <ClInclude Include="AssetIDs.h" />
     <ClInclude Include="BGBush.h" />
     <ClInclude Include="BGCloud.h" />
+    <ClInclude Include="BGTree.h" />
+    <ClInclude Include="BGTreeBody.h" />
+    <ClInclude Include="BGTreeEdge.h" />
+    <ClInclude Include="BGTreeHead.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />

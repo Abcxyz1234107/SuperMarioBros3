@@ -12,6 +12,7 @@
 #include "Pipe.h"
 #include "BGCloud.h"
 #include "BGBush.h"
+#include "BGTree.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -132,6 +133,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		obj = pipe;
 
+		break;
+	}
+	case OBJECT_TYPE_BGTREE:
+	{
+		float z = (float)atof(tokens[3].c_str()); 
+		int bodyLength = atoi(tokens[4].c_str());
+		int edgeLength = atoi(tokens[5].c_str());
+		int edgeLeftRight = atoi(tokens[6].c_str());
+
+		BGTree* bgtree = new BGTree(x, y, bodyLength, edgeLength, edgeLeftRight);
+		bgtree->SetZ(z);
+
+		obj = bgtree;
 		break;
 	}
 	case OBJECT_TYPE_BGCLOUD: obj = new CBGCloud(x, y); break;
@@ -297,8 +311,17 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	//Z lớn hơn che z nhỏ hơn
+	sort(objects.begin(), objects.end(),
+		[](LPGAMEOBJECT a, LPGAMEOBJECT b) {
+			return a->GetZ() < b->GetZ();
+		}
+	);
+
 	for (unsigned int i = 0; i < objects.size(); i++)
+	{
 		objects[i]->Render();
+	}
 }
 
 /*

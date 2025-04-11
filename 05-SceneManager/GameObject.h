@@ -20,6 +20,7 @@ protected:
 
 	float x; 
 	float y;
+	float z;
 
 	float vx;
 	float vy;
@@ -31,10 +32,14 @@ protected:
 	bool isDeleted; 
 
 public: 
+	void SetPosition(float x, float y, float z) { this->x = x, this->y = y; this->z = z; }
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
+	void GetPosition(float&x, float&y, float& z) { x = this->x; y = this->y; this->z = z;}
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+	float GetZ() { return z; } 
+	void SetZ(float z) { this->z = z; }
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
@@ -44,6 +49,7 @@ public:
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y, float z) :CGameObject() { this->x = x; this->y = y; this->z = z; }
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
