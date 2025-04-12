@@ -11,21 +11,21 @@ class BGTree :
 {
 private:
     BGTreeBody* body;
-    BGTreeEdge* edge;
+    BGTreeEdge* edgeRight;
+    BGTreeEdge* edgeLeft;
     BGTreeHead* head;
-    int edgeLeftRight;
 public:
-    BGTree(float x, float y, int bodyLength, int edgeLength, int i = 1,
+    BGTree(float x, float y, int bodyLength, int edgeRightLength, int edgeLeftLength,
         float cellWidth = 30, float cellHeight = 16,
         int spriteId_Body = ID_SPRITE_BGTREEBODY, int spriteId_Edge = ID_SPRITE_BGTREEEDGE)
         : CGameObject(x, y) 
     {
-        edgeLeftRight = i * 15;
         this->head = new BGTreeHead(x, y);
         this->body = new BGTreeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId_Body);
-        this->edge = new BGTreeEdge(x + edgeLeftRight, y, cellWidth, cellHeight, edgeLength, spriteId_Edge);
+        this->edgeRight = new BGTreeEdge(x + 15, y, cellWidth, cellHeight, edgeRightLength, spriteId_Edge);
+        this->edgeLeft = new BGTreeEdge(x - 15, y, cellWidth, cellHeight, edgeLeftLength, spriteId_Edge);
     }
-    void Render() { head->Render(); body->Render(); edge->Render(); }
+    void Render() { head->Render(); body->Render(); edgeRight->Render(); edgeLeft->Render(); }
     void GetBoundingBox(float& l, float& t, float& r, float& b) {}
     int IsBlocking() { return 0; }
 };

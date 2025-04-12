@@ -139,10 +139,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		float z = (float)atof(tokens[3].c_str());
 		int bodyLength = atoi(tokens[4].c_str());
-		int edgeLength = atoi(tokens[5].c_str());
-		int edgeLeftRight = atoi(tokens[6].c_str());
+		int edgeRightLength = atoi(tokens[5].c_str());
+		int edgeLeftLength = atoi(tokens[6].c_str());
 
-		BGTree* bgtree = new BGTree(x, y, bodyLength, edgeLength, edgeLeftRight);
+		BGTree* bgtree = new BGTree(x, y, bodyLength, edgeRightLength, edgeLeftLength);
 		bgtree->SetZ(z);
 
 		obj = bgtree;
