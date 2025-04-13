@@ -1,8 +1,9 @@
 1. Tạo file .txt cho đối tượng (copy lại và đổi thông số)
-2. Thêm vào cảnh cần đối tượng vừa tạo
+2. Thêm vào cảnh (.txt), và PlayScene.cpp
 
 3. Khai báo #define OBJECT_TYPE_ <ID> vào file "AssetIDs.h"
    Khai báo #define ID_SPRITE_ <ID> vào file "AssetIDs.h" (Lưu ý khai báo Spire_ID phải trùng với trong file .txt)
+
 4. Tạo class cho đối tượng
 
 5. Khai báo vào PlayScene.cpp:

@@ -10,6 +10,7 @@ pipebody.txt
 bgcloud.txt
 bgtree.txt
 bgbush.txt
+randombrick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -67,7 +68,7 @@ bgbush.txt
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 5	90	136	16	15	16	51000	52000	53000
-5	120	90	16	16	8	20001	20001	20001	
+5	120	90	16	16	8	20001	20001	20001
 5	70	30	19	23	3	54102	54103	54104
 
 #BGBush
@@ -76,9 +77,12 @@ bgbush.txt
 # PIPE
 11	180	50	4
 
-# BGTREE
+# BGTREE id x y z bodyLength edgeRight_Length edgeLeft_Length
 9	100	55	2	0	0	0
 9	80	40	1	1	0	0
+
+#random brick id x y bboxWidth bboxHeight Number aniID_Begin aniID_Middle aniID_End
+12	30	30	16	16	4	20111	20111	20111
 
 #Portal 
 50	300	110	316	140	2
