@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KeyEventHandler.h"
+#include "Collision.h"
 
 /*
 *  Abstract class for a game scene

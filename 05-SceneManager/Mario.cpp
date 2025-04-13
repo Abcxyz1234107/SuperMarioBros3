@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -7,6 +7,8 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
+#include "CRandomBrick.h"
+#include "PlayScene.h"
 
 #include "Collision.h"
 
@@ -53,6 +55,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CRandomBrick*>(e->obj))
+		OnCollisionWithRandomBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -93,6 +97,23 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
+{
+	CRandomBrick* randomBrick = dynamic_cast<CRandomBrick*>(e->obj);
+
+	if (e->ny > 0)
+	{
+		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED)
+		{
+			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
+
+			CCoin* coin = new CCoin(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
+			coin->SetVy(-0.25f);
+			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			currentScene->AddObject(coin);
+		}
+	}
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
