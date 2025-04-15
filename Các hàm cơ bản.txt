@@ -1,0 +1,26 @@
+1. int IsCollidable() override { return 1; } : Cho phép va chạm
+
+2. 
+void ::Render()
+{
+	CAnimations* animations = CAnimations::GetInstance();
+	animations->Get(ID_ANI_COIN)->Render(x, y);
+
+	CSprites* sprite = CSprites::GetInstance();
+	sprite->Get(ID_SPRITE_RANDOMUSHROOM)->Draw(x, y);
+
+	//RenderBoundingBox();
+}
+
+void ::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = x - RandomMushroom_BBOX_WIDTH / 2;
+	t = y - RandomMushroom_BBOX_HEIGHT / 2;
+	r = l + RandomMushroom_BBOX_WIDTH;
+	b = t + RandomMushroom_BBOX_HEIGHT;
+}
+
+void ::Update(DWORD dt) 
+{
+
+}

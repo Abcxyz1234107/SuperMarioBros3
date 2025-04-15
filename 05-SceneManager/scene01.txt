@@ -11,6 +11,7 @@ bgcloud.txt
 bgtree.txt
 bgbush.txt
 randombrick.txt
+randomMushroom.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -64,7 +65,7 @@ randombrick.txt
 4	180	120
 
 #Goomba
-#2	300	10
+2	100	10
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 5	100	136	16	15	16	51000	52000	53000
@@ -81,8 +82,9 @@ randombrick.txt
 9	160	55	2	0	0	0
 9	140	40	1	1	0	0
 
-#random brick id x y
-12	80	80
+#random brick id x y type(1 for coin, 2 for mushroom)
+12	80	80	1
+12	120	80	2
 
 #Portal 
 50	300	110	316	140	2

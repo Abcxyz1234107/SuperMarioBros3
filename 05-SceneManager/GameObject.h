@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "Sprites.h"
+#include "AssetIDs.h"
 #include "Collision.h"
 
 using namespace std;
@@ -43,6 +44,7 @@ public:
 	float GetZ() { return z; } 
 	void SetZ(float z) { this->z = z; }
 	void SetVy(float vy) { this->vy = vy; }
+	void SetVx(float vx) { this->vx = vx; }
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }

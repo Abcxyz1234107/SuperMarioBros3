@@ -1,13 +1,13 @@
 1. Tạo file .txt cho đối tượng (copy lại và đổi thông số)
 2. Thêm vào cảnh (.txt), và PlayScene.cpp
 
-3. Khai báo #define OBJECT_TYPE_ <ID> vào file "AssetIDs.h"
+3. Khai báo #define OBJECT_TYPE_ <ID> vào file "AssetIDs.h" (Chỉ cần thiết khi được tạo ra từ đầu, nếu phát sinh trong màn chơi thì có thể ko cần)
    Khai báo #define ID_SPRITE_ <ID> vào file "AssetIDs.h" (Lưu ý khai báo Spire_ID phải trùng với trong file .txt)
 
 4. Tạo class cho đối tượng
 
-5. Khai báo vào PlayScene.cpp:
- - #include file .h của đối tượng
+5. Khai báo vào PlayScene.cpp: (Chỉ cần thiết khi được tạo ra từ đầu, nếu phát sinh trong màn chơi thì có thể ko cần)
+ - #include file .h của đối tượng 
  - Khai báo vào hàm CPlayScene::_ParseSection_OBJECTS, phần case (Nhớ thêm break;)
 
 

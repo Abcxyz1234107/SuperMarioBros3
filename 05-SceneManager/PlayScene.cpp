@@ -153,7 +153,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BGCLOUD: obj = new CBGCloud(x, y); break;
 	case OBJECT_TYPE_RANDOMBRICK:
 	{
-		obj = new CRandomBrick(x, y);
+		int type = atoi(tokens[3].c_str());
+		obj = new CRandomBrick(x, y, type);
 		break;
 	}
 	case OBJECT_TYPE_PLATFORM:

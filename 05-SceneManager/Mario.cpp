@@ -64,30 +64,41 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-	// jump on top >> kill Goomba and deflect a bit 
-	if (e->ny < 0)
+	if (dynamic_cast<CRandomMushroom*>(goomba))
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		e->obj->Delete();
+
+		if (this->level == MARIO_LEVEL_SMALL)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			this->SetLevel(MARIO_LEVEL_BIG);
 		}
 	}
-	else // hit by Goomba
+	else
 	{
-		if (untouchable == 0)
+		if (e->ny < 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				goomba->SetState(GOOMBA_STATE_DIE);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+		}
+		else
+		{
+			if (untouchable == 0)
+			{
+				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
+					if (level > MARIO_LEVEL_SMALL)
+					{
+						level = MARIO_LEVEL_SMALL;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+					}
 				}
 			}
 		}
@@ -99,20 +110,29 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	coin++;
 }
+
 void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 {
 	CRandomBrick* randomBrick = dynamic_cast<CRandomBrick*>(e->obj);
 
 	if (e->ny > 0)
 	{
-		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED)
+		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED && randomBrick->GetType() == 1)
 		{
 			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
 
-			CRandomCoin* coin = new CRandomCoin(randomBrick->GetX(), randomBrick->GetY() - 17.0f);
+			CRandomCoin* coin = new CRandomCoin(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
 			coin->SetVy(-0.25f);
 			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			currentScene->AddObject(coin);
+		}
+		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED && randomBrick->GetType() == 2) 
+		{
+			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
+
+			CRandomMushroom* mushroom = new CRandomMushroom(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
+			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			currentScene->AddObject(mushroom);
 		}
 	}
 }
