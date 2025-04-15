@@ -5,10 +5,11 @@
 #include "Game.h"
 
 #include "Goomba.h"
-#include "Coin.h"
+#include "RandomCoin.h"
 #include "Portal.h"
-#include "CRandomBrick.h"
 #include "PlayScene.h"
+#include "Coin.h"
+#include "CRandomBrick.h"
 
 #include "Collision.h"
 
@@ -108,7 +109,7 @@ void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 		{
 			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
 
-			CCoin* coin = new CCoin(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
+			CRandomCoin* coin = new CRandomCoin(randomBrick->GetX(), randomBrick->GetY() - 17.0f);
 			coin->SetVy(-0.25f);
 			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			currentScene->AddObject(coin);

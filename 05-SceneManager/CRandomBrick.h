@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform.h"
+#include "RandomCoin.h"
 
 #define ANI_ID_RANDOMBRICK 20111
 #define RANDOMBRICK_STATE_TOUCHED 511
@@ -14,6 +15,6 @@ public:
 		int aniIdBegin = 20111, int isAni = 1)
 		: CPlatform(x, y, cell_width, cell_height, length, aniIdBegin, aniIdBegin, aniIdBegin, isAni) {}
 	void SetState(int state);
-	int IsBlocking() override { return 1; }
+	void Update(DWORD dt) {}
 };
 

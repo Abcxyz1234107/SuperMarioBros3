@@ -78,8 +78,8 @@ randombrick.txt
 11	180	50	4
 
 # BGTREE id x y z bodyLength edgeRight_Length edgeLeft_Length
-9	100	55	2	0	0	0
-9	80	40	1	1	0	0
+9	160	55	2	0	0	0
+9	140	40	1	1	0	0
 
 #random brick id x y
 12	80	80
