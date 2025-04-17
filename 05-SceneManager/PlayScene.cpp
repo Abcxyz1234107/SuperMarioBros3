@@ -14,6 +14,8 @@
 #include "BGBush.h"
 #include "BGTree.h"
 #include "CRandomBrick.h"
+#include "BGBrick.h"
+
 
 
 #include "SampleKeyEventHandler.h"
@@ -150,6 +152,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = bgtree;
 		break;
 	}
+	case OBJECT_TYPE_BGBRICK: obj = new CBGBrick(x, y); break;
 	case OBJECT_TYPE_BGCLOUD: obj = new CBGCloud(x, y); break;
 	case OBJECT_TYPE_RANDOMBRICK:
 	{

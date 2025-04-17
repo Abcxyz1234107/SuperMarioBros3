@@ -12,6 +12,7 @@ bgtree.txt
 bgbush.txt
 randombrick.txt
 randomMushroom.txt
+bgbrick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -25,6 +26,9 @@ randomMushroom.txt
 
 #BGCLOUD
 8	30	30	2
+
+#BGBrick
+13	30	60
 
 # BRICKS
 1	0	148
@@ -76,7 +80,7 @@ randomMushroom.txt
 10	48	160	16	1	4	54301	54301	54301
 
 # PIPE
-11	180	50	4
+11	180	30	4
 
 # BGTREE id x y z bodyLength edgeRight_Length edgeLeft_Length
 9	160	55	2	0	0	0
