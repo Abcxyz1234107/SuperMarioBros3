@@ -130,7 +130,7 @@ void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 		{
 			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
 
-			CRandomMushroom* mushroom = new CRandomMushroom(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
+			CRandomMushroom* mushroom = new CRandomMushroom(randomBrick->GetX(), randomBrick->GetY());
 			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			currentScene->AddObject(mushroom);
 		}

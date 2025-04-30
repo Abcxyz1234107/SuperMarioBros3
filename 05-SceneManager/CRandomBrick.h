@@ -19,6 +19,7 @@ public:
 		int aniIdBegin = 20111, int isAni = 1)
 		: CPlatform(x, y, cell_width, cell_height, length, aniIdBegin, aniIdBegin, aniIdBegin, isAni) 
 	{
+		z = 2;
 		this->type = type;
 	}
 	void SetState(int state);
