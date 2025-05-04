@@ -15,7 +15,7 @@
 #include "BGTree.h"
 #include "CRandomBrick.h"
 #include "BGBrick.h"
-
+#include "LargeBrick.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -162,7 +162,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PLATFORM:
 	{
-
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
@@ -174,6 +173,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+	case OBJECT_TYPE_LARGEBRICK: 
+	{
+		int bboxWidth = atoi(tokens[3].c_str());
+		int bboxHeight = atoi(tokens[4].c_str());
+		int spriteID = atoi(tokens[5].c_str());
+		int z = atoi(tokens[6].c_str());
+
+		obj = new CLargeBrick(
+			x, y,
+			bboxWidth, bboxHeight,
+			spriteID, z
 		);
 
 		break;
