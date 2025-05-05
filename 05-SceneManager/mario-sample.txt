@@ -1,7 +1,7 @@
 [SETTINGS]
 start	1
-width	640
-height	480
+width	320
+height	240
 
 #id	type	file
 # type: 0: intro, 1: play scene 
