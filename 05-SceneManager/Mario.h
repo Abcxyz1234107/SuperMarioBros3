@@ -128,7 +128,6 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		z = 5;
 		ay = MARIO_GRAVITY; 
 
 		level = MARIO_LEVEL_SMALL;

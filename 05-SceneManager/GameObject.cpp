@@ -10,7 +10,8 @@
 
 CGameObject::CGameObject()
 {
-	x = y = z = 0;
+	x = y = 0;
+	z = 3;
 	vx = vy = 0;
 	nx = 1;	
 	state = -1;
