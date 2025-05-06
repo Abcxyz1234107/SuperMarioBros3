@@ -66,11 +66,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CRandomMushroom*>(goomba))
 	{
-		e->obj->Delete();
-
-		if (this->level == MARIO_LEVEL_SMALL)
+		if (dynamic_cast<CRandomMushroom*>(goomba)->IsEmerging() == false)
 		{
-			this->SetLevel(MARIO_LEVEL_BIG);
+			e->obj->Delete();
+
+			if (this->level == MARIO_LEVEL_SMALL)
+			{
+				this->SetLevel(MARIO_LEVEL_BIG);
+			}
 		}
 	}
 	else

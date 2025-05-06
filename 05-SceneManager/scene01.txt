@@ -78,7 +78,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 # ShootingPlant #Head: 16 16, Body: 16 8
 #id	x	y	bodyLength
-15	380	75	2
+15	380	110	2
 
 # BGTREE id x    y      z  bodyLength edgeRight_Length edgeLeft_Length #30 15
 9	30	102	-1	2	1	2 #1
