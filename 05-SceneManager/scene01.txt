@@ -15,6 +15,7 @@ randomMushroom.txt
 bgbrick.txt
 floor.txt
 largebrick.txt
+shootingplant.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -47,6 +48,8 @@ largebrick.txt
 #5	100	136	16	15	16	51000	52000	53000 Cloud
 #5	160	90	16	16	8	20001	20001	20001
 
+5	0	0	2	400	3	12300	12300	12300	#Left Border
+
 5	130	10	24	23	2	54102	54103	54104
 5	770	40	19	23	3	54102	54103	54104 #MultiCloud
 
@@ -70,8 +73,12 @@ id	x	y	bbWidth bbHeight spriteID  z
 10	1085	119	2
 
 # PIPE #32 16 Head
-id	x	y	bodyLength
+#id	x	y	bodyLength
 11	380	102	2
+
+# ShootingPlant #Head: 16 16, Body: 16 8
+#id	x	y	bodyLength
+15	380	75	2
 
 # BGTREE id x    y      z  bodyLength edgeRight_Length edgeLeft_Length #30 15
 9	30	102	-1	2	1	2 #1

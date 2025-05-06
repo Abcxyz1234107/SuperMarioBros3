@@ -177,6 +177,9 @@
     <ClCompile Include="RandomMushroom.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShootingPlant.cpp" />
+    <ClCompile Include="ShootingPlantBody.cpp" />
+    <ClCompile Include="ShootingPlantHead.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -216,6 +219,9 @@
     <ClInclude Include="RandomMushroom.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShootingPlant.h" />
+    <ClInclude Include="ShootingPlantBody.h" />
+    <ClInclude Include="ShootingPlantHead.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />

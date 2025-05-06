@@ -11,7 +11,7 @@ private:
     float totalHeight;
 public:
 	CPipe(float x, float y,
-        int bodyLength, float cellWidth = 30, float cellHeight = 16,
+        int bodyLength, float cellWidth = 25, float cellHeight = 16,
         int spriteId = ID_SPRITE_PIPEBODY)
         : CGameObject(x, y)
     {
@@ -21,7 +21,7 @@ public:
         totalWidth = cellWidth;
     }
     void Render();
-    void GetBoundingBox(float& l, float& t, float& r, float& b);
+    void GetBoundingBox(float& l, float& t, float& r, float& b) {}
 
     CPipeHead* GetHead() { return head; }
     CPipeBody* GetBody() { return body; }

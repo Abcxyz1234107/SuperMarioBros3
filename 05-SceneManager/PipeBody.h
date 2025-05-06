@@ -11,6 +11,7 @@
 class CPipeBody : public CGameObject
 {
 protected:
+    float totalHeight;
     float cellWidth;
     float cellHeight;
     int length;                  // số lượng ống
@@ -23,13 +24,14 @@ public:
         : CGameObject(x, y)
     {
         this->cellWidth = cellWidth;
+        this->totalHeight = cellHeight * (length+1);
         this->cellHeight = cellHeight;
         this->length = length;
         this->spriteId = spriteId;
     }
 
     void Render();
-    void GetBoundingBox(float& l, float& t, float& r, float& b);
+    virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
     int IsBlocking() { return 1; } 
 };
 

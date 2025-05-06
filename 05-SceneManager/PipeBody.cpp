@@ -22,17 +22,8 @@ void CPipeBody::Render()
 
 void CPipeBody::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    // Lấy nửa chiều rộng & cao (đang quy ước x, y là tâm)
-    float halfW = this->cellWidth / 2.0f;
-    float halfH = this->cellHeight / 2.0f;
-
-    // Box bắt đầu từ (x - halfW, y - halfH)
-    l = x - halfW;
-    t = y - halfH;
-
-    // Chiều rộng là cellWidth
-    r = l + this->cellWidth;
-
-    // Chiều cao tổng = cellHeight * length
-    b = t + (this->cellHeight * this->length);
+    l = x - cellWidth / 2;
+    t = y - cellHeight / 2;
+    r = l + cellWidth;
+    b = t + totalHeight;
 }

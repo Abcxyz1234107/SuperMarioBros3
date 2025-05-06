@@ -6,6 +6,9 @@
 12204	0	232	576	248	-98
 12205	0	282	560	298	-98
 
+#Blank
+12300	94	0	96	100	-99
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 #54411	54401	1000

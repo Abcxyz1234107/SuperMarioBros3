@@ -16,7 +16,7 @@
 #include "CRandomBrick.h"
 #include "BGBrick.h"
 #include "LargeBrick.h"
-
+#include "ShootingPlant.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -136,6 +136,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		objects.push_back(pipe->GetBody());
 
 		obj = pipe;
+
+		break;
+	}
+	case OBJECT_TYPE_SHOOTINGPLANT:
+	{
+		int bodyLength = atoi(tokens[3].c_str());
+
+		CShootingPlant* Plant = new CShootingPlant(x, y, bodyLength);
+		objects.push_back(Plant->GetBody());
+		objects.push_back(Plant->GetHead());
+
+		obj = Plant;
 
 		break;
 	}
