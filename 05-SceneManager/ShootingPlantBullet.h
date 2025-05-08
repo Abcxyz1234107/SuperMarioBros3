@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #define SHOOTINGPLANTBULLET_W 8
 #define SHOOTINGPLANTBULLET_H 8
-#define SHOOTINGPLANT_BULLET_SPEED 0.05f
+#define SHOOTINGPLANT_BULLET_SPEED 0.03f
 
 class CShootingPlantBullet :
     public CGameObject
@@ -16,10 +16,14 @@ public:
     CShootingPlantBullet(float x, float y, float vx, float vy)
          : CGameObject(x, y), vx(vx), vy(vy) {}
 
-    void Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects = nullptr) override;
+    void Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects) override;
     void Render() override;
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
-    void OnNoCollision(DWORD dt) override;
-    void OnCollisionWith(LPCOLLISIONEVENT e) override;
+
+    void OnNoCollision(DWORD dt);
+    void OnCollisionWith(LPCOLLISIONEVENT e);
+
+    int IsCollidable() override { return 1; } 
+    int IsBlocking()   override { return 0; }
 };
 

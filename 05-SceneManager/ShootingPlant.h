@@ -20,7 +20,6 @@ class CShootingPlant :
 private:
     CShootingPlantHead* head;
     CShootingPlantBody* body;
-    CShootingPlantBullet* bullet;
     float detectRange;
 
     float startY, topY;
@@ -35,7 +34,6 @@ public:
     {
         z = 2;
         this->detectRange = detectRange;
-        bullet = nullptr;
         head = new CShootingPlantHead(x, y-4);
         body = new CShootingPlantBody(x, y, 16, 8, bodyLength);
 

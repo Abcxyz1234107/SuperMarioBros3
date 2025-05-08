@@ -8,6 +8,8 @@ class CShootingPlantHead :
 {
 private:
 	int orient; 
+	bool useStatic = false;
+	int  staticSpriteId = -1;
 	// 0‑BottomLeft 
 	// 1‑TopRight
 	// 2‑TopLeft
@@ -20,6 +22,8 @@ public:
 
 	void SetOrient(int o) { orient = o; }
 	int GetOrient() { return orient; }
+	void UseStatic(int id) { useStatic = true;  staticSpriteId = id; }
+	void ClearStatic() { useStatic = false; }
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };

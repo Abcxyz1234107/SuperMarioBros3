@@ -25,7 +25,7 @@ shootingplant.txt
 
 
 # MARIO
-0	500	90
+0	300	90
 
 #BGCLOUD
 8	350	10

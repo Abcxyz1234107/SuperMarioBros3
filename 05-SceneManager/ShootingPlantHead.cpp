@@ -1,17 +1,24 @@
-#include "ShootingPlantHead.h"
+﻿#include "ShootingPlantHead.h"
 
 void CShootingPlantHead::Render() 
 {
-	CAnimations* animations = CAnimations::GetInstance();
-    int ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMLEFT;
-    // default
-    switch (orient)
+    if (useStatic)
     {
-    case 1: ani = ID_ANI_SHOOTINGPLANT_RED_TOPRIGHT;  break;
-    case 2: ani = ID_ANI_SHOOTINGPLANT_RED_TOPLEFT;    break;
-    case 3: ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+        CSprites::GetInstance()->Get(staticSpriteId)->Draw(x, y);
+        return;
     }
-    animations->Get(ani)->Render(x, y);
+    else 
+    {
+        CAnimations* animations = CAnimations::GetInstance();
+        int ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMLEFT;
+        switch (orient)
+        {
+        case 1: ani = ID_ANI_SHOOTINGPLANT_RED_TOPRIGHT;  break;
+        case 2: ani = ID_ANI_SHOOTINGPLANT_RED_TOPLEFT;    break;
+        case 3: ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+        }
+        animations->Get(ani)->Render(x, y);
+    }
 }
 
 void CShootingPlantHead::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -63,25 +63,46 @@ void CShootingPlant::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
         break;
 
     case SPLANT_WAIT_TOP:
+        if (!hasShot)
+        {
+            int sprId = -1;
+            switch (head->GetOrient())
+            {
+            case 0: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMLEFT;      break;
+            case 1: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPRIGHT;     break;
+            case 2: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPLEFT;   break;
+            case 3: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+            }
+            head->UseStatic(sprId);  // <-- Gọi duy nhất khi vừa lên tới đỉnh
+        }
+
         if (!hasShot && GetTickCount64() - stateTimer >= SPLANT_TIME_TOP_WAIT)
         {
-            /* bắn đạn theo orient hiện tại */
             float bx = head->GetX(), by = head->GetY();
             float vx = 0, vyb = 0;
-            switch (head->GetOrient())       
+            
+
+            switch (head->GetOrient())
             {
-            case 0:  vx = -SHOOTINGPLANT_BULLET_SPEED; vyb = SHOOTINGPLANT_BULLET_SPEED;  break; // BL
-            case 1:  vx = SHOOTINGPLANT_BULLET_SPEED; vyb = -SHOOTINGPLANT_BULLET_SPEED;  break; // TR
-            case 2:  vx = -SHOOTINGPLANT_BULLET_SPEED; vyb = -SHOOTINGPLANT_BULLET_SPEED;  break; // BR
-            case 3:  vx = SHOOTINGPLANT_BULLET_SPEED; vyb = SHOOTINGPLANT_BULLET_SPEED;  break; // TL
-            }
+            case 0:  vx = -SHOOTINGPLANT_BULLET_SPEED; vyb = SHOOTINGPLANT_BULLET_SPEED;
+                break;
+            case 1:  vx = SHOOTINGPLANT_BULLET_SPEED; vyb = -SHOOTINGPLANT_BULLET_SPEED;
+                break;
+            case 2:  vx = -SHOOTINGPLANT_BULLET_SPEED; vyb = -SHOOTINGPLANT_BULLET_SPEED;
+                break;
+            case 3:  vx = SHOOTINGPLANT_BULLET_SPEED; vyb = SHOOTINGPLANT_BULLET_SPEED;
+                break;
+            }               
+
             CShootingPlantBullet* b = new CShootingPlantBullet(bx, by, vx, vyb);
-            scene->AddObject(b);               
+            scene->AddObject(b);
             hasShot = true;
+            head->ClearStatic();
 
             state = SPLANT_RETRACT;
             vy = SPLANT_SPEED_RETRACT;
         }
+
         break;
 
     case SPLANT_RETRACT:

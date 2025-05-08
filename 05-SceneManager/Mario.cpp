@@ -59,7 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
-	else if (dynamic_cast<CShootingPlantHead*>(e->obj) || dynamic_cast<CShootingPlantBody*>(e->obj))
+	else if (dynamic_cast<CShootingPlantHead*>(e->obj) || dynamic_cast<CShootingPlantBody*>(e->obj) 
+		|| dynamic_cast<CShootingPlantBullet*>(e->obj))
 		OnCollisionWithRandomShootingPlant(e);
 }
 
@@ -119,6 +120,8 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CShootingPlantBullet*>(e->obj)) e->obj->Delete();
+
 	if (untouchable == 0)
 	{
 		if (level > MARIO_LEVEL_SMALL)
