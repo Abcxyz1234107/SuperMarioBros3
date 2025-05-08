@@ -1,4 +1,4 @@
-#include "Goomba.h"
+﻿#include "Goomba.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -37,13 +37,14 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 
+	// Va chạm cơ bản với vật cản
 	if (e->ny != 0 )
 	{
-		vy = 0;
+		vy = 0; // hit ceiling, floor
 	}
 	else if (e->nx != 0)
 	{
-		vx = -vx;
+		vx = -vx; // đổi hướng khi chạm tường
 	}
 }
 
@@ -72,7 +73,7 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)

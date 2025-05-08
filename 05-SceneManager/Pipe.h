@@ -16,7 +16,20 @@ private:
     float totalHeight;
 public:
     CPipe(float x, float y,
-        int bodyLength, int pType = 0, int pLength = 0, float pRange = 0,
+        int bodyLength,
+        float cellWidth = 25, float cellHeight = 16,
+        int spriteId = ID_SPRITE_PIPEBODY)
+        : CGameObject(x, y)
+    {
+        this->head = new CPipeHead(x - 1, y);
+        this->body = new CPipeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId);
+        this->splant = nullptr;
+
+        totalHeight = cellHeight * bodyLength;
+        totalWidth = cellWidth;
+    }
+    CPipe(float x, float y,
+        int bodyLength, int pType, int pLength, float pRange,
         float cellWidth = 25, float cellHeight = 16,
         int spriteId = ID_SPRITE_PIPEBODY)
         : CGameObject(x, y)

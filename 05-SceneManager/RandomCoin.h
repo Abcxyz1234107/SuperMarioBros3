@@ -19,7 +19,6 @@ private:
 public:
 	CRandomCoin(float x, float y) : CGameObject(x, y)
 	{
-		z = 2;
 		vy = 0.0f;
 	}
 	void Render();

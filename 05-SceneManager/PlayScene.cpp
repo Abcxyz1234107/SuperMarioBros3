@@ -20,6 +20,7 @@
 #include "BGBrick.h"
 #include "LargeBrick.h"
 #include "ShootingPlant.h"
+#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -140,15 +141,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		CPipe* pipe;
 
 		if (pType == 0)
+		{
 			pipe = new CPipe(x, y, length);
+			objects.push_back(pipe->GetHead());
+			objects.push_back(pipe->GetBody());
+		}
 		else
+		{
 			pipe = new CPipe(x, y, length, pType, pLength, pRange);
-
-		objects.push_back(pipe->GetHead());
-		objects.push_back(pipe->GetBody());
-		objects.push_back(pipe->GetSPlant()->GetHead());
-		objects.push_back(pipe->GetSPlant()->GetBody());
-		objects.push_back(pipe->GetSPlant());
+			objects.push_back(pipe->GetHead());
+			objects.push_back(pipe->GetBody());
+			objects.push_back(pipe->GetSPlant()->GetHead());
+			objects.push_back(pipe->GetSPlant()->GetBody());
+			objects.push_back(pipe->GetSPlant());
+		}
 
 		obj = pipe;
 
@@ -173,6 +179,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int type = atoi(tokens[3].c_str());
 		obj = new CRandomBrick(x, y, type);
+
+		break;
+	}
+	case OBJECT_TYPE_KOOPAS:
+	{
+		obj = new CKoopas(x, y); 
+
 		break;
 	}
 	case OBJECT_TYPE_PLATFORM:

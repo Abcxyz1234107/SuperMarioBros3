@@ -16,6 +16,7 @@ bgbrick.txt
 floor.txt
 largebrick.txt
 shootingplant.txt
+Koopas.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -25,7 +26,7 @@ shootingplant.txt
 
 
 # MARIO
-0	300	90
+0	500	50
 
 #BGCLOUD
 8	350	10
@@ -42,7 +43,10 @@ shootingplant.txt
 #4	120	120
 
 #Goomba
-#2	100	10
+2	300	90
+
+#Koopas
+16	455	89
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 #5	100	136	16	15	16	51000	52000	53000 Cloud
@@ -63,7 +67,8 @@ id	x	y	bbWidth bbHeight spriteID  z
 14	300	101	48	80	55502	0
 14	455	117	80	48	55503	1
 14	510	101	64	80	55507	0
-14	574	125	96	32	55504	1
+14	555	75	64	89	55509	-1
+14	574	125	96	32	55504	0
 
 #BGBush # w=16
 #id	x	y	length	
@@ -74,7 +79,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 # PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included	
 #id	x	y	Len	type	pLen	range	
-11	380	102	2	1	2	100
+11	380	102	2	0	2	100
 
 # ShootingPlant #Head: 16 16, Body: 16 8
 
