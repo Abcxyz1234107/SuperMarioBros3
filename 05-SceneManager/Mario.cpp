@@ -9,7 +9,6 @@
 #include "Portal.h"
 #include "PlayScene.h"
 #include "Coin.h"
-#include "CRandomBrick.h"
 #include "ShootingPlant.h"
 
 #include "Collision.h"
@@ -70,15 +69,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CRandomMushroom*>(goomba))
 	{
-		if (dynamic_cast<CRandomMushroom*>(goomba)->IsEmerging() == false)
-		{
-			e->obj->Delete();
-
-			if (this->level == MARIO_LEVEL_SMALL)
-			{
-				this->SetLevel(MARIO_LEVEL_BIG);
-			}
-		}
+		OnCollisionWithRandomMushroom(dynamic_cast<CRandomMushroom*>(goomba));
+	}
+	else if (dynamic_cast<CKoopas*>(goomba))
+	{
+		OnCollisionWithKoopas(dynamic_cast<CKoopas*>(goomba), e);
 	}
 	else
 	{
@@ -116,6 +111,31 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+void CMario::OnCollisionWithRandomMushroom(CRandomMushroom* mushroom)
+{
+	if (mushroom->IsEmerging() == false)
+	{
+		mushroom->Delete();
+
+		if (this->level == MARIO_LEVEL_SMALL)
+		{
+			this->SetLevel(MARIO_LEVEL_BIG);
+		}
+	}
+}
+
+void CMario::OnCollisionWithKoopas(CKoopas* koopas, LPCOLLISIONEVENT e)
+{
+	if (e->ny < 0)
+	{
+		if (koopas->GetState() != GOOMBA_STATE_DIE)
+		{
+			koopas->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
 }
 
 void CMario::OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e)

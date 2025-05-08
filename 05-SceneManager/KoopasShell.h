@@ -1,18 +1,22 @@
 #pragma once
 #include "Goomba.h"
-#include "KoopasShell.h"
 
-class CKoopas :
+#define SHELL_BBOX_W 15
+#define SHELL_BBOX_H 15
+
+#define SHELL_STATE_SLEEP 100
+#define SHELL_SLEEP_TIMEOUT 500
+
+class CKoopasShell :
     public CGoomba
 {
 private:
-	ULONGLONG sleep_start;
-public:
-    CKoopas(float x, float y) : CGoomba(x, y)
-    {
-		
-    }
 
+public:
+	CKoopasShell(float x, float y) : CGoomba(x, y)
+	{
+
+	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void Render() override;

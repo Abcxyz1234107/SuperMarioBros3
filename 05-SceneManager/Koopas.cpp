@@ -2,9 +2,13 @@
 
 #include "RandomMushroom.h"
 #include "Mario.h"
+#include "PlayScene.h"
 
 #define KOOPAS_BBOX_W 15
 #define KOOPAS_BBOX_H 25
+
+#define KOOPAS_STATE_SLEEP 100
+#define KOOPAS_SLEEP_TIMEOUT 500
 
 void CKoopas::Render()
 {
@@ -15,11 +19,6 @@ void CKoopas::Render()
         aniId = ID_ANI_KOOPAS_WALK_RIGHT;
     else
         aniId = ID_ANI_KOOPAS_WALK_LEFT;
-
-    if (state == GOOMBA_STATE_DIE)
-    {
-        aniId = ID_ANI_KOOPAS_SHELL_RESPAWN;
-    }
 
     animations->Get(aniId)->Render(x, y);
 }
@@ -34,6 +33,15 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if ((state == GOOMBA_STATE_DIE))
+    {
+        isDeleted = true;
+        CKoopasShell* shell = new CKoopasShell(this->GetX(), this->GetY());
+        shell->SetVx(0.25f);
+        LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+        currentScene->AddObject(shell);
+        return;
+    }
     CGoomba::Update(dt, coObjects);
 }
 

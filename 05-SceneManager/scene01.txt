@@ -46,7 +46,7 @@ Koopas.txt
 2	300	90
 
 #Koopas
-16	455	89
+16	455	60
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 #5	100	136	16	15	16	51000	52000	53000 Cloud
