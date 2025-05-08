@@ -1,10 +1,40 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
+
+#BottomLeft
 33101	207	39	222	54	10 #Head_Red 1
 33102	233	39	248	54	10 #Head_Red 2
 
-33103	184	45	199	52	10 #Body
+#TopRight
+33103	377	13	392	28	10 #Head_Red 1
+33104	403	13	418	28	10 #Head_Red 2
+
+#TopLeft
+33105	425	13	440	28	10 #Head_Red 1
+33106	449	13	464	28	10 #Head_Red 2
+
+#BottomRight
+33107	474	13	489	28	10 #Head_Red 1
+33108	504	13	519	28	10 #Head_Red 2
+
+#Body
+33110	184	45	199	52	10
+
+#Bullet
+33111	411	40	419	48	10 #TopUp
+33112	428	39	436	48	10 #TopDown
+33113	411	57	419	65	10 #BottomDown
+33114	427	57	436	66	10 #BottomUp
+
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
-33201	33101	500	33102	500
+
+#Head Move
+33201	33101	500	33102	500 #BottomLeft
+33202	33103	500	33104	500 #TopRight
+33203	33105	500	33106	500 #TopLeft
+33204	33107	500	33108	500 #BottomRight
+
+#Bullet
+33205	33111	100	33112	100	33113	100	33114	100

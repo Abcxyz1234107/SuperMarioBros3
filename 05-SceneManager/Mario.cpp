@@ -10,6 +10,7 @@
 #include "PlayScene.h"
 #include "Coin.h"
 #include "CRandomBrick.h"
+#include "ShootingPlant.h"
 
 #include "Collision.h"
 
@@ -58,6 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
+	else if (dynamic_cast<CShootingPlantHead*>(e->obj) || dynamic_cast<CShootingPlantBody*>(e->obj))
+		OnCollisionWithRandomShootingPlant(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -112,6 +115,23 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+void CMario::OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e)
+{
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
 }
 
 void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)

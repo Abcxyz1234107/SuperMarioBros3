@@ -25,7 +25,7 @@ shootingplant.txt
 
 
 # MARIO
-0	300	90
+0	500	90
 
 #BGCLOUD
 8	350	10
@@ -72,13 +72,11 @@ id	x	y	bbWidth bbHeight spriteID  z
 10	706	119	6
 10	1085	119	2
 
-# PIPE #32 16 Head
-#id	x	y	bodyLength
-11	380	102	2
+# PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included	
+#id	x	y	Len	type	pLen	range	
+11	380	102	2	1	2	100
 
 # ShootingPlant #Head: 16 16, Body: 16 8
-#id	x	y	bodyLength
-15	380	110	2
 
 # BGTREE id x    y      z  bodyLength edgeRight_Length edgeLeft_Length #30 15
 9	30	102	-1	2	1	2 #1

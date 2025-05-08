@@ -98,17 +98,6 @@ void Render()
 	spriteHandler->End();
 	pSwapChain->Present(0, 0);
 
-	POINT p;
-	GetCursorPos(&p);
-	+ScreenToClient(CGame::GetInstance()->GetHWND(), &p);
-	float camX, camY;
-	CGame::GetInstance()->GetCamPos(camX, camY);
-	int worldX = p.x + (int)camX;
-	int worldY = SCREEN_HEIGHT - p.y + (int)camY;
-
-	DebugOut(L"[Mouse] screen=(%d,%d) world=(%d,%d)\n", p.x, p.y, worldX, worldY);
-
-
 }
 
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)

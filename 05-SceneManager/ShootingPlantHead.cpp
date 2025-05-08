@@ -3,13 +3,21 @@
 void CShootingPlantHead::Render() 
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_SHOOTINGPLANT_RED)->Render(x, y);
+    int ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMLEFT;
+    // default
+    switch (orient)
+    {
+    case 1: ani = ID_ANI_SHOOTINGPLANT_RED_TOPRIGHT;  break;
+    case 2: ani = ID_ANI_SHOOTINGPLANT_RED_TOPLEFT;    break;
+    case 3: ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+    }
+    animations->Get(ani)->Render(x, y);
 }
 
 void CShootingPlantHead::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - width / 2 + 2;
-	t = y - height / 2 + 2;
-	r = l + width - 2;
-	b = t + height - 2;
+	l = x - SHOOTINGPLANT_HEAD_W / 2 + 2;
+	t = y - SHOOTINGPLANT_HEAD_H / 2 + 2;
+	r = l + SHOOTINGPLANT_HEAD_W - 2;
+	b = t + SHOOTINGPLANT_HEAD_H - 2;
 }

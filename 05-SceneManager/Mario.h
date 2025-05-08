@@ -118,6 +118,7 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -153,6 +154,7 @@ public:
 	void SetLevel(int l);
 	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	BOOL IsUntouchable() { if (untouchable == 1) return true; else return false; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

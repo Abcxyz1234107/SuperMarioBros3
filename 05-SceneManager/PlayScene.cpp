@@ -1,5 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
 #include "AssetIDs.h"
 
 #include "PlayScene.h"
@@ -130,24 +133,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PIPE:
 	{
 		int length = atoi(tokens[3].c_str());
+		int pType = atoi(tokens[4].c_str());
+		int pLength = atoi(tokens[5].c_str());
+		float pRange = (float)atof(tokens[6].c_str());
 
-		CPipe* pipe = new CPipe(x, y, length);
+		CPipe* pipe;
+
+		if (pType == 0)
+			pipe = new CPipe(x, y, length);
+		else
+			pipe = new CPipe(x, y, length, pType, pLength, pRange);
+
 		objects.push_back(pipe->GetHead());
 		objects.push_back(pipe->GetBody());
+		objects.push_back(pipe->GetSPlant()->GetHead());
+		objects.push_back(pipe->GetSPlant()->GetBody());
+		objects.push_back(pipe->GetSPlant());
 
 		obj = pipe;
-
-		break;
-	}
-	case OBJECT_TYPE_SHOOTINGPLANT:
-	{
-		int bodyLength = atoi(tokens[3].c_str());
-
-		CShootingPlant* Plant = new CShootingPlant(x, y, bodyLength);
-		objects.push_back(Plant->GetBody());
-		objects.push_back(Plant->GetHead());
-
-		obj = Plant;
 
 		break;
 	}
