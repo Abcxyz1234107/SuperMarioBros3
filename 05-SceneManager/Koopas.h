@@ -2,6 +2,12 @@
 #include "Goomba.h"
 #include "KoopasShell.h"
 
+#define KOOPAS_BBOX_W 15
+#define KOOPAS_BBOX_H 25
+
+#define KOOPAS_STATE_SLEEP 100
+#define KOOPAS_SLEEP_TIMEOUT 500
+
 class CKoopas :
     public CGoomba
 {

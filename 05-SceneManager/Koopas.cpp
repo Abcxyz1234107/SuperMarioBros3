@@ -4,12 +4,6 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
-#define KOOPAS_BBOX_W 15
-#define KOOPAS_BBOX_H 25
-
-#define KOOPAS_STATE_SLEEP 100
-#define KOOPAS_SLEEP_TIMEOUT 500
-
 void CKoopas::Render()
 {
     if (sleep) return; // ẩn khi đang 'ngủ'
@@ -71,5 +65,5 @@ void CKoopas::GetBoundingBox(float& l, float& t, float& r, float& b)
     l = x - KOOPAS_BBOX_W / 2;
     t = y - KOOPAS_BBOX_H / 2;
     r = l + KOOPAS_BBOX_W;
-    b = t + KOOPAS_BBOX_H;
+    b = t + KOOPAS_BBOX_H - 1;
 }
