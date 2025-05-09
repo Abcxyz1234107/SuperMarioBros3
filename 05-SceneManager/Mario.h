@@ -123,6 +123,7 @@ class CMario : public CGameObject
 	void OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomMushroom(CRandomMushroom* mushroom);
 	void OnCollisionWithKoopas(CKoopas* koopas, LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

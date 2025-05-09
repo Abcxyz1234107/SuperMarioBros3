@@ -75,6 +75,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithKoopas(dynamic_cast<CKoopas*>(goomba), e);
 	}
+	else if (dynamic_cast<CKoopasShell*>(goomba))
+	{
+		OnCollisionWithKoopasShell(dynamic_cast<CKoopasShell*>(goomba), e);
+	}
 	else
 	{
 		if (e->ny < 0)
@@ -113,6 +117,36 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	coin++;
 }
 
+void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
+{
+	// vỏ đứng yên -> kích hoạt
+	if (shell->GetVx() == 0)
+	{
+		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
+		shell->Activate(dir);
+		return;
+	}
+
+	// vỏ đang chạy
+	if (e->ny < 0)                 // nhảy lên vỏ
+	{
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+	}
+	else if (untouchable == 0)     // va chạm
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
+
 void CMario::OnCollisionWithRandomMushroom(CRandomMushroom* mushroom)
 {
 	if (mushroom->IsEmerging() == false)
@@ -134,6 +168,25 @@ void CMario::OnCollisionWithKoopas(CKoopas* koopas, LPCOLLISIONEVENT e)
 		{
 			koopas->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else
+	{
+		if (untouchable == 0)
+		{
+			if (koopas->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
 		}
 	}
 }

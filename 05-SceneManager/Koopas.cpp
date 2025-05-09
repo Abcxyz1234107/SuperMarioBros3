@@ -37,7 +37,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     {
         isDeleted = true;
         CKoopasShell* shell = new CKoopasShell(this->GetX(), this->GetY());
-        shell->SetVx(0.25f);
         LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
         currentScene->AddObject(shell);
         return;

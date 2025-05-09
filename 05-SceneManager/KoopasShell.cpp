@@ -1,23 +1,41 @@
-#include "KoopasShell.h"
+﻿#include "KoopasShell.h"
+#include "PlayScene.h"
+#include "Mario.h"
 
 void CKoopasShell::Render()
 {
     CSprites* sprite = CSprites::GetInstance();
     sprite->Get(ID_SPRITE_KOOPAS_SHELL)->Draw(x, y);
 }
+
+void CKoopasShell::Activate(float dir)
+{
+    vx = dir * SHELL_MOVE_SPEED;
+}
+
 void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     CGoomba::OnCollisionWith(e);
 }
 void CKoopasShell::OnNoCollision(DWORD dt)
 {
-    CGoomba::OnNoCollision(dt);
+
 }
 
 void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     vx += ax * dt;
     CGoomba::Update(dt, coObjects);
+
+    // despawn
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+
+    if (abs(mario->GetX() - this->x) > SHELL_DESPAWN_DISTANCE)
+    {
+        isDeleted = true;
+        return;
+    }
 }
 
 void CKoopasShell::GetBoundingBox(float& l, float& t, float& r, float& b)

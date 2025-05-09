@@ -4,6 +4,8 @@
 #define SHELL_BBOX_W 15
 #define SHELL_BBOX_H 15
 
+#define SHELL_MOVE_SPEED 0.25f 
+#define SHELL_DESPAWN_DISTANCE 240.0f
 #define SHELL_STATE_SLEEP 100
 #define SHELL_SLEEP_TIMEOUT 500
 
@@ -15,7 +17,8 @@ private:
 public:
 	CKoopasShell(float x, float y) : CGoomba(x, y)
 	{
-
+		vx = 0.0f;          
+		ax = 0.0f;
 	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
@@ -26,5 +29,8 @@ public:
 
 	int IsCollidable() override { return 1; };
 	int IsBlocking() override { return 0; }
+
+	void Activate(float dir); //direction
+	float GetVx() { return vx; }
 };
 
