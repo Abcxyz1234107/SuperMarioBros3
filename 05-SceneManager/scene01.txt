@@ -44,9 +44,10 @@ Koopas.txt
 
 #Goomba
 2	500	90
+2	300	90
 
 #Koopas
-16	620	60
+16	620	70
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 #5	100	136	16	15	16	51000	52000	53000 Cloud
@@ -79,7 +80,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 # PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included	
 #id	x	y	Len	type	pLen	range	
-11	380	102	2	0	2	100
+11	380	102	2	1	2	110
 
 # ShootingPlant #Head: 16 16, Body: 16 8
 

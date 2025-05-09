@@ -23,6 +23,7 @@ public:
         int spriteId)
         : CGameObject(x, y)
     {
+        z = 3;
         this->cellWidth = cellWidth;
         this->totalHeight = cellHeight * (length+1);
         this->cellHeight = cellHeight;

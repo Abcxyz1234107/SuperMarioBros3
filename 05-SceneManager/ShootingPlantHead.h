@@ -17,6 +17,7 @@ private:
 public:
 	CShootingPlantHead(int x, int y) : CGameObject(x, y) 
 	{
+		z = 2;
 		this->orient = 0;
 	}
 

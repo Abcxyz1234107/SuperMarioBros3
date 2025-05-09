@@ -15,6 +15,7 @@ private:
 public:
 	CPipeHead(float x, float y) : CGameObject(x, y) 
 	{
+		z = 3;
 	}
 	void Render();
 	void Update(DWORD dt) {}

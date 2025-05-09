@@ -119,7 +119,16 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
 {
-	// vỏ đứng yên -> kích hoạt
+	if (shell->IsHeld()) return;
+
+	/* 1. Mario chạy & shell đứng yên  ->  nhặt */
+	if (shell->GetVx() == 0 && abs(ax) == MARIO_ACCEL_RUN_X)
+	{
+		shell->SetHeld();
+		return;
+	}
+
+	/* 2. Shell đứng yên nhưng Mario không chạy -> đá */
 	if (shell->GetVx() == 0)
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
@@ -127,13 +136,13 @@ void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
 		return;
 	}
 
-	// vỏ đang chạy
-	if (e->ny < 0)                 // nhảy lên vỏ
+	/* 3. Shell đang chạy */
+	if (e->ny < 0)                          // nhảy lên để dừng
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		shell->SetVx(0);
 	}
-	else if (untouchable == 0)     // va chạm
+	else if (untouchable == 0)              // va chạm 
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{

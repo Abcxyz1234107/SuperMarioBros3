@@ -162,4 +162,7 @@ public:
 	bool IsUntouchable() { if (untouchable == 1) return true; else return false; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	int GetNx() { return nx; }
+	float GetAx() { return ax; }
 };

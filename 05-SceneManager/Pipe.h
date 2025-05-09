@@ -21,6 +21,7 @@ public:
         int spriteId = ID_SPRITE_PIPEBODY)
         : CGameObject(x, y)
     {
+        z = 3;
         this->head = new CPipeHead(x - 1, y);
         this->body = new CPipeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId);
         this->splant = nullptr;
@@ -34,6 +35,7 @@ public:
         int spriteId = ID_SPRITE_PIPEBODY)
         : CGameObject(x, y)
     {
+        z = 3;
         this->head = new CPipeHead(x - 1, y);
         this->body = new CPipeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId);
         this->splant = nullptr;

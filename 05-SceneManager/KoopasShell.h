@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Goomba.h"
 #include "CRandomBrick.h"
 
@@ -14,6 +14,7 @@ class CKoopasShell :
     public CGoomba
 {
 private:
+	bool isHeld;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);
@@ -23,6 +24,8 @@ public:
 	{
 		vx = 0.0f;          
 		ax = 0.0f;
+
+		isHeld = false;
 	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
@@ -36,5 +39,8 @@ public:
 
 	void Activate(float dir); //direction
 	float GetVx() { return vx; }
+
+	void SetHeld();       // gán / hủy trạng thái được cầm
+	bool IsHeld() { return isHeld; }
 };
 

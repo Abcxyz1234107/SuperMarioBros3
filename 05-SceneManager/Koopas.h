@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Goomba.h"
 #include "KoopasShell.h"
 
@@ -6,11 +6,16 @@ class CKoopas :
     public CGoomba
 {
 private:
-	ULONGLONG sleep_start;
+	float spawnX, spawnY;
+
+	bool sleep = false;  // Koopas 'ngủ' sau khi chết
+	bool passedSpawn = false;
+
 public:
     CKoopas(float x, float y) : CGoomba(x, y)
     {
-		
+		spawnX = x;
+		spawnY = y;
     }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;

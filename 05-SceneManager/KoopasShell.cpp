@@ -1,6 +1,5 @@
 ﻿#include "KoopasShell.h"
 #include "PlayScene.h"
-#include "Mario.h"
 
 void CKoopasShell::Render()
 {
@@ -11,6 +10,13 @@ void CKoopasShell::Render()
 void CKoopasShell::Activate(float dir)
 {
     vx = dir * SHELL_MOVE_SPEED;
+}
+
+void CKoopasShell::SetHeld()
+{
+    isHeld = true;
+    vx = ax = 0;  // đứng yên
+    vy = 0;
 }
 
 void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -39,14 +45,29 @@ void CKoopasShell::OnNoCollision(DWORD dt)
 
 void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+
+    // khi được Mario cầm
+    if (isHeld && mario)
+    {
+        x = mario->GetX() + (mario->GetNx() > 0 ? SHELL_BBOX_W : -SHELL_BBOX_W);
+        y = mario->GetY() - SHELL_BBOX_H / 2;;
+
+        // thả mai rùa khi Mario không còn giữ nút chạy
+        if (abs(mario->GetAx()) != MARIO_ACCEL_RUN_X)
+        {
+            isHeld = false;
+            vx = mario->GetNx() * SHELL_MOVE_SPEED;
+        }
+        return;
+    }
+
     vx += ax * dt;
     vy += ay * dt;
     CGoomba::Update(dt, coObjects);
 
     // despawn
-    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-    CMario* mario = (CMario*)scene->GetPlayer();
-
     if (abs(mario->GetX() - this->x) > SHELL_DESPAWN_DISTANCE)
     {
         isDeleted = true;

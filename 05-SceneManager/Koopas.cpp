@@ -1,4 +1,4 @@
-#include "Koopas.h"
+﻿#include "Koopas.h"
 
 #include "RandomMushroom.h"
 #include "Mario.h"
@@ -12,14 +12,10 @@
 
 void CKoopas::Render()
 {
-    CAnimations* animations = CAnimations::GetInstance();
-    int aniId = -1;
-    
-    if (vx >= 0)
-        aniId = ID_ANI_KOOPAS_WALK_RIGHT;
-    else
-        aniId = ID_ANI_KOOPAS_WALK_LEFT;
+    if (sleep) return; // ẩn khi đang 'ngủ'
 
+    CAnimations* animations = CAnimations::GetInstance();
+    int aniId = (vx >= 0) ? ID_ANI_KOOPAS_WALK_RIGHT : ID_ANI_KOOPAS_WALK_LEFT;
     animations->Get(aniId)->Render(x, y);
 }
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -33,14 +29,40 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if ((state == GOOMBA_STATE_DIE))
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario*     mario = (CMario*)scene->GetPlayer();
+    float       camW = (float)CGame::GetInstance()->GetBackBufferWidth();
+
+    /* 1. Bị dẫm  ->  sinh vỏ & chuyển sang sleep */
+    if (state == GOOMBA_STATE_DIE && sleep == false)
     {
-        isDeleted = true;
-        CKoopasShell* shell = new CKoopasShell(this->GetX(), this->GetY());
-        LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-        currentScene->AddObject(shell);
+        scene->AddObject(new CKoopasShell(x, y));
+        sleep = true;
+        vx = vy = 0;
+        return;  // Koopa 'biến mất'
+    }
+
+    /* 2. chờ Mario đi rồi quay lại để respawn */
+    if (sleep)
+    {
+        if (!passedSpawn && (mario->GetX() - spawnX) > camW * 0.6)
+            passedSpawn = true;  // vượt qua 0.6 màn hình
+
+        /* Khi Mario quay lại */
+        if (passedSpawn && abs(mario->GetX() - spawnX) < camW)
+        {
+            x = spawnX;                         // reset vị trí gốc
+            y = spawnY;
+            this->ay = GOOMBA_GRAVITY;
+            SetState(GOOMBA_STATE_WALKING);
+
+            sleep = false;
+            passedSpawn = false;
+        }
         return;
     }
+
+    /* 3. Xử lý gốc */
     CGoomba::Update(dt, coObjects);
 }
 
