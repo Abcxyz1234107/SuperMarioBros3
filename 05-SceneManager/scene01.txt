@@ -43,10 +43,10 @@ Koopas.txt
 #4	120	120
 
 #Goomba
-2	300	90
+2	500	90
 
 #Koopas
-16	455	60
+16	620	60
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 #5	100	136	16	15	16	51000	52000	53000 Cloud
@@ -113,7 +113,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 12	445	55	1
 
-12	690	118	1
+12	690	118	2
 12	735	85	1
 
 #Portal 

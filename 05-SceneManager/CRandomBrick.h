@@ -23,6 +23,7 @@ public:
 		this->type = type;
 	}
 	void SetState(int state);
+	void Activate();
 	int GetType() { return type; }
 	void Update(DWORD dt) {}
 };

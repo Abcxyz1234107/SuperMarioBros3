@@ -16,15 +16,31 @@ void CKoopasShell::Activate(float dir)
 void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     CGoomba::OnCollisionWith(e);
+
+    if (dynamic_cast<CGoomba*>(e->obj))
+        OnCollisionWithGoomba(e);
+    else if (dynamic_cast<CRandomBrick*>(e->obj))
+        OnCollisionWithRandomBrick(e);
 }
+
+void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+    dynamic_cast<CGoomba*>(e->obj)->SetState(GOOMBA_STATE_DIE);
+}
+void CKoopasShell::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
+{
+    dynamic_cast<CRandomBrick*>(e->obj)->Activate();
+}
+
 void CKoopasShell::OnNoCollision(DWORD dt)
 {
-
+    y += vy * dt;
 }
 
 void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     vx += ax * dt;
+    vy += ay * dt;
     CGoomba::Update(dt, coObjects);
 
     // despawn

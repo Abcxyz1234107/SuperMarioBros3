@@ -131,6 +131,7 @@ void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
 	if (e->ny < 0)                 // nhảy lên vỏ
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		shell->SetVx(0);
 	}
 	else if (untouchable == 0)     // va chạm
 	{
@@ -216,23 +217,7 @@ void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 
 	if (e->ny > 0)
 	{
-		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED && randomBrick->GetType() == 1)
-		{
-			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
-
-			CRandomCoin* coin = new CRandomCoin(randomBrick->GetX(), randomBrick->GetY() - 16.0f);
-			coin->SetVy(-0.25f);
-			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-			currentScene->AddObject(coin);
-		}
-		if (randomBrick->GetState() != RANDOMBRICK_STATE_TOUCHED && randomBrick->GetType() == 2) 
-		{
-			randomBrick->SetState(RANDOMBRICK_STATE_TOUCHED);
-
-			CRandomMushroom* mushroom = new CRandomMushroom(randomBrick->GetX(), randomBrick->GetY());
-			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-			currentScene->AddObject(mushroom);
-		}
+		randomBrick->Activate();
 	}
 }
 

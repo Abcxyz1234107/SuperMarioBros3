@@ -1,5 +1,6 @@
 #pragma once
 #include "Goomba.h"
+#include "CRandomBrick.h"
 
 #define SHELL_BBOX_W 15
 #define SHELL_BBOX_H 15
@@ -13,6 +14,9 @@ class CKoopasShell :
     public CGoomba
 {
 private:
+
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);
 
 public:
 	CKoopasShell(float x, float y) : CGoomba(x, y)
