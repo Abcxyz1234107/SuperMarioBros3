@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 
 #include "Animation.h"
@@ -116,6 +116,8 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	int coin; 
 
+	bool  holdingShell = false;
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -165,4 +167,7 @@ public:
 
 	int GetNx() { return nx; }
 	float GetAx() { return ax; }
+
+	void  SetHoldingShell(bool v) { holdingShell = v; }
+	bool  IsHoldingShell() { return holdingShell; }
 };

@@ -15,7 +15,7 @@ private:
 	// 2‑TopLeft
 	// 3‑BottomRight
 public:
-	CShootingPlantHead(int x, int y) : CGameObject(x, y) 
+	CShootingPlantHead(float x, float y) : CGameObject(x, y) 
 	{
 		z = 2;
 		this->orient = 0;

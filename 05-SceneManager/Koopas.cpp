@@ -23,6 +23,8 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if (vy == 0) onGround = true;
+
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario*     mario = (CMario*)scene->GetPlayer();
     float       camW = (float)CGame::GetInstance()->GetBackBufferWidth();

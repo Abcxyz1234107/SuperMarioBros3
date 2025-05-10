@@ -2,6 +2,9 @@
 #include "Goomba.h"
 #include "CRandomBrick.h"
 
+#define SHELL_BBOX_W 15
+#define SHELL_BBOX_H 15
+
 class CKoopasShell :
     public CGoomba
 {

@@ -1,9 +1,6 @@
 ﻿#include "KoopasShell.h"
 #include "PlayScene.h"
 
-#define SHELL_BBOX_W 15
-#define SHELL_BBOX_H 15
-
 #define SHELL_MOVE_SPEED 0.25f 
 #define SHELL_DESPAWN_DISTANCE 240.0f
 #define SHELL_STATE_DIE 101
@@ -29,6 +26,7 @@ void CKoopasShell::Render()
 
 void CKoopasShell::Activate(float dir)
 {
+    isHeld = false;
     vx = dir * SHELL_MOVE_SPEED;
     revive_start = 0;               // khi mai lăn thì huỷ timer
 }
@@ -112,7 +110,15 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (abs(mario->GetAx()) != MARIO_ACCEL_RUN_X)
         {
             isHeld = false;
-            vx = mario->GetNx() * SHELL_MOVE_SPEED;
+            mario->SetHoldingShell(false);                 // bbox Mario thu nhỏ
+            mario->StartUntouchable();
+
+            /* đẩy vỏ ra 2px để tránh kẹt */
+            float dir = mario->GetNx();
+            x = mario->GetX() + dir * (SHELL_BBOX_W - 2);
+
+            vx = dir * SHELL_MOVE_SPEED;                   // vỏ bắt đầu lăn
+            revive_start = 0;
         }
         return;
     }
@@ -146,7 +152,6 @@ void CKoopasShell::SetState(int state)
         break;
 
     case SHELL_STATE_DIE:
-        vx = vy = 0;
         break;
     }
 }

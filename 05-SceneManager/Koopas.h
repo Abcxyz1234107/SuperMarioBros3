@@ -17,6 +17,8 @@ private:
 	bool sleep = false;  // Koopas 'ngủ' sau khi chết
 	bool passedSpawn = false;
 
+	bool onGround = false;
+
 public:
     CKoopas(float x, float y) : CGoomba(x, y)
     {

@@ -125,6 +125,7 @@ void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
 	if (shell->GetVx() == 0 && abs(ax) == MARIO_ACCEL_RUN_X)
 	{
 		shell->SetHeld();
+		this->SetHoldingShell(true);
 		return;
 	}
 
@@ -371,7 +372,9 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
 
-	animations->Get(aniId)->Render(x, y);
+	bool skipRender = (untouchable && ((GetTickCount64() / 100) % 2 == 0));
+	if (!skipRender)
+		animations->Get(aniId)->Render(x, y);
 
 	//RenderBoundingBox();
 	
@@ -483,6 +486,12 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+	}
+
+	if (holdingShell)
+	{
+		if (nx > 0)  right += SHELL_BBOX_W;     // hướng phải
+		else         left -= SHELL_BBOX_W;     // hướng trái
 	}
 }
 
