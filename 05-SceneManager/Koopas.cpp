@@ -23,28 +23,26 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (vy == 0) onGround = true;
-
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-    CMario*     mario = (CMario*)scene->GetPlayer();
+    CMario* mario = (CMario*)scene->GetPlayer();
     float       camW = (float)CGame::GetInstance()->GetBackBufferWidth();
-
-    /* 1. Bị dẫm  ->  sinh vỏ & chuyển sang sleep */
+    /* 1. Turn to Shell */
     if (state == GOOMBA_STATE_DIE && sleep == false)
     {
-        scene->AddObject(new CKoopasShell(x, y));
+        CKoopasShell* fakeShell = new CKoopasShell(x, y);
+        scene->AddObject(fakeShell);
+        this->shell = fakeShell;
         sleep = true;
         vx = vy = 0;
-        return;  // Koopa 'biến mất'
+        return;
     }
 
-    /* 2. chờ Mario đi rồi quay lại để respawn */
-    if (sleep)
+    /* 2. Respawn */
+    if (sleep && shell->IsDeleted())
     {
         if (!passedSpawn && (mario->GetX() - spawnX) > camW * 0.6)
-            passedSpawn = true;  // vượt qua 0.6 màn hình
+            passedSpawn = true;
 
-        /* Khi Mario quay lại */
         if (passedSpawn && abs(mario->GetX() - spawnX) < camW)
         {
             x = spawnX;                         // reset vị trí gốc
@@ -60,6 +58,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     /* 3. Xử lý gốc */
     CGoomba::Update(dt, coObjects);
+
+    /* 4. Quay đầu */
+    float dx = vx * dt; //Khoảng cách bước tiêp theo
+
+    if (vy == 0 && HasGroundAhead(coObjects, dx))
+        vx = -vx;
 }
 
 void CKoopas::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -68,4 +72,27 @@ void CKoopas::GetBoundingBox(float& l, float& t, float& r, float& b)
     t = y - KOOPAS_BBOX_H / 2;
     r = l + KOOPAS_BBOX_W;
     b = t + KOOPAS_BBOX_H - 1;
+}
+
+bool CKoopas::HasGroundAhead(vector<LPGAMEOBJECT>* coObjects, float dx)
+{
+    float l, t, r, b;
+    GetBoundingBox(l, t, r, b);
+
+    float nextL = l + dx;
+    float nextR = r + dx;
+    float probeX = (dx > 0) ? nextR + 1.0f : nextL - 1.0f;
+    float probeY = b + 2.0f;                 // ngay dưới chân
+
+    for (LPGAMEOBJECT obj : *coObjects)
+    {
+        if (!obj->IsBlocking()) continue;
+
+        float ol, ot, orr, ob;
+        obj->GetBoundingBox(ol, ot, orr, ob);
+
+        if (probeX >= ol - 5 && probeX <= orr + 5 && probeY >= ot && probeY <= ot + 3.0f)
+            return false;
+    }
+    return true; // không có nền -> mép
 }

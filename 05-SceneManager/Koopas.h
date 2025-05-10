@@ -12,12 +12,14 @@ class CKoopas :
     public CGoomba
 {
 private:
+	CKoopasShell* shell = nullptr;
+
 	float spawnX, spawnY;
 
 	bool sleep = false;  // Koopas 'ngủ' sau khi chết
 	bool passedSpawn = false;
 
-	bool onGround = false;
+	bool HasGroundAhead(vector<LPGAMEOBJECT>* coObjects, float dx);
 
 public:
     CKoopas(float x, float y) : CGoomba(x, y)

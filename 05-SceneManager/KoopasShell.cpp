@@ -1,15 +1,6 @@
 ﻿#include "KoopasShell.h"
 #include "PlayScene.h"
 
-#define SHELL_MOVE_SPEED 0.25f 
-#define SHELL_DESPAWN_DISTANCE 240.0f
-#define SHELL_STATE_DIE 101
-#define SHELL_STATE_REVIVING 102
-
-#define SHELL_REVIVE_TIMEOUT    9000       // 5 s hoàn toàn tỉnh lại
-#define SHELL_REVIVE_WARNING    3000       // 1,5 s cuối bắt đầu rung
-#define SHELL_SHAKE_SPEED       0.01f
-
 void CKoopasShell::Render()
 {
     if (state == SHELL_STATE_DIE)
@@ -28,7 +19,7 @@ void CKoopasShell::Activate(float dir)
 {
     isHeld = false;
     vx = dir * SHELL_MOVE_SPEED;
-    revive_start = 0;               // khi mai lăn thì huỷ timer
+    revive_start = 0;
 }
 
 void CKoopasShell::SetHeld()
@@ -106,19 +97,17 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         x = mario->GetX() + (mario->GetNx() > 0 ? SHELL_BBOX_W : -SHELL_BBOX_W);
         y = mario->GetY() - SHELL_BBOX_H / 2;;
 
-        // thả mai rùa khi Mario không còn giữ nút chạy
+        // thả mai rùa
         if (abs(mario->GetAx()) != MARIO_ACCEL_RUN_X)
         {
             isHeld = false;
-            mario->SetHoldingShell(false);                 // bbox Mario thu nhỏ
+            mario->SetHoldingShell(false);
             mario->StartUntouchable();
 
-            /* đẩy vỏ ra 2px để tránh kẹt */
             float dir = mario->GetNx();
-            x = mario->GetX() + dir * (SHELL_BBOX_W - 2);
+            x = mario->GetX() + dir * (SHELL_BBOX_W - 2); //đẩy vỏ ra 2px để tránh kẹt
 
-            vx = dir * SHELL_MOVE_SPEED;                   // vỏ bắt đầu lăn
-            revive_start = 0;
+            this->Activate(dir);
         }
         return;
     }

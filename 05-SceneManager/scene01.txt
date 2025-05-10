@@ -46,7 +46,7 @@ Koopas.txt
 2	500	90
 2	300	90
 
-#Koopas
+#Koopas #445	30
 16	620	70
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
@@ -59,7 +59,7 @@ Koopas.txt
 5	770	40	19	23	3	54102	54103	54104 #MultiCloud
 
 5	200	150	871	16	1	12201	12201	12201 #Floor
-5	891	142	511	32	1	12202	12202	12202 
+5	891	142	500	32	1	12202	12202	12202 
 5	1360	150	352	16	1	12203	12203	12203
 
 #LargeBrick 
