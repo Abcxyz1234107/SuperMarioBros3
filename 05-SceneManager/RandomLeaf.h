@@ -14,7 +14,7 @@
 #define LEAF_STATE_FALLING_LEFT    1
 #define LEAF_STATE_FALLING_RIGHT   2
 
- 
+
 class CRandomLeaf :
     public CGameObject
 {
