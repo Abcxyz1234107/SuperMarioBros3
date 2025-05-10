@@ -27,6 +27,7 @@ public:
 	int IsBlocking() { return 0; }
 	int IsCollidable() override { return 1; }
 
-	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 };
 

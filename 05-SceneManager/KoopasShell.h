@@ -6,7 +6,7 @@
 #define SHELL_BBOX_H 15
 #define SHELL_MOVE_SPEED 0.25f 
 #define SHELL_DESPAWN_DISTANCE 240.0f
-#define SHELL_STATE_DIE 101
+#define SHELL_STATE_NORMAL 101
 #define SHELL_STATE_REVIVING 102
 
 #define SHELL_REVIVE_TIMEOUT    9000       // 5 s hoàn toàn tỉnh lại

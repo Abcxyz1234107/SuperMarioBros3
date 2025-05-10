@@ -3,15 +3,15 @@
 
 void CKoopasShell::Render()
 {
-    if (state == SHELL_STATE_DIE)
-    {
-        CSprites* sprite = CSprites::GetInstance();
-        sprite->Get(ID_SPRITE_KOOPAS_SHELL)->Draw(x, y);
-    }
-    else
+    if (state == SHELL_STATE_REVIVING)
     {
         CAnimations* animation = CAnimations::GetInstance();
         animation->Get(ID_ANI_KOOPAS_SHELL_RESPAWN)->Render(x, y);
+    }
+    else
+    {
+        CSprites* sprite = CSprites::GetInstance();
+        sprite->Get(ID_SPRITE_KOOPAS_SHELL)->Draw(x, y);
     }
 }
 
@@ -19,6 +19,7 @@ void CKoopasShell::Activate(float dir)
 {
     isHeld = false;
     vx = dir * SHELL_MOVE_SPEED;
+    this->SetState(SHELL_STATE_NORMAL);
     revive_start = 0;
 }
 
@@ -66,7 +67,7 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
         ULONGLONG elapsed = GetTickCount64() - revive_start;
 
-        /* 1. Hiệu ứng rung & đổi animation trong 1,5 s cuối */
+        /* 1. Hiệu ứng rung & đổi animation trong 3 s cuối */
         if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING - 500)
         {
             float dir = ((elapsed / 100) & 1) ? 1.f : -1.f;
@@ -77,7 +78,7 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         }
         else
         {
-            if (state != SHELL_STATE_DIE) this->SetState(SHELL_STATE_DIE);
+            if (state != SHELL_STATE_NORMAL) this->SetState(SHELL_STATE_NORMAL);
             vx = 0;  // đứng yên
         }
 
@@ -140,7 +141,7 @@ void CKoopasShell::SetState(int state)
     case SHELL_STATE_REVIVING:
         break;
 
-    case SHELL_STATE_DIE:
+    case SHELL_STATE_NORMAL:
         break;
     }
 }
