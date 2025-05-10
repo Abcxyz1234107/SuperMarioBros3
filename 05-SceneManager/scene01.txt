@@ -17,6 +17,7 @@ floor.txt
 largebrick.txt
 shootingplant.txt
 Koopas.txt
+voidspike.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -24,13 +25,15 @@ Koopas.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 # OBJECT_TYPE_ID [tab] x [tab] y
 
-
 # MARIO
 0	500	50
 
 #BGCLOUD
-8	350	10
-8	685	10
+8	350	10	0	0	1	54101	54101	54101
+8	685	10	0	0	1	54101	54101	54101
+
+8	130	10	24	23	2	54102	54103	54104
+8	770	40	19	23	3	54102	54103	54104
 
 #BGBrick
 #13	30	60
@@ -55,12 +58,12 @@ Koopas.txt
 
 5	0	0	2	400	3	12300	12300	12300	#Left Border
 
-5	130	10	24	23	2	54102	54103	54104
-5	770	40	19	23	3	54102	54103	54104 #MultiCloud
-
 5	200	150	871	16	1	12201	12201	12201 #Floor
 5	891	142	500	32	1	12202	12202	12202 
 5	1360	150	352	16	1	12203	12203	12203
+
+#VOIDSPIKE
+17	0	230	1000	5	5	99990
 
 #LargeBrick 
 id	x	y	bbWidth bbHeight spriteID  z

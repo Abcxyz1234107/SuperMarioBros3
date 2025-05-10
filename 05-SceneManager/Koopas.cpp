@@ -31,14 +31,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     {
         CKoopasShell* fakeShell = new CKoopasShell(x, y);
         scene->AddObject(fakeShell);
-        this->shell = fakeShell;
         sleep = true;
         vx = vy = 0;
         return;
     }
 
     /* 2. Respawn */
-    if (sleep && shell->IsDeleted())
+    if (sleep)
     {
         if (!passedSpawn && (mario->GetX() - spawnX) > camW * 0.6)
             passedSpawn = true;

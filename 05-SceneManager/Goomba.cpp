@@ -1,4 +1,5 @@
 ﻿#include "Goomba.h"
+#include "VoidSpike.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -34,6 +35,11 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CVoidSpike*>(e->obj))
+	{
+		this->SetState(GOOMBA_STATE_DIE);
+		return;
+	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 

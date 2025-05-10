@@ -1,0 +1,5 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+
+99990	327	180	400	185	10
+

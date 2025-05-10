@@ -10,6 +10,7 @@
 #include "PlayScene.h"
 #include "Coin.h"
 #include "ShootingPlant.h"
+#include "VoidSpike.h"
 
 #include "Collision.h"
 
@@ -58,6 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
+	else if (dynamic_cast<CVoidSpike*>(e->obj))
+		OnCollisionWithVoidSpike(e);
 	else if (dynamic_cast<CShootingPlantHead*>(e->obj) || dynamic_cast<CShootingPlantBody*>(e->obj) 
 		|| dynamic_cast<CShootingPlantBullet*>(e->obj))
 		OnCollisionWithRandomShootingPlant(e);
@@ -115,6 +118,12 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+void CMario::OnCollisionWithVoidSpike(LPCOLLISIONEVENT e)
+{
+	DebugOut(L">>> Mario DIE >>> \n");
+	SetState(MARIO_STATE_DIE);
 }
 
 void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)

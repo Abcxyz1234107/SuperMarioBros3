@@ -9,8 +9,9 @@
 #define SHELL_STATE_NORMAL 101
 #define SHELL_STATE_REVIVING 102
 
-#define SHELL_REVIVE_TIMEOUT    9000       // 5 s hoàn toàn tỉnh lại
-#define SHELL_REVIVE_WARNING    3000       // 1,5 s cuối bắt đầu rung
+#define SHELL_REVIVE_TIMEOUT    9000       // 9 s hoàn toàn tỉnh lại
+#define SHELL_REVIVE_PREWARNING 500 
+#define SHELL_REVIVE_WARNING    3000       // 3 s cuối đổi thành animation
 #define SHELL_SHAKE_SPEED       0.01f
 
 

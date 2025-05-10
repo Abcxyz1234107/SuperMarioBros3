@@ -141,6 +141,9 @@
     <ClCompile Include="KoopasShell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VoidSpike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -362,6 +365,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KoopasShell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoidSpike.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

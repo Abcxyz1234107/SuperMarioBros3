@@ -67,8 +67,8 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
         ULONGLONG elapsed = GetTickCount64() - revive_start;
 
-        /* 1. Hiệu ứng rung & đổi animation trong 3 s cuối */
-        if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING - 500)
+        /* 1. Hiệu ứng rung trong 3.5s cuối & đổi animation trong 3 s cuối */
+        if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING - SHELL_REVIVE_PREWARNING)
         {
             float dir = ((elapsed / 100) & 1) ? 1.f : -1.f;
             x += dir * SHELL_SHAKE_SPEED * dt;
