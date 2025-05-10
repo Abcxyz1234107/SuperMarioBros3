@@ -37,7 +37,10 @@ void CRandomBrick::Activate()
 		}
 		else
 		{
-
+			CRandomLeaf* leaf = new CRandomLeaf(this->GetX(), this->GetY() - 16.0f);
+			leaf->SetVy(-0.25f);
+			LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			currentScene->AddObject(leaf);
 		}
 	}
 }

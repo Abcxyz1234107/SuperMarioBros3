@@ -12,6 +12,7 @@ bgtree.txt
 bgbush.txt
 randombrick.txt
 randomMushroom.txt
+randomleft.txt
 bgbrick.txt
 floor.txt
 largebrick.txt
