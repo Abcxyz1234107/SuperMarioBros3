@@ -49,7 +49,7 @@ void CRandomLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)
 	l = x - LEAF_BBOX_W / 2;
 	t = y - LEAF_BBOX_H / 2;
 	r = l + LEAF_BBOX_W;
-	b = t + LEAF_BBOX_H;
+	b = t + LEAF_BBOX_H - 1;
 }
 
 void CRandomLeaf::SetState(int state)

@@ -12,7 +12,7 @@ bgtree.txt
 bgbush.txt
 randombrick.txt
 randomMushroom.txt
-randomleft.txt
+randomleaf.txt
 bgbrick.txt
 floor.txt
 largebrick.txt
@@ -27,7 +27,7 @@ voidspike.txt
 # OBJECT_TYPE_ID [tab] x [tab] y
 
 # MARIO
-0	500	50
+0	500	30
 
 #BGCLOUD
 8	350	10	0	0	1	54101	54101	54101

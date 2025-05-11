@@ -31,7 +31,7 @@ public:
 		vy = -LEAF_RISE_SPEED;
     }
 
-    void Render() override;
+    void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
