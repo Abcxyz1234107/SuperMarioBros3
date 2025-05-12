@@ -39,7 +39,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     /* 2. Respawn */
     if (sleep)
     {
-        if (!passedSpawn && abs(mario->GetX() - spawnX) > camW * 0.6)
+        if (!passedSpawn && abs(mario->GetX() - spawnX) > camW * 0.51)
             passedSpawn = true;
 
         if (passedSpawn && abs(mario->GetX() - spawnX) < camW)
