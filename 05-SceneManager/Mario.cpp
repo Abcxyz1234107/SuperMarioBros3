@@ -12,6 +12,7 @@
 #include "ShootingPlant.h"
 #include "VoidSpike.h"
 #include "CRandomBrick.h"
+#include "CoinBrick.h"
 #include "Koopas.h"
 
 #include "Collision.h"
@@ -61,6 +62,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
+	else if (dynamic_cast<CoinBrick*>(e->obj))
+		OnCollisionWithCoinBrick(e);
 	else if (dynamic_cast<CVoidSpike*>(e->obj))
 		OnCollisionWithVoidSpike(e);
 	else if (dynamic_cast<CShootingPlantHead*>(e->obj) || dynamic_cast<CShootingPlantBody*>(e->obj) 
@@ -120,6 +123,12 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+void CMario::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
+{
+	CoinBrick* cb = (CoinBrick*)e->obj;
+	if (e->ny > 0) cb->Activate();
 }
 
 void CMario::OnCollisionWithVoidSpike(LPCOLLISIONEVENT e)

@@ -28,7 +28,13 @@ coinbrick.txt
 # OBJECT_TYPE_ID [tab] x [tab] y
 
 # MARIO
-0	2400	30
+#500:  Floor 1 (600 for kill Koopas and kick the shell to the leaf)
+#700:  Floor 2
+#1200: Floor 3
+#1400: Floor 4 (in front is Hole 3)
+#2100: Floor 5
+#2400: Floor 6
+0	600	30
 
 #BGCLOUD
 8	350	10	0	0	1	54101	54101	54101
