@@ -1,4 +1,5 @@
 ﻿#include "RandomLeaf.h"
+#include "Mario.h"
 
 void CRandomLeaf::Render()
 {
@@ -41,7 +42,12 @@ void CRandomLeaf::OnNoCollision(DWORD dt)
 
 void CRandomLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	
+	if (dynamic_cast<CMario*>(e->obj))
+	{
+		CMario* mario = (CMario*)e->obj;
+		mario->SetLevel(mario->GetLevel() + 1);
+		this->Delete();
+	}
 }
 
 void CRandomLeaf::GetBoundingBox(float& l, float& t, float& r, float& b)

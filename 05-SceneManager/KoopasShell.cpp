@@ -118,7 +118,7 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         {
             isHeld = false;
             mario->SetHoldingShell(false);
-            mario->StartUntouchable();
+            //mario->StartUntouchable();
 
             float dir = mario->GetNx();
             x = mario->GetX() + dir * (SHELL_BBOX_W - 2); //đẩy vỏ ra 2px để tránh kẹt

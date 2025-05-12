@@ -14,6 +14,7 @@
 #include "CRandomBrick.h"
 #include "CoinBrick.h"
 #include "Koopas.h"
+#include "RandomLeaf.h"
 
 #include "Collision.h"
 
@@ -62,6 +63,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
+	else if (dynamic_cast<CRandomLeaf*>(e->obj))
+		OnCollisionWithRandomLeaf(e);
 	else if (dynamic_cast<CoinBrick*>(e->obj))
 		OnCollisionWithCoinBrick(e);
 	else if (dynamic_cast<CVoidSpike*>(e->obj))
@@ -252,6 +255,14 @@ void CMario::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 	{
 		randomBrick->Activate();
 	}
+}
+
+void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
+{
+	CRandomLeaf* leaf = dynamic_cast<CRandomLeaf*>(e->obj);
+
+	leaf->Delete();
+	this->SetLevel(this->GetLevel() + 1);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
