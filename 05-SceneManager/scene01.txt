@@ -19,6 +19,7 @@ largebrick.txt
 shootingplant.txt
 Koopas.txt
 voidspike.txt
+coinbrick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -27,7 +28,7 @@ voidspike.txt
 # OBJECT_TYPE_ID [tab] x [tab] y
 
 # MARIO
-0	500	30
+0	2400	30
 
 #BGCLOUD
 8	350	10	0	0	1	54101	54101	54101
@@ -35,6 +36,8 @@ voidspike.txt
 
 8	130	10	24	23	2	54102	54103	54104
 8	770	40	19	23	3	54102	54103	54104
+
+8	2390	25	0	0	1	54101	54101	54101 #Floor 6
 
 #BGBrick
 #13	30	60
@@ -53,15 +56,41 @@ voidspike.txt
 #Koopas #445	30
 16	620	70
 
+16	2144	80	#Floor 5, above the coinbrick
+
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 #5	100	136	16	15	16	51000	52000	53000 Cloud
 #5	160	90	16	16	8	20001	20001	20001
 
 5	0	0	2	400	3	12300	12300	12300	#Left Border
 
-5	200	150	871	16	1	12201	12201	12201 #Floor
-5	891	142	500	32	1	12202	12202	12202 
-5	1360	150	352	16	1	12203	12203	12203
+5	200	150	871	16	1	12201	12201	12201	#Floor 1
+5	891	142	500	32	1	12202	12202	12202	#Floor 2
+
+5	1360	150	352	16	1	12203	12203	12203	#Floor 3
+
+5	1620	151	80	16	1	12204	12204	12204	#Floor 4
+5	1555	70	16	16	2	20002	20002	20002
+5	1621	134	16	16	3	20002	20002	20002
+5	1637	118	16	16	2	20002	20002	20002
+5	1653	102	16	16	1	20002	20002	20002
+
+5	1990	150	576	16	1	12205	12205	12205	#Floor 5
+5	1709	134	16	16	3	20002	20002	20002
+5	1709	118	16	16	2	20002	20002	20002
+5	1709	102	16	16	1	20002	20002	20002
+
+5	2576	150	560	16	1	12206	12206	12206	#Floor 6
+5	2304	102	16	16	2	20002	20002	20002
+5	2304	38	16	16	2	20002	20002	20002	
+
+#CoinBrick 16 16
+#id	x	y	length
+18	2000	134	7	#Floor 5
+18	2016	118	5
+18	2032	102	4
+18	2144	134	2
+18	2144	118	1
 
 #VOIDSPIKE
 17	0	230	1000	5	5	99990
@@ -70,10 +99,18 @@ voidspike.txt
 id	x	y	bbWidth bbHeight spriteID  z
 14	270	117	48	48	55501	1
 14	300	101	48	80	55502	0
+
 14	455	117	80	48	55503	1
 14	510	101	64	80	55507	0
 14	555	75	64	89	55509	-1
 14	574	125	96	32	55504	0
+
+14	1350	126	112	32	55505	0
+14	1385	110	112	64	55508	-1
+14	1420	94	112	96	55510	-2
+
+14	2210	118	48	48	55501	1	#Floor 5
+14	2234	70	48	144	55506	0
 
 #BGBush # w=16
 #id	x	y	length	
@@ -82,9 +119,20 @@ id	x	y	bbWidth bbHeight spriteID  z
 10	706	119	6
 10	1085	119	2
 
+10	1225	135	3
+
+10	1775	135	3	#Floor 5
+
 # PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included	
 #id	x	y	Len	type	pLen	range	
-11	380	102	2	1	2	110
+11	380	102	2	2	2	110
+
+11	1850	118	1	0	0	0	#Floor 5
+11	1915	102	2	0	0	0
+
+11	2312	102	2	1	0	0	#Floor 6
+11	2312	-154	11	0	0	0
+11	2380	118	1	0	0	0
 
 # ShootingPlant #Head: 16 16, Body: 16 8
 
@@ -109,6 +157,16 @@ id	x	y	bbWidth bbHeight spriteID  z
 9	1001	86	-2	2	0	2
 9	1018	102	-1	1	1	0
 
+9	1946	134	0	0	0	0	#Floor 5
+9	1961	102	-2	2	0	2
+9	1977	118	-1	1	1	0
+
+9	2430	86	-1	3	0	3	#Floor 6
+9	2446	70	-2	4	0	0
+9	2461	22	-3	7	0	3
+9	2477	38	-2	6	5	0
+9	2493	118	0	1	1	0
+
 #random brick id x y type(1 for coin, 2 for mushroom)
 12	180	80	1
 12	196	80	1
@@ -120,6 +178,8 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 12	690	118	2
 12	735	85	1
+
+12	1515	100	2
 
 #Portal 
 #50	300	110	316	140	2

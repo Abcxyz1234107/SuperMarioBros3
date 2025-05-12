@@ -39,12 +39,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     /* 2. Respawn */
     if (sleep)
     {
-        if (!passedSpawn && (mario->GetX() - spawnX) > camW * 0.6)
+        if (!passedSpawn && abs(mario->GetX() - spawnX) > camW * 0.6)
             passedSpawn = true;
 
         if (passedSpawn && abs(mario->GetX() - spawnX) < camW)
         {
-            x = spawnX;                         // reset vị trí gốc
+            x = spawnX;
             y = spawnY;
             this->ay = GOOMBA_GRAVITY;
             SetState(GOOMBA_STATE_WALKING);
@@ -81,7 +81,7 @@ bool CKoopas::HasGroundAhead(vector<LPGAMEOBJECT>* coObjects, float dx)
     float nextL = l + dx;
     float nextR = r + dx;
     float probeX = (dx > 0) ? nextR + 1.0f : nextL - 1.0f;
-    float probeY = b + 2.0f;                 // ngay dưới chân
+    float probeY = b + 2.0f;
 
     for (LPGAMEOBJECT obj : *coObjects)
     {
@@ -90,7 +90,7 @@ bool CKoopas::HasGroundAhead(vector<LPGAMEOBJECT>* coObjects, float dx)
         float ol, ot, orr, ob;
         obj->GetBoundingBox(ol, ot, orr, ob);
 
-        if (probeX >= ol - 5 && probeX <= orr + 5 && probeY >= ot && probeY <= ot + 3.0f)
+        if (probeX >= ol - 10 && probeX <= orr + 10 && probeY >= ot && probeY <= ot + 3.0f)
             return false;
     }
     return true; // không có nền -> mép

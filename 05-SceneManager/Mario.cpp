@@ -11,6 +11,8 @@
 #include "Coin.h"
 #include "ShootingPlant.h"
 #include "VoidSpike.h"
+#include "CRandomBrick.h"
+#include "Koopas.h"
 
 #include "Collision.h"
 
@@ -72,15 +74,15 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CRandomMushroom*>(goomba))
 	{
-		OnCollisionWithRandomMushroom(dynamic_cast<CRandomMushroom*>(goomba));
+		OnCollisionWithRandomMushroom(e);
 	}
 	else if (dynamic_cast<CKoopas*>(goomba))
 	{
-		OnCollisionWithKoopas(dynamic_cast<CKoopas*>(goomba), e);
+		OnCollisionWithKoopas(e);
 	}
 	else if (dynamic_cast<CKoopasShell*>(goomba))
 	{
-		OnCollisionWithKoopasShell(dynamic_cast<CKoopasShell*>(goomba), e);
+		OnCollisionWithKoopasShell(e);
 	}
 	else
 	{
@@ -126,8 +128,9 @@ void CMario::OnCollisionWithVoidSpike(LPCOLLISIONEVENT e)
 	SetState(MARIO_STATE_DIE);
 }
 
-void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 {
+	CKoopasShell* shell = (CKoopasShell*)e->obj;
 	if (shell->IsHeld()) return;
 
 	/* 1. Mario chạy & shell đứng yên  ->  nhặt */
@@ -167,8 +170,9 @@ void CMario::OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e)
 	}
 }
 
-void CMario::OnCollisionWithRandomMushroom(CRandomMushroom* mushroom)
+void CMario::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
 {
+	CRandomMushroom* mushroom = (CRandomMushroom*)e->obj;
 	if (mushroom->IsEmerging() == false)
 	{
 		mushroom->Delete();
@@ -180,8 +184,9 @@ void CMario::OnCollisionWithRandomMushroom(CRandomMushroom* mushroom)
 	}
 }
 
-void CMario::OnCollisionWithKoopas(CKoopas* koopas, LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
+	CKoopas* koopas = (CKoopas*)e->obj;
 	if (e->ny < 0)
 	{
 		if (koopas->GetState() != GOOMBA_STATE_DIE)

@@ -1,5 +1,9 @@
 ﻿#include "KoopasShell.h"
+#include "CRandomBrick.h"
+#include "VoidSpike.h"
+#include "CoinBrick.h"
 #include "PlayScene.h"
+#include "Koopas.h"
 
 void CKoopasShell::Render()
 {
@@ -26,7 +30,7 @@ void CKoopasShell::Activate(float dir)
 void CKoopasShell::SetHeld()
 {
     isHeld = true;
-    vx = ax = 0;  // đứng yên
+    vx = ax = 0;
     vy = 0;
 }
 
@@ -38,15 +42,26 @@ void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithGoomba(e);
     else if (dynamic_cast<CRandomBrick*>(e->obj))
         OnCollisionWithRandomBrick(e);
+    else if (dynamic_cast<CoinBrick*>(e->obj))
+        OnCollisionWithCoinBrick(e);
+    else if (dynamic_cast<CVoidSpike*>(e->obj))
+        this->Delete();
 }
 
 void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
     dynamic_cast<CGoomba*>(e->obj)->SetState(GOOMBA_STATE_DIE);
 }
+
 void CKoopasShell::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 {
     dynamic_cast<CRandomBrick*>(e->obj)->Activate();
+}
+
+void CKoopasShell::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
+{
+    if (vx != 0 && (e->nx < 0 || e->nx > 0))
+        dynamic_cast<CoinBrick*>(e->obj)->Activate();
 }
 
 void CKoopasShell::OnNoCollision(DWORD dt)

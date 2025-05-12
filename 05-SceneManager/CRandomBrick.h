@@ -16,7 +16,7 @@ private:
 
 public:
 	CRandomBrick(float x, float y, int type,
-		float cell_width = 16, float cell_height = 16, int length = 1,
+		float cell_width = 15, float cell_height = 16, int length = 1,
 		int aniIdBegin = 20111, int isAni = 1)
 		: CPlatform(x, y, cell_width, cell_height, length, aniIdBegin, aniIdBegin, aniIdBegin, isAni) 
 	{

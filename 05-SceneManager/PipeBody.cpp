@@ -22,8 +22,11 @@ void CPipeBody::Render()
 
 void CPipeBody::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    l = x - cellWidth / 2;
-    t = y - cellHeight / 2;
+    float halfW = cellWidth / 2.0f;
+    float halfH = cellHeight / 2.0f;
+
+    l = x - halfW;
+    t = (y + cellHeight) - halfH;
     r = l + cellWidth;
-    b = t + totalHeight;
+    b = t + cellHeight * length;
 }

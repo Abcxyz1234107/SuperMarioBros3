@@ -22,6 +22,7 @@
 #include "ShootingPlant.h"
 #include "Koopas.h"
 #include "VoidSpike.h"
+#include "CoinBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -154,24 +155,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int pLength = atoi(tokens[5].c_str());
 		float pRange = (float)atof(tokens[6].c_str());
 
-		CPipe* pipe;
+		CPipe* pipe = new CPipe(x, y, length, pType, pLength, pRange);
 
-		if (pType == 0)
+		if (pType != 1)
 		{
-			pipe = new CPipe(x, y, length);
 			objects.push_back(pipe->GetHead());
-			objects.push_back(pipe->GetBody());
 		}
-		else
+		
+		if (pType == 2 || pType == 3)
 		{
-			pipe = new CPipe(x, y, length, pType, pLength, pRange);
-			objects.push_back(pipe->GetHead());
-			objects.push_back(pipe->GetBody());
 			objects.push_back(pipe->GetSPlant()->GetHead());
 			objects.push_back(pipe->GetSPlant()->GetBody());
 			objects.push_back(pipe->GetSPlant());
 		}
 
+		objects.push_back(pipe->GetBody());
 		obj = pipe;
 
 		break;
@@ -190,6 +188,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_BGBRICK: obj = new CBGBrick(x, y); break;
+	case OBJECT_TYPE_COINBRICK:
+	{
+		int length = atoi(tokens[3].c_str());
+
+		for (float i = 0; i < length; i++)
+		{
+			obj = new CoinBrick(x + i * 16, y);
+			objects.push_back(obj);
+		}
+		
+		return; //Tránh trùng con trỏ vì có một objects.push_back 
+		        //khác ở dưới cùng của hàm này
+	}
 	case OBJECT_TYPE_BGCLOUD:
 	{
 		float cell_width = (float)atof(tokens[3].c_str());
@@ -381,11 +392,13 @@ void CPlayScene::Update(DWORD dt)
 
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	float y = game->GetBackBufferHeight();
+	if (cy > y && player->GetState() != MARIO_STATE_DIE) cy -= (y / 2);
+	else cy = 0;
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }

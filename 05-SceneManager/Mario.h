@@ -3,8 +3,6 @@
 
 #include "Animation.h"
 #include "Animations.h"
-#include "CRandomBrick.h"
-#include "Koopas.h"
 
 #include "debug.h"
 
@@ -124,9 +122,9 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e);
-	void OnCollisionWithRandomMushroom(CRandomMushroom* mushroom);
-	void OnCollisionWithKoopas(CKoopas* koopas, LPCOLLISIONEVENT e);
-	void OnCollisionWithKoopasShell(CKoopasShell* shell, LPCOLLISIONEVENT e);
+	void OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopasShell(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
