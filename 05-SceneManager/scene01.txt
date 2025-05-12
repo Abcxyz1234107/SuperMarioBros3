@@ -34,7 +34,7 @@ coinbrick.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	500	30
+0	20	30
 
 #BGCLOUD
 8	350	10	0	0	1	54101	54101	54101

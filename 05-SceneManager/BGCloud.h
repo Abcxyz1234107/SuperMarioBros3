@@ -17,7 +17,7 @@ public:
 		: CPlatform(x, y, cell_width, cell_height, length, sprite_id_begin, sprite_id_middle,
 			sprite_id_end)
 	{
-
+		z = 1;
 	}
 
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override {}

@@ -387,18 +387,64 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	const float CAM_SPEED = 100.0f;
+
+	float px, py, cx, cy;
+	player->GetPosition(px, py);
 
 	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	float y = game->GetBackBufferHeight();
-	if (cy > y && player->GetState() != MARIO_STATE_DIE) cy -= (y / 2);
-	else cy = 0;
+	game->GetCamPos(cx, cy);
 
+	static float lastPx = -1.0f, lastPy = -1.0f;
+	static bool  camStarted = false;
+
+	// Khởi tạo vị trí
+	float halfW = game->GetBackBufferWidth() * 0.5f;
+
+	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
+	{
+		lastPx = px;
+		lastPy = py;
+		cx = 0;                       
+		cy = 0;
+		game->SetCamPos(cx, cy);
+		return;
+	}
+
+	// Tính quãng đường Mario vừa di chuyển
+	float dx = px - lastPx;
+	float dy = py - lastPy;
+
+	// Chờ Mario chạm mốc giữa màn hình rồi mới bắt đầu scroll
+	if (!camStarted)
+	{
+		if (px >= halfW)
+		{
+			camStarted = true;
+			cx = px - halfW;  // căn ngay Mario vào giữa
+		}
+		
+	}
+	else
+	{
+		// Camera di chuyển đúng quãng đường Mario đi
+		cx += dx;
+	}
+
+	// ------------------------------------------------------------
+	// 4. Giới hạn biên & trục Y
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	if (player->GetState() == MARIO_STATE_DIE || py >= 20)
+		cy = 0;
+	else
+		cy += dy;                         
+
+	// 5. Lưu vị trí & cập nhật camera
+	lastPx = px;
+	lastPy = py;
+
+	game->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
