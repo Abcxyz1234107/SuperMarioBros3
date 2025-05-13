@@ -391,6 +391,7 @@ void CPlayScene::Update(DWORD dt)
 
 	float px, py, cx, cy;
 	player->GetPosition(px, py);
+	CMario* mario = (CMario*)player;
 
 	CGame* game = CGame::GetInstance();
 	game->GetCamPos(cx, cy);
@@ -399,10 +400,14 @@ void CPlayScene::Update(DWORD dt)
 	static bool  camStarted = false;
 
 	// Khởi tạo vị trí
-	float halfW = game->GetBackBufferWidth() * 0.5f;
+	float screenW = game->GetBackBufferWidth();
+	float screenH = game->GetBackBufferHeight();
+
+	float halfW = screenW * 0.5f;
 
 	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
-	{
+	{                   // không cần xét y ban đầu vì người chơi ko thể
+						// lấy lá khi mới chơi
 		lastPx = px;
 		lastPy = py;
 		cx = 0;                       
@@ -432,15 +437,13 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// ------------------------------------------------------------
-	// 4. Giới hạn biên & trục Y
 	if (cx < 0) cx = 0;
-
-	if (player->GetState() == MARIO_STATE_DIE || py >= 20)
+	if (mario->GetState() == MARIO_STATE_DIE 
+		|| py >= screenH * 0.2 || mario->GetLevel() != 3)
 		cy = 0;
 	else
 		cy += dy;                         
 
-	// 5. Lưu vị trí & cập nhật camera
 	lastPx = px;
 	lastPy = py;
 

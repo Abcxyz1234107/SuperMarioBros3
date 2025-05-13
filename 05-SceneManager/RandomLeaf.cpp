@@ -45,7 +45,8 @@ void CRandomLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CMario*>(e->obj))
 	{
 		CMario* mario = (CMario*)e->obj;
-		mario->SetLevel(mario->GetLevel() + 1);
+		if (mario->GetLevel() < MARIO_LEVEL_FLY)
+			mario->SetLevel(mario->GetLevel() + 1);
 		this->Delete();
 	}
 }

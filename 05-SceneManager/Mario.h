@@ -33,6 +33,8 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
+#define MARIO_STATE_FLY				700
+#define MARIO_STATE_RELEASE_FLY 	701
 
 #pragma region ANIMATION_ID
 
@@ -138,7 +140,8 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	int coin; 
 
-	bool  holdingShell = false;
+	bool holdingShell;
+	bool isFly;
 
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -154,6 +157,7 @@ class CMario : public CGameObject
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdFly();
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -163,11 +167,14 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = 2;
+		level = 1;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+
+		holdingShell = false;
+		isFly = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -195,4 +202,6 @@ public:
 
 	void  SetHoldingShell(bool v) { holdingShell = v; }
 	bool  IsHoldingShell() { return holdingShell; }
+
+	bool IsFly() { return isFly; }
 };

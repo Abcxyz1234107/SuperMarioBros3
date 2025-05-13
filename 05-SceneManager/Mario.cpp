@@ -32,6 +32,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 
+	if (level == MARIO_LEVEL_FLY && isFly)
+		vy = -MARIO_RUNNING_SPEED;
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -108,7 +111,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				{
 					if (level > MARIO_LEVEL_SMALL)
 					{
-						level = MARIO_LEVEL_SMALL;
+						level--;
 						StartUntouchable();
 					}
 					else
@@ -171,7 +174,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
-			level = MARIO_LEVEL_SMALL;
+			level--;
 			StartUntouchable();
 		}
 		else
@@ -215,7 +218,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					level--;
 					StartUntouchable();
 				}
 				else
@@ -236,7 +239,7 @@ void CMario::OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
-			level = MARIO_LEVEL_SMALL;
+			level--;
 			StartUntouchable();
 		}
 		else
@@ -262,7 +265,8 @@ void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
 	CRandomLeaf* leaf = dynamic_cast<CRandomLeaf*>(e->obj);
 
 	leaf->Delete();
-	this->SetLevel(this->GetLevel() + 1);
+	if (level < MARIO_LEVEL_FLY)
+		SetLevel(level + 1);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -328,6 +332,64 @@ int CMario::GetAniIdSmall()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+
+	return aniId;
+}
+
+int CMario::GetAniIdFly()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X || isFly)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_BIG_FLY_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_BIG_FLY_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_BIG_FLY_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_BIG_FLY_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_BIG_FLY_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_BIG_FLY_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_BIG_FLY_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_BIG_FLY_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_BIG_FLY_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_BIG_FLY_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_BIG_FLY_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_BIG_FLY_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_BIG_FLY_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT;
 
 	return aniId;
 }
@@ -405,6 +467,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_FLY)
+		aniId = GetAniIdFly();
 
 	bool skipRender = (untouchable && ((GetTickCount64() / 100) % 2 == 0));
 	if (!skipRender)
@@ -450,6 +514,7 @@ void CMario::SetState(int state)
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
+			isOnPlatform = false;
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else
@@ -458,6 +523,25 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
+		isOnPlatform = true;
+		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		break;
+
+	case MARIO_STATE_FLY:
+		if (isSitting) break;
+
+		isFly = true;
+		isOnPlatform = false;
+		if (abs(this->vx) == MARIO_RUNNING_SPEED)
+			vy = -MARIO_RUNNING_SPEED;
+		else
+			vy = -MARIO_WALKING_SPEED;
+
+		break;
+
+	case MARIO_STATE_RELEASE_FLY:
+		isFly = false;
+		isOnPlatform = true;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 
@@ -497,7 +581,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level==MARIO_LEVEL_BIG || level == MARIO_LEVEL_FLY)
 	{
 		if (isSitting)
 		{
