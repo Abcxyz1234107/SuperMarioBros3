@@ -17,7 +17,6 @@
 #include "BGBush.h"
 #include "BGTree.h"
 #include "CRandomBrick.h"
-#include "BGBrick.h"
 #include "LargeBrick.h"
 #include "ShootingPlant.h"
 #include "Koopas.h"
@@ -187,7 +186,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = bgtree;
 		break;
 	}
-	case OBJECT_TYPE_BGBRICK: obj = new CBGBrick(x, y); break;
 	case OBJECT_TYPE_COINBRICK:
 	{
 		int length = atoi(tokens[3].c_str());

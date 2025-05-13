@@ -114,12 +114,6 @@
     <ClCompile Include="RandomMushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BGObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BGBrick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LargeBrick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -347,12 +341,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RandomMushroom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BGBrick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LargeBrick.h">
