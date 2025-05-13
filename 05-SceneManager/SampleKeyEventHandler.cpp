@@ -23,6 +23,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else mario->SetState(MARIO_STATE_JUMP);
 		break;
+	case DIK_F:
+		mario->SetImmortal(true);
+		break;
+	case DIK_K:
+		mario->SetImmortal(false);
+		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
 		break;
@@ -66,21 +72,42 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (mario->IsImmortal())
 	{
-		if (game->IsKeyDown(DIK_D))
-			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-		else
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	}
-	else if (game->IsKeyDown(DIK_LEFT))
-	{
-		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_LEFT);
-		else
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		if (game->IsKeyDown(DIK_W))
+		{
+			mario->SetPosition(mario->GetX(), mario->GetY() - 10);
+		}
+		else if (game->IsKeyDown(DIK_S))
+		{
+			mario->SetPosition(mario->GetX(), mario->GetY() + 10);
+		}
+		else if (game->IsKeyDown(DIK_A))
+		{
+			mario->SetPosition(mario->GetX() - 10, mario->GetY());
+		}
+		else if (game->IsKeyDown(DIK_D))
+		{
+			mario->SetPosition(mario->GetX() + 10, mario->GetY());
+		}
 	}
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+	{
+		if (game->IsKeyDown(DIK_RIGHT))
+		{
+			if (game->IsKeyDown(DIK_D))
+				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			else
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		}
+		else if (game->IsKeyDown(DIK_LEFT))
+		{
+			if (game->IsKeyDown(DIK_A))
+				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			else
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
+		else
+			mario->SetState(MARIO_STATE_IDLE);
+	}
 }

@@ -143,6 +143,8 @@ class CMario : public CGameObject
 	bool holdingShell;
 	bool isFly;
 
+	bool immortal;
+
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -158,7 +160,6 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdFly();
-
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -167,7 +168,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = 3;
+		level = 2;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -175,6 +176,8 @@ public:
 
 		holdingShell = false;
 		isFly = false;
+
+		immortal = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -204,4 +207,6 @@ public:
 	bool  IsHoldingShell() { return holdingShell; }
 
 	bool IsFly() { return isFly; }
+	void SetImmortal(bool b) { immortal = b; }
+	bool IsImmortal() { return immortal; }
 };

@@ -5,6 +5,12 @@
 54103	28	25	43	48	-99
 54104	50	25	73	48	-99
 
+54105	82	1	97	16	-99 #Flower
+54106	105	1	120	16	-99 #Star
+54107	127	1	142	16	-99 #Mushroom
+
+54108	354	243	369	258	20 #16 16, smile cloud
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 54111	54101	1000

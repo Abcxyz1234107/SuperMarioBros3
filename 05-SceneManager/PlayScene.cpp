@@ -131,7 +131,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_COIN: 
+	{
+		int length = atoi(tokens[3].c_str());
+
+		for (float i = 0; i < length; i++)
+		{
+			obj = new CCoin(x + i * 16, y);
+			objects.push_back(obj);
+		}
+
+		return;
+	}
 	case OBJECT_TYPE_VOIDSPIKE:
 	{
 		float cell_width = (float)atof(tokens[3].c_str());
@@ -275,10 +286,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+		int scene_id = atoi(tokens[3].c_str());
+		obj = new CPortal(x, y, scene_id);
 	}
 	break;
 
@@ -385,67 +394,21 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	// Update camera to follow mario
-	const float CAM_SPEED = 100.0f;
-
-	float px, py, cx, cy;
-	player->GetPosition(px, py);
-	CMario* mario = (CMario*)player;
+	float cx, cy;
+	player->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
-	game->GetCamPos(cx, cy);
-
-	static float lastPx = -1.0f, lastPy = -1.0f;
-	static bool  camStarted = false;
-
-	// Khởi tạo vị trí
-	float screenW = game->GetBackBufferWidth();
-	float screenH = game->GetBackBufferHeight();
-
-	float halfW = screenW * 0.5f;
-
-	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
-	{                   // không cần xét y ban đầu vì người chơi ko thể
-						// lấy lá khi mới chơi
-		lastPx = px;
-		lastPy = py;
-		cx = 0;                       
-		cy = 0;
-		game->SetCamPos(cx, cy);
-		return;
-	}
-
-	// Tính quãng đường Mario vừa di chuyển
-	float dx = px - lastPx;
-	float dy = py - lastPy;
-
-	// Chờ Mario chạm mốc giữa màn hình rồi mới bắt đầu scroll
-	if (!camStarted)
+	cx -= game->GetBackBufferWidth() / 2;
+	if (cy < 20 && player->GetState() != MARIO_STATE_DIE)
 	{
-		if (px >= halfW)
-		{
-			camStarted = true;
-			cx = px - halfW;  // căn ngay Mario vào giữa
-		}
-		
+		cy -= game->GetBackBufferWidth() / 3;
 	}
 	else
-	{
-		// Camera di chuyển đúng quãng đường Mario đi
-		cx += dx;
-	}
+		cy = 0;
 
-	// ------------------------------------------------------------
 	if (cx < 0) cx = 0;
-	if (mario->GetState() == MARIO_STATE_DIE 
-		|| py >= screenH * 0.2 || mario->GetLevel() != 3)
-		cy = 0;
-	else
-		cy += dy;                         
 
-	lastPx = px;
-	lastPy = py;
-
-	game->SetCamPos(cx, cy);
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }

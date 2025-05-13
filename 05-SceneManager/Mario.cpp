@@ -20,6 +20,8 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (immortal) return;
+
 	vy += ay * dt;
 	vx += ax * dt;
 
