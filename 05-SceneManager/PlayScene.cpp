@@ -415,7 +415,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	//Z lớn hơn che z nhỏ hơn
+	// z lớn che z nhỏ hơn
 	sort(objects.begin(), objects.end(),
 		[](LPGAMEOBJECT a, LPGAMEOBJECT b) {
 			return a->GetZ() < b->GetZ();

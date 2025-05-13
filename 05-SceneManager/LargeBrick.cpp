@@ -4,6 +4,8 @@
 
 void CLargeBrick::Render()
 {
+	shadow->Render();
+
 	CSprites* sprite = CSprites::GetInstance();
 	sprite->Get(spriteID)->Draw(x, y);
 	//RenderBoundingBox();
