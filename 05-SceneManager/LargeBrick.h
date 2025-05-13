@@ -17,7 +17,7 @@ public:
         this->spriteID = spriteID;
         this->bboxHeight = bboxHeight;
         this->bboxWidth = bboxWidth;
-        this->shadow = new Shadow(this, spriteID);
+        this->shadow = new Shadow(this, 10, 10, spriteID);
     }
     void Render();
     void GetBoundingBox(float& l, float& t, float& r, float& b);
