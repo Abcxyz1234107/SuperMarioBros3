@@ -6,12 +6,6 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
-void Reload(int scene_id)
-{
-	CGame::GetInstance()->ReloadScene(scene_id);
-}
-
-
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -48,8 +42,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_DIE);
 		break;
 	case DIK_R: // reset
-		DebugOut(L"1111\n");
-		Reload(1);
+		CGame::GetInstance()->ReloadScene(1);
 		break;
 	}
 }
