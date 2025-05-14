@@ -14,6 +14,7 @@
 #include "CoinBrick.h"
 #include "Koopas.h"
 #include "RandomLeaf.h"
+#include "GoombaRed.h"
 
 #include "Collision.h"
 
@@ -94,6 +95,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithKoopasShell(e);
 	}
+	else if (dynamic_cast<CGoombaRed*>(goomba))
+	{
+		OnCollisionWithGoombaRed(e);
+	}
 	else
 	{
 		if (e->ny < 0)
@@ -144,6 +149,47 @@ void CMario::OnCollisionWithVoidSpike(LPCOLLISIONEVENT e)
 {
 	DebugOut(L">>> Mario DIE >>> \n");
 	SetState(MARIO_STATE_DIE);
+}
+
+void CMario::OnCollisionWithGoombaRed(LPCOLLISIONEVENT e)
+{
+	CGoombaRed* rg = (CGoombaRed*)e->obj;
+	if (e->ny < 0)
+	{
+		if (rg->HasWings()) // lần 1
+		{
+			score += 100;
+			rg->AddCharacter(C_100);
+			rg->RemoveWing();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (rg->GetState() != GOOMBA_STATE_DIE)  // lần 2
+		{
+			score += 200;
+			rg->AddCharacter(C_200);
+			rg->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else
+	{
+		if (untouchable == 0)
+		{
+			if (rg->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level--;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
 }
 
 void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)

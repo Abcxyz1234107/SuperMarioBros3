@@ -22,6 +22,7 @@
 #include "Koopas.h"
 #include "VoidSpike.h"
 #include "CoinBrick.h"
+#include "GoombaRed.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -237,6 +238,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPAS:
 	{
 		obj = new CKoopas(x, y); 
+
+		break;
+	}
+	case OBJECT_TYPE_REDGOOMBA:
+	{
+		obj = new CGoombaRed(x, y);
 
 		break;
 	}

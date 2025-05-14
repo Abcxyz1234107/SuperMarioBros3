@@ -10,7 +10,6 @@ void CShootingPlant::Render()
 
 void CShootingPlant::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
 {
-    
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
 

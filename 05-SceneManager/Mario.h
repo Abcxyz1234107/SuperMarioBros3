@@ -151,6 +151,7 @@ class CMario : public CGameObject
 
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoombaRed(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);

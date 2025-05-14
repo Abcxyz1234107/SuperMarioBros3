@@ -21,6 +21,7 @@ Koopas.txt
 voidspike.txt
 coinbrick.txt
 character.txt
+wing.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -35,14 +36,15 @@ character.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	200	90
+0	800	90
 
 #Goomba
-#2	300	90 #Floor 1
+2	300	90 #Floor 1
 2	500	100
 
-2	800	90 #Floor 2
-2	1000	90 #Floor 2
+2	750	90 #Floor 2
+2	900	90 #Floor 2
+19	1100	90 #Floor 2 #Red goomba
 
 #BGCLOUD
 #id	x	y	bW	bH	Len	s1	s2	s3
