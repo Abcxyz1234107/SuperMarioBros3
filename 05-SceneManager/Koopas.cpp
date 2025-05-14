@@ -11,6 +11,8 @@ void CKoopas::Render()
     CAnimations* animations = CAnimations::GetInstance();
     int aniId = (vx >= 0) ? ID_ANI_KOOPAS_WALK_RIGHT : ID_ANI_KOOPAS_WALK_LEFT;
     animations->Get(aniId)->Render(x, y);
+
+    RenderCharacter();
 }
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {

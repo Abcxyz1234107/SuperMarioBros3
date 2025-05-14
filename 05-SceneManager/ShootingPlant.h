@@ -23,7 +23,7 @@ private:
     float detectRange;
 
     float startY, topY;
-    DWORD stateTimer;
+    ULONGLONG stateTimer;
     SPLANT_STATE state;
     bool hasShot;
 public:

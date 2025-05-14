@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
-#include "CRandomBrick.h"
+#include "Character.h"
 
 #define ID_ANI_COIN 11000
 #define	COIN_WIDTH 10
@@ -16,10 +16,13 @@ class CRandomCoin :
 private:
 	void OnCollisionWithRandomBrick(LPCOLLISIONEVENT e);
 
+	Character* character;
+
 public:
 	CRandomCoin(float x, float y) : CGameObject(x, y)
 	{
 		vy = 0.0f;
+		character = nullptr;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -29,5 +32,7 @@ public:
 
 	void OnNoCollision(DWORD dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
+
+	void AddCharacter(int c);
 };
 

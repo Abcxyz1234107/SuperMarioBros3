@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "Goomba.h"
 
-
 #define SHELL_BBOX_W 15
 #define SHELL_BBOX_H 15
 #define SHELL_MOVE_SPEED 0.25f 

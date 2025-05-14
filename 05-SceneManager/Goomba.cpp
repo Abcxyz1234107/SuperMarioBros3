@@ -7,7 +7,11 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
+	character = nullptr;
 }
+
+void CGoomba::AddCharacter(int c) { LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene(); character = new Character(x, y, c); currentScene->AddObject(character); }
+void CGoomba::RenderCharacter() { if (!character) return; if (character->IsDeleted()) {character = nullptr;  return; } character->Render(); }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
@@ -79,6 +83,8 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
+
+	RenderCharacter();
 	//RenderBoundingBox();
 }
 

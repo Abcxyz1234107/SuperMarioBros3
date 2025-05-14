@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "Character.h"
+
+class Character;
 
 #define LEAF_BBOX_W 16
 #define LEAF_BBOX_H 14
@@ -22,6 +25,7 @@ private:
 	int   state;
 	float xPivot;  // gốc để đo biên dao động
 
+	Character* character;
 public:
     CRandomLeaf(float x, float y) : CGameObject(x, y)
     {
@@ -29,17 +33,20 @@ public:
 		xPivot = x;
 		vx = 0.0f;
 		vy = -LEAF_RISE_SPEED;
+		character = nullptr;
     }
 
     void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
-	int IsCollidable() override { return 1; }
+	int IsCollidable() override { return 0; }
 
 	void OnNoCollision(DWORD dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
 	void SetState(int state) override;
+
+	void AddCharacter(int c);
 };
 

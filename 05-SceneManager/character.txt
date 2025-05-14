@@ -1,6 +1,17 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-54108	354	243	369	258	20
+10100	458	222	469	231	20 #11 8, 100
+10110	471	222	486	231	20 #15 8, 1000
+
+10200	457	232	468	239	20 #12 8, 200
+10220	470	232	487	239	20 #16 8, 2000
+
+#Coin: 50 (not show), brick coin: 100
+#Koopas: 100, shell: 200. Stop shell: 100, hit again: 100
+#Red mushroom, leaf: 1000
+#Goomba: 100. Shell hit goomba: 100
+#Red goomba: 200, wing: 100
+#Green Koopas: 200, wing: 100
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]

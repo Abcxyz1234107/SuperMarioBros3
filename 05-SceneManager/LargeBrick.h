@@ -6,11 +6,12 @@ class CLargeBrick :
     public CGameObject
 {
 private:
-    Shadow* shadow;
     int spriteID;
     int bboxWidth, bboxHeight;
+
+    Shadow* shadow;
 public:
-    CLargeBrick(int x, int y, int bboxWidth, int bboxHeight, int spriteID, int z) : 
+    CLargeBrick(float x, float y, int bboxWidth, int bboxHeight, int spriteID, int z) :
         CGameObject(x, y)
     {
         this->z = z;

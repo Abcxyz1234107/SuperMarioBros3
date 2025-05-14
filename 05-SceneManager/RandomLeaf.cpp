@@ -5,7 +5,19 @@ void CRandomLeaf::Render()
 {
 	CSprites* sprite = CSprites::GetInstance();
 	sprite->Get(ID_SPRITE_RANDOMLEAF)->Draw(x, y);
+
+	if (!character) return;
+	if (character->IsDeleted()) { character = nullptr;  return; }
+
+	character->Render();
 	//RenderBoundingBox();
+}
+
+void CRandomLeaf::AddCharacter(int c)
+{
+	LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	character = new Character(x, y, c);
+	currentScene->AddObject(character);
 }
 
 void CRandomLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -47,6 +59,9 @@ void CRandomLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 		CMario* mario = (CMario*)e->obj;
 		if (mario->GetLevel() < MARIO_LEVEL_FLY)
 			mario->SetLevel(mario->GetLevel() + 1);
+
+		AddCharacter(C_1000);
+
 		this->Delete();
 	}
 }

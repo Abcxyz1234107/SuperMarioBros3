@@ -129,6 +129,8 @@
 
 class CMario : public CGameObject
 {
+	float spawnX, spawnY;
+
 	BOOLEAN isSitting;
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -139,8 +141,10 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	long long score;
 
 	bool holdingShell;
+	bool hitShellOnce;
 	bool isFly;
 
 	bool immortal;
@@ -163,19 +167,24 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		spawnX = x;
+		spawnY = y;
+
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = 2;
+		level = 1;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		score = 0;
 
 		holdingShell = false;
 		isFly = false;
+		hitShellOnce = false;
 
 		immortal = false;
 	}

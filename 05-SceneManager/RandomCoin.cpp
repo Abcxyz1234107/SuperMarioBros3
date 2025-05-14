@@ -1,4 +1,5 @@
 ﻿#include "RandomCoin.h"
+#include "CRandomBrick.h"
 #include "debug.h"
 
 void CRandomCoin::Render()
@@ -6,8 +7,21 @@ void CRandomCoin::Render()
     CAnimations* animations = CAnimations::GetInstance();
     animations->Get(ID_ANI_COIN)->Render(x, y);
 
+    if (!character) return; 
+    if (character->IsDeleted()) { character = nullptr;  return; } 
+
+    character->Render();
+
     //RenderBoundingBox();
 }
+
+void CRandomCoin::AddCharacter(int c)
+{
+    LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    character = new Character(x, y, c);
+    currentScene->AddObject(character);
+}
+
 
 void CRandomCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
@@ -25,7 +39,7 @@ void CRandomCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
-void CRandomCoin::OnNoCollision(DWORD dt)        // <─ mới
+void CRandomCoin::OnNoCollision(DWORD dt)
 {
     y += vy * dt;
 }
@@ -38,5 +52,6 @@ void CRandomCoin::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CRandomCoin::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 {
+    AddCharacter(C_100);
     this->Delete();
 }

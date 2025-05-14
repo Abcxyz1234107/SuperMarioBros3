@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "Character.h" 
+
+class Character;
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
@@ -25,6 +28,8 @@ protected:
 
 	ULONGLONG die_start;
 
+	Character* character;
+
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
@@ -37,4 +42,7 @@ protected:
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
+
+	void AddCharacter(int c);
+	void RenderCharacter();
 };

@@ -17,6 +17,8 @@ void CKoopasShell::Render()
         CSprites* sprite = CSprites::GetInstance();
         sprite->Get(ID_SPRITE_KOOPAS_SHELL)->Draw(x, y);
     }
+
+    RenderCharacter();
 }
 
 void CKoopasShell::Activate(float dir)
@@ -50,6 +52,7 @@ void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
+    AddCharacter(C_100);
     dynamic_cast<CGoomba*>(e->obj)->SetState(GOOMBA_STATE_DIE);
 }
 

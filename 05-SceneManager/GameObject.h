@@ -30,7 +30,7 @@ protected:
 
 	int state;
 
-	bool isDeleted; 
+	bool isDeleted = false; 
 
 public: 
 	void SetPosition(float x, float y, float z) { this->x = x, this->y = y; this->z = z; }

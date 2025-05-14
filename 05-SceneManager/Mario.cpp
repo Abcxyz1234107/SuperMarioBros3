@@ -7,7 +7,6 @@
 #include "Goomba.h"
 #include "CRandomBrick.h"
 #include "Portal.h"
-#include "PlayScene.h"
 #include "Coin.h"
 #include "ShootingPlant.h"
 #include "VoidSpike.h"
@@ -101,6 +100,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
+				score += 100;
+				goomba->AddCharacter(C_100);
 				goomba->SetState(GOOMBA_STATE_DIE);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
 			}
@@ -162,6 +163,17 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	if (shell->GetVx() == 0)
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
+		if (!hitShellOnce)
+		{
+			score += 200;
+			shell->AddCharacter(C_200);
+			hitShellOnce = true;
+		}
+		else
+		{
+			score += 100;
+			shell->AddCharacter(C_100);
+		}
 		shell->Activate(dir);
 		return;
 	}
@@ -171,6 +183,8 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		shell->SetVx(0);
+		score += 100;
+		shell->AddCharacter(C_100);
 	}
 	else if (untouchable == 0)              // va chạm 
 	{
@@ -192,6 +206,8 @@ void CMario::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
 	CRandomMushroom* mushroom = (CRandomMushroom*)e->obj;
 	if (mushroom->IsEmerging() == false)
 	{
+		score += 1000;
+		mushroom->AddCharacter(C_1000);
 		mushroom->Delete();
 
 		if (this->level == MARIO_LEVEL_SMALL)
@@ -208,6 +224,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	{
 		if (koopas->GetState() != GOOMBA_STATE_DIE)
 		{
+			score += 1000;
+			koopas->AddCharacter(C_100);
 			koopas->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -266,6 +284,8 @@ void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
 {
 	CRandomLeaf* leaf = dynamic_cast<CRandomLeaf*>(e->obj);
 
+	score += 1000;
+	leaf->AddCharacter(C_1000);
 	leaf->Delete();
 	if (level < MARIO_LEVEL_FLY)
 		SetLevel(level + 1);
