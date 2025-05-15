@@ -25,7 +25,7 @@ public:
     void OnNoCollision(DWORD dt);
     void OnCollisionWith(LPCOLLISIONEVENT e);
 
-    int IsCollidable() override { return 1; } 
+    int IsCollidable() override { return 0; } 
     int IsBlocking()   override { return 0; }
 };
 

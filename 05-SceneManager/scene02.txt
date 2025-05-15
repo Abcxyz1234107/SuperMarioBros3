@@ -1,9 +1,28 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-coin.txt
-cloud.txt
 brick.txt
+coin.txt
+goomba.txt
+cloud.txt
+pipehead.txt
+pipebody.txt
+bgcloud.txt
+bgtree.txt
+bgbush.txt
+randombrick.txt
+randomMushroom.txt
+randomleaf.txt
+bgbrick.txt
+floor.txt
+largebrick.txt
+shootingplant.txt
+Koopas.txt
+voidspike.txt
+coinbrick.txt
+character.txt
+wing.txt
+scoreboard.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
