@@ -29,11 +29,18 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
     float       camW = (float)CGame::GetInstance()->GetBackBufferWidth();
+
+    if (shell && shell->IsDeleted())
+    {
+        shell = nullptr;
+    }
+
     /* 1. Turn to Shell */
     if (state == GOOMBA_STATE_DIE && sleep == false)
     {
         CKoopasShell* fakeShell = new CKoopasShell(x, y);
         scene->AddObject(fakeShell);
+        shell = fakeShell;
         sleep = true;
         vx = vy = 0;
         return;
@@ -42,6 +49,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     /* 2. Respawn */
     if (sleep)
     {
+        if (shell) return;
+
         if (!passedSpawn && abs(mario->GetX() - spawnX) > camW * 0.51)
             passedSpawn = true;
 
