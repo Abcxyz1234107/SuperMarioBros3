@@ -60,6 +60,7 @@ void CRandomLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (mario->GetLevel() < MARIO_LEVEL_FLY)
 			mario->SetLevel(mario->GetLevel() + 1);
 
+		mario->SetScore(mario->GetScore() + 1000);
 		AddCharacter(C_1000);
 
 		this->Delete();

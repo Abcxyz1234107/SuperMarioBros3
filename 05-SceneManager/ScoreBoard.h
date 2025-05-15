@@ -2,6 +2,17 @@
 #include "GameObject.h"
 #include "Game.h"
 
+/* khoảng cách giữa các chữ số (pixel) */
+#define SB_DIGIT_W   8
+
+#define SB_MAX_TIME     300 //s
+#define SB_SCORE_X       -35
+#define SB_COIN_X        5
+#define SB_LIFE_X        -100
+#define SB_TIMER_X       5
+#define SB_TEXT_Y        -1
+
+
 class CScoreBoard :
     public CGameObject
 {
@@ -18,10 +29,16 @@ public:
     CScoreBoard(float x, float y) : CGameObject(x, y), offsetX(x), offsetY(y)
     {
         SetZ(5);
+        timer = GetTickCount64();
     }
 
     void Render();
-    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
     void GetBoundingBox(float& l, float& t, float& r, float& b) override {}
+
+    void SetCoin(int c) { coin = c; }
+    void SetScore(int c) { score = c; }
+    void SetLife(int c) { life = c; }
+
+    void DrawNumber(long long value, int fixedDigits, float rightX, float y);
 };
 

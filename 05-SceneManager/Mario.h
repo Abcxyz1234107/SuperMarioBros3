@@ -221,4 +221,12 @@ public:
 	bool IsFly() { return isFly; }
 	void SetImmortal(bool b) { immortal = b; }
 	bool IsImmortal() { return immortal; }
+
+	int GetCoin() { return coin; }
+	long long GetScore() { return score; }
+	int GetLife() { return life; }
+
+	void SetCoin(int c) { coin = c; }
+	void SetScore(int c) { score = c; }
+	void SetLife(int c) { life = c; }
 };

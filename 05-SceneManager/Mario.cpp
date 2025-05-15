@@ -137,12 +137,19 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+	score += 50;
 }
 
 void CMario::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
 {
 	CoinBrick* cb = (CoinBrick*)e->obj;
-	if (e->ny > 0) cb->Activate();
+	
+	if (e->ny > 0)
+	{
+		cb->Activate();
+		coin++;
+		score += 10;
+	}
 }
 
 void CMario::OnCollisionWithVoidSpike(LPCOLLISIONEVENT e)
@@ -272,7 +279,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	{
 		if (koopas->GetState() != GOOMBA_STATE_DIE)
 		{
-			score += 1000;
+			score += 100;
 			koopas->AddCharacter(C_100);
 			koopas->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -544,7 +551,7 @@ void CMario::Render()
 	if (!skipRender)
 		animations->Get(aniId)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }

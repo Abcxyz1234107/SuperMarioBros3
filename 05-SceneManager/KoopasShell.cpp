@@ -39,14 +39,22 @@ void CKoopasShell::SetHeld()
 
 void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+
     CGoomba::OnCollisionWith(e);
 
     if (dynamic_cast<CGoomba*>(e->obj))
+    {
         OnCollisionWithGoomba(e);
+        mario->SetScore(mario->GetScore() + 100);
+    }
     else if (dynamic_cast<CRandomBrick*>(e->obj))
         OnCollisionWithRandomBrick(e);
     else if (dynamic_cast<CoinBrick*>(e->obj))
+    {
         OnCollisionWithCoinBrick(e);
+    }
     else if (dynamic_cast<CVoidSpike*>(e->obj))
         this->Delete();
 }
@@ -64,8 +72,15 @@ void CKoopasShell::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 
 void CKoopasShell::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
 {
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+
     if (vx != 0 && (e->nx < 0 || e->nx > 0))
+    {
+        mario->SetCoin(mario->GetCoin() + 1);
+        mario->SetScore(mario->GetScore() + 10);
         dynamic_cast<CoinBrick*>(e->obj)->Activate();
+    }  
 }
 
 void CKoopasShell::OnNoCollision(DWORD dt)

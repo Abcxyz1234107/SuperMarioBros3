@@ -7,6 +7,17 @@
 #define C_200 10200
 #define C_2000 10220
 
+#define C_0 10300
+#define C_1 10301
+#define C_2 10302
+#define C_3 10303
+#define C_4 10304
+#define C_5 10305
+#define C_6 10306
+#define C_7 10307
+#define C_8 10308
+#define C_9 10309
+
 #define C_SPEED 0.05f
 #define C_TIMEOUT 750
 

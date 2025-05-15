@@ -1,6 +1,7 @@
 ﻿#include "RandomCoin.h"
 #include "CRandomBrick.h"
 #include "debug.h"
+#include "Mario.h"
 
 void CRandomCoin::Render()
 {
@@ -52,6 +53,11 @@ void CRandomCoin::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CRandomCoin::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
 {
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+
+    mario->SetCoin(mario->GetCoin() + 1);
     AddCharacter(C_100);
+    mario->SetScore(mario->GetScore() + 100);
     this->Delete();
 }
