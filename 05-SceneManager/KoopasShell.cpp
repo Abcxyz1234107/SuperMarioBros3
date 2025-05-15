@@ -25,6 +25,7 @@ void CKoopasShell::Activate(float dir)
 {
     isHeld = false;
     vx = dir * SHELL_MOVE_SPEED;
+    ay = GOOMBA_GRAVITY;
     this->SetState(SHELL_STATE_NORMAL);
     revive_start = 0;
 }
@@ -77,7 +78,9 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
-    bool isReviving = (isHeld || vx == 0);
+    
+    // Ko xét abs(vx) == 0 vì thực tế vx không thực sự = 0
+    bool isReviving = (isHeld || abs(vx) < SHELL_MOVE_SPEED);
 
     if (isReviving)
     {

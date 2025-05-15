@@ -28,7 +28,8 @@ private:
 public:
 	CKoopasShell(float x, float y) : CGoomba(x, y)
 	{
-		vx = ax = 0.0f;          
+		vx = vy = ax = 0.0f;    
+		ay = GOOMBA_GRAVITY;
 		isHeld = false;
 		revive_start = GetTickCount64();
 	}
