@@ -53,6 +53,7 @@ public:
 
     void DetectMario();
 
+
     bool HasWings() { return hasWing; }
     void AddWing();
     void RemoveWing();

@@ -209,6 +209,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	if (shell->GetVx() == 0)
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
+
 		if (!hitShellOnce)
 		{
 			score += 200;
@@ -220,6 +221,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 			score += 100;
 			shell->AddCharacter(C_100);
 		}
+
 		shell->Activate(dir);
 		return;
 	}

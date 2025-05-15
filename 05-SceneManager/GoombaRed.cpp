@@ -108,6 +108,8 @@ void CGoombaRed::DetectMario()
 
 void CGoombaRed::Render()
 {
+    if (!spawned) return;
+
     CAnimations* animations = CAnimations::GetInstance();
     int aniId = (this->GetState() != GOOMBA_STATE_DIE) ? ID_ANI_RED_GOOMBA_WALK 
         : ID_ANI_RED_GOOMBA_DIE;

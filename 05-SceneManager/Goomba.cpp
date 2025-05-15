@@ -8,6 +8,9 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
 	character = nullptr;
+
+	spawned = false;
+	SetState(GOOMBA_STATE_SLEEPING);
 }
 
 void CGoomba::AddCharacter(int c) { LPPLAYSCENE currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene(); character = new Character(x, y, c); currentScene->AddObject(character); }
@@ -60,6 +63,23 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (!spawned)
+	{
+		LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		CMario* mario = (CMario*)sc->GetPlayer();
+
+		float mx, my;  mario->GetPosition(mx, my);
+		float range = CGame::GetInstance()->GetBackBufferWidth() * 0.6f;
+
+		if (fabs(mx - x) <= range)  // Mario trong nửa màn hình
+		{
+			spawned = true;
+			SetState(GOOMBA_STATE_WALKING);
+		}
+		else
+			return;
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -76,6 +96,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CGoomba::Render()
 {
+	if (!spawned) return;
+
 	int aniId = ID_ANI_GOOMBA_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{
@@ -102,6 +124,9 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			break;
+		case GOOMBA_STATE_SLEEPING:
+			vx = vy = 0;
 			break;
 	}
 }

@@ -6,6 +6,7 @@
 
 void CKoopas::Render()
 {
+    if (!spawned) return;
     if (sleep) return; // ẩn khi đang 'ngủ'
 
     CAnimations* animations = CAnimations::GetInstance();

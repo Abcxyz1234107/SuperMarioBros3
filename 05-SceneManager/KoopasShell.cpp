@@ -97,7 +97,7 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         else
         {
             if (state != SHELL_STATE_NORMAL) this->SetState(SHELL_STATE_NORMAL);
-            vx = 0;  // đứng yên
+            vx = 0;
         }
 
         /* 2. Hết thời gian -> biến lại Koopas */
@@ -108,7 +108,7 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             return;
         }
     }
-    else revive_start = 0;      // mai đang lăn -> reset timer
+    else revive_start = 0;  // mai đang lăn -> reset timer
 
     // khi được Mario cầm
     if (isHeld && mario)
