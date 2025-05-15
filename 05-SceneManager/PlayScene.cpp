@@ -401,21 +401,58 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
+	float px, py, cx, cy;
+	CMario* mario = (CMario*)player;
 	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	if (cy < 20 && player->GetState() != MARIO_STATE_DIE)
+	player->GetPosition(px, py);
+	game->GetCamPos(cx, cy);
+
+	static float lastPx = -1.0f, lastPy = -1.0f;
+	static bool  camStarted = false;
+
+	float screenW = game->GetBackBufferWidth();
+	float screenH = game->GetBackBufferHeight();
+
+	float halfW = screenW * 0.5f;
+
+	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
+	{                   
+		lastPx = px;
+		lastPy = py;
+		cx = 0;
+		cy = 0;
+		game->SetCamPos(cx, cy);
+		return;
+	}
+
+	float dx = px - lastPx; // Tính quãng đường Mario vừa di chuyển
+	float dy = py - lastPy;
+
+	if (!camStarted)
 	{
-		cy -= game->GetBackBufferWidth() / 3;
+		if (px >= halfW)
+		{
+			camStarted = true;
+			cx = px - halfW;  // căn Mario vào giữa
+		}
 	}
 	else
-		cy = 0;
+	{
+		cx += dx; // Camera di chuyển theo dx Mario đi
+	}
 
+	// ------------------------------------------------------------
 	if (cx < 0) cx = 0;
+	if (mario->GetState() == MARIO_STATE_DIE
+		|| py >= screenH * 0.2 || (mario->GetLevel() != 3 && mario->IsFly()))
+		cy = 0;
+	else
+		cy += dy;
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	lastPx = px;
+	lastPy = py;
+
+	game->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
