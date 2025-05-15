@@ -23,6 +23,7 @@
 #include "VoidSpike.h"
 #include "CoinBrick.h"
 #include "GoombaRed.h"
+#include "ScoreBoard.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -146,16 +147,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_VOIDSPIKE:
 	{
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite = atoi(tokens[6].c_str());
+		int length = atoi(tokens[3].c_str());
 
 		obj = new CVoidSpike(
-			x, y,
-			cell_width, cell_height, length,
-			sprite
-		);
+			x, y, length);
 
 		break;
 	}
@@ -290,6 +285,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_SCOREBOARD:
+	{
+		obj = new CScoreBoard(x, y);
+
+		break;
+	}
 
 	case OBJECT_TYPE_PORTAL:
 	{
@@ -397,6 +398,7 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
+	
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -415,7 +417,7 @@ void CPlayScene::Update(DWORD dt)
 
 	float halfW = screenW * 0.5f;
 
-	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
+	if (lastPx < halfW && lastPx < 0) // camera đứng yên (tránh trường hợp biên)
 	{                   
 		lastPx = px;
 		lastPy = py;
@@ -444,7 +446,7 @@ void CPlayScene::Update(DWORD dt)
 	// ------------------------------------------------------------
 	if (cx < 0) cx = 0;
 	if (mario->GetState() == MARIO_STATE_DIE
-		|| py >= screenH * 0.2 || (mario->GetLevel() != 3 && mario->IsFly()))
+		|| py >= screenH * 0.2 || mario->GetLevel() != 3)
 		cy = 0;
 	else
 		cy += dy;

@@ -1,20 +1,23 @@
 #pragma once
 #include "Platform.h"
 
+#define ID_VOIDSPIKE 99990
+#define VS_W 525
+#define VS_H 10
+
 class CVoidSpike :
-    public CPlatform
+    public CGameObject
 {
+private:
+	int length;
 
 public:
-	CVoidSpike(float x, float y,
-		float cell_width, float cell_height, int length,
-		int sprite_id_begin, int isAni = 0)
-		: CPlatform(x, y, cell_width, cell_height, length, sprite_id_begin, sprite_id_begin,
-			sprite_id_begin)
+	CVoidSpike(float x, float y, int length): CGameObject(x, y)
 	{
-
+		this->length = length;
 	}
 
-	
+	void Render();
+	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
 };
 

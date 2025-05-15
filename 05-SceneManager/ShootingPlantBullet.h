@@ -2,19 +2,21 @@
 #include "GameObject.h"
 #define SHOOTINGPLANTBULLET_W 8
 #define SHOOTINGPLANTBULLET_H 8
-#define SHOOTINGPLANT_BULLET_SPEED 0.03f
+#define SHOOTINGPLANT_BULLET_SPEED 0.1f
 
 class CShootingPlantBullet :
     public CGameObject
 {
 private:
-    float vx, vy;
-
     void OnCollisionWithMario(LPCOLLISIONEVENT e);
 
 public:
-    CShootingPlantBullet(float x, float y, float vx, float vy)
-         : CGameObject(x, y), vx(vx), vy(vy) {}
+    CShootingPlantBullet(float x, float y, float vvx, float vvy)
+         : CGameObject(x, y) 
+    {
+        vx = vvx;
+        vy = vvy;
+    }
 
     void Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects) override;
     void Render() override;

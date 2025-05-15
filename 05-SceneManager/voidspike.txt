@@ -1,5 +1,5 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 
-99990	327	180	400	185	10
+99990	411	229	936	302	10 #525 73
 

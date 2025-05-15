@@ -1,0 +1,10 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+71230	4	81	353	124	40 #350 44, background
+
+#7 number in score
+#3 number in timer
+#1 number in coin, but could be more if > 10
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]

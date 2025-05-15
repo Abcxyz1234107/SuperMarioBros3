@@ -22,6 +22,7 @@ voidspike.txt
 coinbrick.txt
 character.txt
 wing.txt
+scoreboard.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -45,6 +46,9 @@ wing.txt
 2	900	90 #Floor 2
 2	1000	90 #Floor 2
 19	1100	90 #Floor 2 #Red goomba
+
+#Score Board
+20	165	181
 
 #BGCLOUD
 #id	x	y	bW	bH	Len	s1	s2	s3
@@ -168,7 +172,7 @@ wing.txt
 18	2144	118	1
 
 #VOIDSPIKE
-17	0	230	1000	5	5	99990
+17	0	230	10
 
 #LargeBrick 
 id	x	y	bbWidth bbHeight spriteID  z

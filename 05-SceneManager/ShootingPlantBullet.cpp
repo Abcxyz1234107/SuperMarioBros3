@@ -38,7 +38,7 @@ void CShootingPlantBullet::OnCollisionWithMario(LPCOLLISIONEVENT e)
 	{
 		if (mario->GetLevel() > MARIO_LEVEL_SMALL)
 		{
-			mario->SetLevel(MARIO_LEVEL_SMALL);
+			mario->SetLevel(mario->GetLevel() - 1);
 		}
 		else
 		{
@@ -50,13 +50,11 @@ void CShootingPlantBullet::OnCollisionWithMario(LPCOLLISIONEVENT e)
 
 void CShootingPlantBullet::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
 {
-	
-	OnNoCollision(dt);   
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-	
 	// xoá viên đạn khi ra khỏi màn hình
 	float camX, camY;
 	CGame::GetInstance()->GetCamPos(camX, camY);
 	if (x < camX - 32 || x > camX + CGame::GetInstance()->GetBackBufferWidth() + 32)
 		this->Delete();
+
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
