@@ -77,5 +77,4 @@ scoreboard.txt
 11	376	8	1	0	0	0
 
 #Portal 
-13	2312	-154	11	1	2
 

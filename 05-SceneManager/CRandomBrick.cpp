@@ -22,20 +22,19 @@ void CRandomBrick::Activate()
         LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
         CMario* mario = (CMario*)scene->GetPlayer();
 
-        this->SetState(RANDOMBRICK_STATE_TOUCHED);
+        SetState(RANDOMBRICK_STATE_TOUCHED);
 
-        if (this->GetType() == 1)
+        vy = -RB_SPEED_Y;
+        isBouncing = true;
+
+        if (type == 1)
         {
             CRandomCoin* coin = new CRandomCoin(x, y - 16.0f);
             coin->SetVy(-0.25f);
             scene->AddObject(coin);
         }
-        else if (mario->GetLevel() == MARIO_LEVEL_SMALL) // Mushroom
-        {
-            CRandomMushroom* mushroom = new CRandomMushroom(x, y);
-            scene->AddObject(mushroom);
-        }
         else
+        if (mario->GetLevel() > MARIO_LEVEL_SMALL) // Leaf
         {
             CRandomLeaf* leaf = new CRandomLeaf(x, y - 16.0f);
             leaf->SetVy(-0.125f);
@@ -44,3 +43,28 @@ void CRandomBrick::Activate()
     }
 }
 
+void CRandomBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+    if (!isBouncing) return;
+
+    y += vy * dt;
+
+    if (vy < 0 && startY - y >= RB_MAX_Y) // đạt đỉnh
+        vy = RB_SPEED_Y;
+
+    // trở lại vị trí
+    if (vy > 0 && y >= startY)
+    {
+        LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+        CMario* mario = (CMario*)scene->GetPlayer();
+
+        if (state == RANDOMBRICK_STATE_TOUCHED && type == 2 && mario->GetLevel() == MARIO_LEVEL_SMALL)
+        {
+            CRandomMushroom* mushroom = new CRandomMushroom(x, y);
+            scene->AddObject(mushroom);
+        }
+        y = startY;
+        vy = 0;
+        isBouncing = false;
+    }
+}

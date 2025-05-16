@@ -24,6 +24,7 @@
 #include "CoinBrick.h"
 #include "GoombaRed.h"
 #include "ScoreBoard.h"
+#include "ButtonCoinBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -205,6 +206,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		
 		return; //Tránh trùng con trỏ vì có một objects.push_back 
 		        //khác ở dưới cùng của hàm này
+	}
+	case OBJECT_TYPE_BUTTON_COINBRICK:
+	{
+		obj = new ButtonCoinBrick(x, y);
+
+		break;
 	}
 	case OBJECT_TYPE_BGCLOUD:
 	{

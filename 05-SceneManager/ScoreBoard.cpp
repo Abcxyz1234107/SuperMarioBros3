@@ -44,7 +44,7 @@ void CScoreBoard::Render()
     DrawNumber(life, 1, drawX + SB_LIFE_X, offset_text_Y);
 
     // Coin
-    DrawNumber(coin, 1, drawX + SB_COIN_X, offset_text_Y - 8);
+    DrawNumber(coin, 2, drawX + SB_COIN_X, offset_text_Y - 8);
 
     // Timer
     DrawNumber(timer, 3, drawX + SB_TIMER_X, offset_text_Y);

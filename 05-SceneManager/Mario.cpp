@@ -15,6 +15,7 @@
 #include "Koopas.h"
 #include "RandomLeaf.h"
 #include "GoombaRed.h"
+#include "ButtonCoinBrick.h"
 
 #include "Collision.h"
 
@@ -116,6 +117,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<Button*>(e->obj))
+		OnCollisionWithButton(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
 	else if (dynamic_cast<CRandomLeaf*>(e->obj))
@@ -190,15 +193,20 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	score += 50;
 }
 
+void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
+{
+	Button* b = (Button*)e->obj;
+	b->Activate();
+}
+
 void CMario::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
 {
 	CoinBrick* cb = (CoinBrick*)e->obj;
 	
 	if (e->ny > 0)
 	{
-		cb->Activate();
-		coin++;
-		score += 10;
+		cb->Bounce();
+		if (dynamic_cast<ButtonCoinBrick*>(e->obj)) cb->Activate();
 	}
 }
 

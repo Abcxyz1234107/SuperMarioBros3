@@ -1,6 +1,19 @@
 ﻿#include "CoinBrick.h"
 #include "CoinBrickFragment.h"
 #include "PlayScene.h"
+#include "Coin.h"
+
+void CoinBrick::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case CB_STATE_TOUCHED:
+	{
+		break;
+	}
+	}
+}
 
 void CoinBrick::Render()
 {
@@ -17,6 +30,20 @@ void CoinBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + COINBRICK_BBOX_H;
 }
 
+void CoinBrick::Bounce()
+{
+    vy = -CB_SPEED_Y;
+    isBouncing = true;
+}
+
+void CoinBrick::ChangeToCoin()
+{
+    this->Delete();
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+
+    scene->AddObject(new CCoin(x, y));
+}
+
 void CoinBrick::Activate()
 {
     this->Delete();
@@ -31,4 +58,22 @@ void CoinBrick::Activate()
     scene->AddObject(new CoinBrickFragment(cx, cy, vx, -vy));
     scene->AddObject(new CoinBrickFragment(cx, cy, -vx, vy));
     scene->AddObject(new CoinBrickFragment(cx, cy, vx, vy));
+}
+
+void CoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+    if (!isBouncing) return;
+
+    y += vy * dt;
+
+    if (vy < 0 && startY - y >= CB_MAX_Y) // đạt đỉnh
+        vy = CB_SPEED_Y;
+
+    // trở lại vị trí
+    if (vy > 0 && y >= startY)
+    {
+        y = startY;
+        vy = 0;
+        isBouncing = false;
+    }
 }
