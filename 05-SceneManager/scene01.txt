@@ -37,7 +37,7 @@ scoreboard.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	20	60
+0	2000	60
 
 #Goomba
 2	200	90 #Floor 1
@@ -210,7 +210,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 11	1915	102	2	0	0	0
 
 11	2312	102	2	1	0	0	#Floor 6
-11	2312	-154	11	0	0	0
+#11	2312	-154	11	0	0	0
 11	2380	118	1	0	0	0
 
 # ShootingPlant #Head: 16 16, Body: 16 8
@@ -263,4 +263,4 @@ id	x	y	bbWidth bbHeight spriteID  z
 12	1460	-110	1 #Sky, Floor 3
 
 #Portal 
-50	100	60	2
+13	2312	-154	11	1	2
