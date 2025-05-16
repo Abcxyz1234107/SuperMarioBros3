@@ -25,6 +25,7 @@
 #include "GoombaRed.h"
 #include "ScoreBoard.h"
 #include "ButtonCoinBrick.h"
+#include "BlackPipe.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -155,6 +156,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_SHADOW:
+	{
+		int z = atoi(tokens[3].c_str());
+		int sprite_id = atoi(tokens[4].c_str());
+		int c = atoi(tokens[5].c_str());
+
+		obj = new Shadow(
+			x, y, z, sprite_id, c);
+
+		break;
+	}
 	case OBJECT_TYPE_PIPE:
 	{
 		int length = atoi(tokens[3].c_str());
@@ -177,6 +189,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 
 		objects.push_back(pipe->GetBody());
+		obj = pipe;
+
+		break;
+	}
+	case OBJECT_TYPE_BLACKPIPE:
+	{
+		CBlackPipe* pipe = new CBlackPipe(x, y);
+
 		obj = pipe;
 
 		break;
@@ -301,8 +321,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PORTAL:
 	{
-		int scene_id = atoi(tokens[3].c_str());
-		obj = new CPortal(x, y, scene_id);
+		float desX = atof(tokens[3].c_str());
+		float desY = atof(tokens[4].c_str());
+		int scene_id = atoi(tokens[5].c_str());
+
+		obj = new CPortal(x, y, desX, desY, scene_id);
 	}
 	break;
 
@@ -424,7 +447,7 @@ void CPlayScene::Update(DWORD dt)
 
 	float halfW = screenW * 0.5f;
 
-	if (lastPx < halfW && lastPx < 0) // camera đứng yên (tránh trường hợp biên)
+	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
 	{                   
 		lastPx = px;
 		lastPy = py;

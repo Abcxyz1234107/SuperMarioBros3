@@ -16,6 +16,7 @@
 #include "RandomLeaf.h"
 #include "GoombaRed.h"
 #include "ButtonCoinBrick.h"
+#include "BlackPipe.h"
 
 #include "Collision.h"
 
@@ -69,7 +70,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			ay = MARIO_GRAVITY;
 			isTeleporting = false;
 
-			CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
+			if (teleportSceneId >= 0)
+				CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
+			else SetState(MARIO_STATE_IDLE);
 
 		}
 		return;	// bỏ qua xử lý va chạm khi đang dịch chuyển
@@ -413,6 +416,8 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	int dir = (e->ny > 0) ? -1 : 1;	// đụng dưới -> lên, đụng trên -> xuống
 	float distance = (level == MARIO_LEVEL_SMALL) ? MARIO_SMALL_BBOX_HEIGHT :MARIO_BIG_BBOX_HEIGHT;
 
+	if (p->GetDesX() == -1) p->SetSceneId(-1);
+
 	StartTeleport(dir, p->GetSceneId(), distance);
 }
 
@@ -644,7 +649,8 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE || this->state == MARIO_STATE_TELEPORT) return; 
+	if (this->state == MARIO_STATE_DIE) return;
+	if (this->state == MARIO_STATE_TELEPORT && isTeleporting) return;
 
 	switch (state)
 	{

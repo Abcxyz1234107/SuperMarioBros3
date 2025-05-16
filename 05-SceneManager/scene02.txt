@@ -30,7 +30,7 @@ scoreboard.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	200	50
+0	152	-3
 
 #Score Board
 20	165	181
@@ -74,7 +74,9 @@ scoreboard.txt
 5	392	-8	16	16	8	20001	20001	20001
 
 #Pipe
-11	376	8	1	0	0	0
+23	368	0	1	0	0	0
+23	152	0	1	0	0	0
 
 #Portal 
-
+50	368	12	1	1	1
+50	152	10	-1	-1	1

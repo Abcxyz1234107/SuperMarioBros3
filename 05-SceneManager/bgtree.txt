@@ -1,8 +1,8 @@
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-54201	0	59	29	74	-99
-54202	36	59	65	74	-99
-54203	69	59	70	74	-99
+54201	0	59	29	74	-99 #head
+54202	36	59	65	74	-99 #body
+54203	69	59	70	74	-99 #edge
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]

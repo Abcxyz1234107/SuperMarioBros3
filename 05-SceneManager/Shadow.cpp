@@ -2,16 +2,20 @@
 #include "Game.h"
 #include "debug.h"
 
-void Shadow::Update(DWORD dt)
-{
-	this->x = owner->GetX() + offsetX;
-	this->y = owner->GetY() + offsetY;
-}
-
 void Shadow::Render()
 {
 	CSprites* sprite = CSprites::GetInstance();
-	float drawX = owner->GetX() + offsetX;
-	float drawY = owner->GetY() + offsetY;
-	sprite->Get(spriteId)->Draw(drawX, drawY, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	float drawX = x;
+	float drawY = y;
+
+	if (owner)
+	{
+		drawX = owner->GetX() + offsetX;
+		drawY = owner->GetY() + offsetY;
+	}
+	
+	if (color == 1)
+		sprite->Get(spriteId)->Draw(drawX, drawY, black);
+	else
+		sprite->Get(spriteId)->Draw(drawX, drawY, white);
 }
