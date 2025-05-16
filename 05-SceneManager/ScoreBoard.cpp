@@ -30,9 +30,10 @@ void CScoreBoard::Render()
     CMario* mario = (CMario*)scene->GetPlayer();
     if (!mario) return;
 
-    int        coin = mario->GetCoin();
-    long long  score = mario->GetScore();
-    int        life = mario->GetLife();
+    coin = mario->GetCoin();
+    score = mario->GetScore();
+    life = mario->GetLife();
+    timer = mario->GetTimer();
 
     const float offset_text_Y = drawY + SB_TEXT_Y;
 
@@ -46,10 +47,5 @@ void CScoreBoard::Render()
     DrawNumber(coin, 1, drawX + SB_COIN_X, offset_text_Y - 8);
 
     // Timer
-    ULONGLONG elapsedMs = GetTickCount64() - timer;
-    int elapsedSec = int(elapsedMs / 1000);
-    int remain = max(0, SB_MAX_TIME - elapsedSec);
-    DrawNumber(remain, 3, drawX + SB_TIMER_X, offset_text_Y);
-
-    if (remain <= 0) mario->SetState(MARIO_STATE_DIE);
+    DrawNumber(timer, 3, drawX + SB_TIMER_X, offset_text_Y);
 }

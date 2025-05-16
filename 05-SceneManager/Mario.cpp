@@ -40,6 +40,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (timer > 0)
+	{
+		ULONGLONG now = GetTickCount64();
+		ULONGLONG delta = now - ref;
+
+		if (delta >= 1000) // 1 giây
+		{
+			int secPassed = (int)(delta / 1000);
+			timer = max(0, timer - secPassed);
+			ref += secPassed * 1000;   // tham chiếu
+
+			if (timer == 0)
+				SetState(MARIO_STATE_DIE);
+		}
+	}
+
 	if (state == MARIO_STATE_TELEPORT && isTeleporting)
 	{
 		y += vy * dt;
@@ -387,9 +403,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CPortal* p = (CPortal*)e->obj;
 
 	int dir = (e->ny > 0) ? -1 : 1;	// đụng dưới -> lên, đụng trên -> xuống
-	float distance = (level == MARIO_LEVEL_SMALL) ?
-		MARIO_SMALL_BBOX_HEIGHT :
-		MARIO_BIG_BBOX_HEIGHT;
+	float distance = (level == MARIO_LEVEL_SMALL) ? MARIO_SMALL_BBOX_HEIGHT :MARIO_BIG_BBOX_HEIGHT;
 
 	StartTeleport(dir, p->GetSceneId(), distance);
 }
@@ -401,7 +415,7 @@ int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
 	if (this->GetState() == MARIO_STATE_TELEPORT)
-		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
+		aniId = ID_ANI_MARIO_SMALL_TELEPORT;
 
 	else
 	if (!isOnPlatform)
@@ -529,7 +543,7 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 	if (this->GetState() == MARIO_STATE_TELEPORT)
-		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
+		aniId = ID_ANI_MARIO_TELEPORT;
 
 	else
 	if (!isOnPlatform)
@@ -601,8 +615,6 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_FLY)
 		aniId = GetAniIdFly();
 
-	DebugOut(L"%d\n", aniId);
-
 	bool skipRender = (untouchable && state != MARIO_STATE_TELEPORT &&
 		((GetTickCount64() / 100) % 2 == 0));
 
@@ -624,7 +636,7 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return; 
+	if (this->state == MARIO_STATE_DIE || this->state == MARIO_STATE_TELEPORT) return; 
 
 	switch (state)
 	{

@@ -13,18 +13,28 @@ using namespace std;
 #include "Texture.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
+#include "Mario.h"
 
 #define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-
+struct PlayerData
+{
+	int level;
+	int coin;
+	long long score;
+	int life;
+	int timer = 300;
+};
 
 /*
 	Our simple game framework
 */
 class CGame
 {
+	PlayerData saved;
+
 	static CGame* __instance;
 	HWND hWnd;									// Window handle
 
@@ -54,6 +64,7 @@ class CGame
 	ID3D10SamplerState* pPointSamplerState;
 
 	unordered_map<int, LPSCENE> scenes;
+	int first_scene;
 	int current_scene;
 	int next_scene = -1;
 
@@ -117,6 +128,10 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
+	void SavePlayerState(CMario* mario);
+	void ApplyPlayerState(CMario* mario);
+
+	void SetFirstScene(int i) { first_scene = i; }
 
 	~CGame();
 };

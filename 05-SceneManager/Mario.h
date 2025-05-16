@@ -6,7 +6,8 @@
 
 #include "debug.h"
 
-#define MARIO_TELEPORT_SPEED	0.05f
+#define MARIO_INITIAL_TIME 300 //s
+#define MARIO_TELEPORT_SPEED	0.025f
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
@@ -147,12 +148,15 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 
 	int level; 
-	int untouchable; 
-	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
 	int coin; 
 	long long score;
 	int life;
+	int timer;
+	ULONGLONG ref;
+
+	int untouchable;
+	ULONGLONG untouchable_start;
+	BOOLEAN isOnPlatform;
 
 	bool holdingShell;
 	bool hitShellOnce;
@@ -199,6 +203,8 @@ public:
 		coin = 0;
 		score = 0;
 		life = 4;
+		timer = MARIO_INITIAL_TIME;
+		ref = GetTickCount64();
 
 		holdingShell = false;
 		isFly = false;
@@ -225,8 +231,6 @@ public:
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
-	void SetLevel(int l);
-	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	bool IsUntouchable() { if (untouchable == 1) return true; else return false; }
 
@@ -242,13 +246,17 @@ public:
 	void SetImmortal(bool b) { immortal = b; }
 	bool IsImmortal() { return immortal; }
 
+	int GetLevel() { return level; }
 	int GetCoin() { return coin; }
 	long long GetScore() { return score; }
 	int GetLife() { return life; }
+	int GetTimer() { return timer; }
 
+	void SetLevel(int l);
 	void SetCoin(int c) { coin = c; }
 	void SetScore(int c) { score = c; }
 	void SetLife(int c) { life = c; }
+	void SetTimer(int c) { timer = c; ref = GetTickCount64(); }
 
 	void StartTeleport(int dir, int sceneId, float distance);
 };

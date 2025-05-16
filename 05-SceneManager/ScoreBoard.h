@@ -29,7 +29,6 @@ public:
     CScoreBoard(float x, float y) : CGameObject(x, y), offsetX(x), offsetY(y)
     {
         SetZ(5);
-        timer = GetTickCount64();
     }
 
     void Render();

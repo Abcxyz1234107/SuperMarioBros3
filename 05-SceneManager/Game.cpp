@@ -444,7 +444,10 @@ void CGame::_ParseSection_SETTINGS(string line)
 
 	if (tokens.size() < 2) return;
 	if (tokens[0] == "start")
+	{
 		next_scene = atoi(tokens[1].c_str());
+		first_scene = next_scene;
+	}
 	else
 		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
@@ -508,14 +511,40 @@ void CGame::Load(LPCWSTR gameFile)
 	SwitchScene();
 }
 
+void CGame::SavePlayerState(CMario* mario)          // hàm mới
+{
+	if (!mario) return;
+	saved.coin = mario->GetCoin();
+	saved.level = mario->GetLevel();
+	saved.timer = mario->GetTimer();
+	saved.life = mario->GetLife();
+	saved.score = mario->GetScore();
+}
+
+void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
+{
+	if (!mario) return;
+	mario->SetCoin(saved.coin);
+	mario->SetLevel(saved.level);
+	mario->SetTimer(saved.timer);
+	mario->SetLife(saved.life);
+	mario->SetScore(saved.score);
+}
+
 void CGame::SwitchScene()
 {
 	if (next_scene < 0 || next_scene == current_scene) return; 
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	scenes[current_scene]->Unload();
+	if (next_scene != first_scene)
+	{
+		auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
+		if (curPlay)
+			SavePlayerState(dynamic_cast<CMario*>(curPlay->GetPlayer()));
+	}
 
+	scenes[current_scene]->Unload();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
@@ -523,6 +552,13 @@ void CGame::SwitchScene()
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+
+	if (next_scene != first_scene)
+	{
+		auto* newPlay = dynamic_cast<CPlayScene*>(s);
+		if (newPlay)
+			ApplyPlayerState(dynamic_cast<CMario*>(newPlay->GetPlayer()));
+	}
 }
 
 void CGame::ReloadScene(int scene_id)
