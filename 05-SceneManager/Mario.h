@@ -6,6 +6,8 @@
 
 #include "debug.h"
 
+#define MARIO_TELEPORT_SPEED	0.05f
+
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
@@ -36,7 +38,11 @@
 #define MARIO_STATE_FLY				700
 #define MARIO_STATE_RELEASE_FLY 	701
 
+#define MARIO_STATE_TELEPORT		800
+
 #pragma region ANIMATION_ID
+
+#define ID_ANI_MARIO_TELEPORT  399
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -62,6 +68,8 @@
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
+#define ID_ANI_MARIO_SMALL_TELEPORT  1099
+
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
 
@@ -81,6 +89,8 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
 // FLY MARIO
+#define ID_ANI_MARIO_BIG_FLY_TELEPORT		   299
+
 #define ID_ANI_MARIO_BIG_FLY_IDLE_LEFT         300
 #define ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT        301
 
@@ -150,6 +160,11 @@ class CMario : public CGameObject
 
 	bool immortal;
 
+	bool isTeleporting;
+	int  teleportDir;       // 1: xuống, -1: lên
+	float teleportTargetY;
+	int  teleportSceneId;
+
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoombaRed(LPCOLLISIONEVENT e);
@@ -190,6 +205,11 @@ public:
 		hitShellOnce = false;
 
 		immortal = false;
+
+		isTeleporting = false;
+		teleportDir = 0;
+		teleportTargetY = 0.0f;
+		teleportSceneId = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -229,4 +249,6 @@ public:
 	void SetCoin(int c) { coin = c; }
 	void SetScore(int c) { score = c; }
 	void SetLife(int c) { life = c; }
+
+	void StartTeleport(int dir, int sceneId, float distance);
 };

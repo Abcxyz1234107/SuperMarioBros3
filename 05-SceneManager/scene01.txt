@@ -263,4 +263,4 @@ id	x	y	bbWidth bbHeight spriteID  z
 12	1460	-110	1 #Sky, Floor 3
 
 #Portal 
-#50	2380	-200	2
+50	100	60	2

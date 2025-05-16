@@ -18,12 +18,46 @@
 
 #include "Collision.h"
 
+void CMario::StartTeleport(int dir, int sceneId, float distance)
+{
+	teleportDir = dir;
+	teleportSceneId = sceneId;
+	isTeleporting = true;
+
+	vy = dir * MARIO_TELEPORT_SPEED;
+	ay = 0.0f;
+	teleportTargetY = y + dir * distance;
+
+	isOnPlatform = false;
+
+	SetState(MARIO_STATE_TELEPORT);
+}
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (immortal) return;
 
 	vy += ay * dt;
 	vx += ax * dt;
+
+	if (state == MARIO_STATE_TELEPORT && isTeleporting)
+	{
+		y += vy * dt;
+
+		if ((teleportDir == 1 && y >= teleportTargetY) ||
+			(teleportDir == -1 && y <= teleportTargetY))
+		{
+			y = teleportTargetY;
+			vy = 0;
+			ay = MARIO_GRAVITY;
+			isTeleporting = false;
+
+			CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
+
+		}
+		return;	// bỏ qua xử lý va chạm khi đang dịch chuyển
+	}
+
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
@@ -348,8 +382,19 @@ void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
+	if (isTeleporting) return;
+
 	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+
+	int dir = (e->ny > 0) ? -1 : 1;	// đụng dưới -> lên, đụng trên -> xuống
+	float distance = (level == MARIO_LEVEL_SMALL) ?
+		MARIO_SMALL_BBOX_HEIGHT :
+		MARIO_BIG_BBOX_HEIGHT;
+
+	p->Delete();
+	StartTeleport(dir, p->GetSceneId(), distance);
+
+	
 }
 
 //
@@ -410,6 +455,9 @@ int CMario::GetAniIdSmall()
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
 
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_SMALL_TELEPORT;
+
 	return aniId;
 }
 
@@ -467,6 +515,9 @@ int CMario::GetAniIdFly()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT;
+
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
 
 	return aniId;
 }
@@ -530,6 +581,9 @@ int CMario::GetAniIdBig()
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_TELEPORT;
+
 	return aniId;
 }
 
@@ -547,9 +601,20 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_FLY)
 		aniId = GetAniIdFly();
 
-	bool skipRender = (untouchable && ((GetTickCount64() / 100) % 2 == 0));
-	if (!skipRender)
-		animations->Get(aniId)->Render(x, y);
+	DebugOut(L"%d\n", aniId);
+
+	bool skipRender = (untouchable && state != MARIO_STATE_TELEPORT &&
+		((GetTickCount64() / 100) % 2 == 0));
+
+	if (skipRender) return;
+
+	auto ani = animations->Get(aniId);
+	if (!ani)
+	{
+		DebugOut(L"[ERROR] Animation %d not found\n", aniId);
+		return;
+	}
+	ani->Render(x, y);
 
 	//RenderBoundingBox();
 	
@@ -644,6 +709,10 @@ void CMario::SetState(int state)
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
 		vx = 0.0f;
+		break;
+		
+	case MARIO_STATE_TELEPORT:
+		ax = vx = 0.0f;
 		break;
 
 	case MARIO_STATE_DIE:
