@@ -2,6 +2,7 @@
 
 #include "KeyEventHandler.h"
 #include "Collision.h"
+#include <d3dx9.h>
 
 /*
 *  Abstract class for a game scene
@@ -9,6 +10,8 @@
 class CScene
 {
 protected:
+	D3DXCOLOR backgroundColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
 	LPKEYEVENTHANDLER key_handler;
 	int id;
 	LPCWSTR sceneFilePath;
@@ -21,6 +24,9 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0; 
+
+	void SetBackgroundColor(const D3DXCOLOR& c);
+	D3DXCOLOR GetBackgroundColor() const;
 };
 typedef CScene * LPSCENE;
 

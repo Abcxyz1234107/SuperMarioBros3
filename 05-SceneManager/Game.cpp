@@ -459,8 +459,20 @@ void CGame::_ParseSection_SCENES(string line)
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
+	
+	float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
+	if (tokens.size() >= 5)
+	{
+		r = (float)atof(tokens[2].c_str()) / 255.0f;
+		g = (float)atof(tokens[3].c_str()) / 255.0f;
+		b = (float)atof(tokens[4].c_str()) / 255.0f;
+		if (tokens.size() >= 6)
+			a = (float)atof(tokens[5].c_str()) / 255.0f;
+	}
+	D3DXCOLOR bgColor(r, g, b, a);
 
 	LPSCENE scene = new CPlayScene(id, path);
+	scene->SetBackgroundColor(bgColor);
 	scenes[id] = scene;
 }
 
