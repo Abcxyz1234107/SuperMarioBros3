@@ -382,7 +382,7 @@ void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	if (isTeleporting) return;
+	if (isTeleporting || e->ny == 0) return;
 
 	CPortal* p = (CPortal*)e->obj;
 
@@ -391,10 +391,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 		MARIO_SMALL_BBOX_HEIGHT :
 		MARIO_BIG_BBOX_HEIGHT;
 
-	p->Delete();
 	StartTeleport(dir, p->GetSceneId(), distance);
-
-	
 }
 
 //
@@ -403,6 +400,10 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
+
+	else
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -455,15 +456,16 @@ int CMario::GetAniIdSmall()
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
 
-	if (this->GetState() == MARIO_STATE_TELEPORT)
-		aniId = ID_ANI_MARIO_SMALL_TELEPORT;
-
 	return aniId;
 }
 
 int CMario::GetAniIdFly()
 {
 	int aniId = -1;
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
+
+	else
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X || isFly)
@@ -516,9 +518,6 @@ int CMario::GetAniIdFly()
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT;
 
-	if (this->GetState() == MARIO_STATE_TELEPORT)
-		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
-
 	return aniId;
 }
 
@@ -529,6 +528,10 @@ int CMario::GetAniIdFly()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
+	if (this->GetState() == MARIO_STATE_TELEPORT)
+		aniId = ID_ANI_MARIO_BIG_FLY_TELEPORT;
+
+	else
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -580,9 +583,6 @@ int CMario::GetAniIdBig()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
-
-	if (this->GetState() == MARIO_STATE_TELEPORT)
-		aniId = ID_ANI_MARIO_TELEPORT;
 
 	return aniId;
 }
