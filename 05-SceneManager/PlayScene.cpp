@@ -447,16 +447,6 @@ void CPlayScene::Update(DWORD dt)
 
 	float halfW = screenW * 0.5f;
 
-	if (lastPx < halfW) // camera đứng yên (tránh trường hợp biên)
-	{                   
-		lastPx = px;
-		lastPy = py;
-		cx = 0;
-		cy = 0;
-		game->SetCamPos(cx, cy);
-		return;
-	}
-
 	float dx = px - lastPx; // Tính quãng đường Mario vừa di chuyển
 	float dy = py - lastPy;
 
@@ -474,12 +464,18 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// ------------------------------------------------------------
-	if (cx < 0) cx = 0;
-	if (mario->GetState() == MARIO_STATE_DIE
-		|| py >= screenH * 0.2 || mario->GetLevel() != 3)
-		cy = 0;
-	else
-		cy += dy;
+	float MAX_MAP_X = game->GetCurrentScene()->GetMaxMapX();
+	float MAX_MAP_Y = game->GetCurrentScene()->GetMaxMapY();
+
+	DebugOutTitle(L"Mario x: %.4f, Mario y: %.4f, MAX_MAP_X: %.4f, MAX_MAP_Y: %.4f", px, py, MAX_MAP_X, MAX_MAP_Y);
+	if (px < halfW) cx = 0;
+	else if (px >= MAX_MAP_X - halfW) cx = MAX_MAP_X - screenW;
+
+	if (py <= MAX_MAP_Y * 0.8 && MAX_MAP_Y != 0) cy = MAX_MAP_Y;
+	else if (MAX_MAP_Y == 0) cy = 0;
+	else if (mario->GetState() == MARIO_STATE_DIE || py >= screenH * 0.2 || mario->GetLevel() != 3)
+		    cy = 0;
+	else	cy += dy;
 
 	lastPx = px;
 	lastPy = py;

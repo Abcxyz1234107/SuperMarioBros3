@@ -471,7 +471,15 @@ void CGame::_ParseSection_SCENES(string line)
 	}
 	D3DXCOLOR bgColor(r, g, b, a);
 
+	float max_map_x = 0.0f, max_map_y = 0.0f;
+	if (tokens.size() >= 8) {
+		max_map_x = (float)atof(tokens[6].c_str());
+		max_map_y = (float)atof(tokens[7].c_str());
+	}
+
 	LPSCENE scene = new CPlayScene(id, path);
+	scene->SetMaxMapX(max_map_x);
+	scene->SetMaxMapY(max_map_y);
 	scene->SetBackgroundColor(bgColor);
 	scenes[id] = scene;
 }

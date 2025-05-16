@@ -16,6 +16,9 @@ protected:
 	int id;
 	LPCWSTR sceneFilePath;
 
+	float max_map_x;
+	float max_map_y;
+
 public: 
 	CScene(int id, LPCWSTR filePath);
 
@@ -27,6 +30,12 @@ public:
 
 	void SetBackgroundColor(const D3DXCOLOR& c);
 	D3DXCOLOR GetBackgroundColor() const;
+
+	void SetMaxMapX(float x) { max_map_x = x; }
+	void SetMaxMapY(float y) { max_map_y = y; }
+
+	float GetMaxMapX() { return max_map_x; }
+	float GetMaxMapY() { return max_map_y; }
 };
 typedef CScene * LPSCENE;
 

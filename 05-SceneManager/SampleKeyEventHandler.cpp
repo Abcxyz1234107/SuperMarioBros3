@@ -19,7 +19,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_SPACE:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
-	case DIK_LSHIFT:
+	case DIK_LCONTROL:
 		if (mario->GetLevel() == MARIO_LEVEL_FLY)
 		{
 			mario->SetState(MARIO_STATE_FLY);
@@ -59,7 +59,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_SPACE:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;
-	case DIK_LSHIFT:
+	case DIK_LCONTROL:
 		if (mario->GetLevel() == MARIO_LEVEL_FLY)
 		{
 			mario->SetState(MARIO_STATE_RELEASE_FLY);
