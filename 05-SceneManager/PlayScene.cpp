@@ -439,6 +439,10 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(px, py);
 	game->GetCamPos(cx, cy);
 
+	if (px < 10) {
+		mario->SetState(MARIO_STATE_IDLE);
+		mario->SetPosition(10, py);
+	}
 	static float lastPx = -1.0f, lastPy = -1.0f;
 	static bool  camStarted = false;
 

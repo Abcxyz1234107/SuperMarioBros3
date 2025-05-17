@@ -147,7 +147,6 @@ scoreboard.txt
 16	2144	80	#Floor 5, above the coinbrick
 
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
-5	-5	0	2	400	3	12300	12300	12300	#Left Border
 
 5	200	150	871	16	1	12201	12201	12201	#Floor 1
 5	891	142	500	32	1	12202	12202	12202	#Floor 2
