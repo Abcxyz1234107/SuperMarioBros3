@@ -19,7 +19,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.002f
-#define MARIO_FLY_GRAVITY       0.0005f
+#define MARIO_GLIDE_GRAVITY     0.0002f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -164,6 +164,7 @@ class CMario : public CGameObject
 	bool holdingShell;
 	bool hitShellOnce;
 	bool isFly;
+	bool isGlide;
 
 	bool immortal;
 
@@ -215,6 +216,7 @@ public:
 		holdingShell = false;
 		isFly = false;
 		hitShellOnce = false;
+		isGlide = false;
 
 		immortal = false;
 
@@ -253,6 +255,8 @@ public:
 	bool IsFly() { return isFly; }
 	void SetImmortal(bool b) { immortal = b; }
 	bool IsImmortal() { return immortal; }
+	void  SetGlide(bool g);
+	bool  IsGlide() { return isGlide; }
 
 	int GetLevel() { return level; }
 	int GetCoin() { return coin; }

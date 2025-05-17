@@ -35,12 +35,33 @@ void CMario::StartTeleport(int dir, int sceneId, float distance)
 	SetState(MARIO_STATE_TELEPORT);
 }
 
+void CMario::SetGlide(bool g)
+{
+	isGlide = g;
+}
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (immortal) return;
 
-	vy += ay * dt;
 	vx += ax * dt;
+
+	if (level == MARIO_LEVEL_FLY && !isOnPlatform)
+	{
+		if (isFly)
+			vy = -MARIO_RUNNING_SPEED;
+		else
+		{
+			ay = isGlide && vy > 0 ? MARIO_GLIDE_GRAVITY   // nhấn C
+				: MARIO_GRAVITY;
+			vy += ay * dt;
+		}
+	}
+	else
+	{
+		ay = immortal ? 0.0f : MARIO_GRAVITY;
+		vy += ay * dt;
+	}
 
 	if (timer > 0)
 	{
@@ -512,7 +533,7 @@ int CMario::GetAniIdFly()
 	else
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X || isFly)
+		if (abs(ax) == MARIO_ACCEL_RUN_X || isFly || isGlide)
 		{
 			if (nx >= 0)
 				aniId = ID_ANI_MARIO_BIG_FLY_JUMP_RUN_RIGHT;

@@ -156,6 +156,7 @@
     <ClCompile Include="BGTreeEdge.cpp" />
     <ClCompile Include="BGTreeHead.cpp" />
     <ClCompile Include="BlackPipe.cpp" />
+    <ClCompile Include="Border.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonCoinBrick.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="BGTreeEdge.h" />
     <ClInclude Include="BGTreeHead.h" />
     <ClInclude Include="BlackPipe.h" />
+    <ClInclude Include="Border.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonCoinBrick.h" />
