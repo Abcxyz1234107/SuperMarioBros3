@@ -551,15 +551,14 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 	mario->SetScore(saved.score);
 }
 
+bool isFirstLoad = true;
 void CGame::SwitchScene()
 {
 	if (next_scene < 0 || next_scene == current_scene) return; 
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	bool isFirstLoad = (next_scene == -1);
-
-	if (!isFirstLoad && next_scene != first_scene)
+	if (!isFirstLoad)
 	{
 		auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
 		if (curPlay)
@@ -577,12 +576,14 @@ void CGame::SwitchScene()
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 
-	if (!isFirstLoad && next_scene != first_scene)
+	if (!isFirstLoad)
 	{
 		auto* newPlay = dynamic_cast<CPlayScene*>(s);
 		if (newPlay)
 			ApplyPlayerState(dynamic_cast<CMario*>(newPlay->GetPlayer()));
 	}
+
+	isFirstLoad = false;
 }
 
 void CGame::ReloadScene(int scene_id)

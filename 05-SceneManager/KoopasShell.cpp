@@ -4,6 +4,7 @@
 #include "CoinBrick.h"
 #include "PlayScene.h"
 #include "Koopas.h"
+#include "GoombaRed.h"
 
 void CKoopasShell::Render()
 {
@@ -61,8 +62,20 @@ void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
+    LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+    CMario* mario = (CMario*)scene->GetPlayer();
+    CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+
     AddCharacter(C_100);
-    dynamic_cast<CGoomba*>(e->obj)->SetState(GOOMBA_STATE_DIE);
+        if (dynamic_cast<CGoombaRed*>(e->obj))
+        {
+            CGoombaRed* gr = (CGoombaRed*)e->obj;
+            gr->RemoveWing();
+            AddCharacter(C_200);
+            mario->SetScore(mario->GetScore() + 200);
+        }
+           
+    goomba->SetState(GOOMBA_STATE_DIE);
 }
 
 void CKoopasShell::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)

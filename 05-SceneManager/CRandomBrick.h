@@ -19,6 +19,8 @@ private:
 	float startY;
 	bool  isBouncing = false;
 
+	void OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e);
+
 public:
 	CRandomBrick(float x, float y, int type,
 		float cell_width = 15, float cell_height = 16, int length = 1,
@@ -32,5 +34,7 @@ public:
 	void Activate();
 	int GetType() { return type; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
+
+	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 

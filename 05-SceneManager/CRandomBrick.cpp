@@ -15,6 +15,17 @@ void CRandomBrick::SetState(int state)
 	}
 }
 
+void CRandomBrick::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+    if (dynamic_cast<CRandomMushroom*>(e->obj))
+        OnCollisionWithRandomMushroom(e);
+}
+
+void CRandomBrick::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
+{
+    e->obj->SetVy(-0.25f);
+}
+
 void CRandomBrick::Activate()
 {
     if (this->GetState() != RANDOMBRICK_STATE_TOUCHED)
@@ -60,7 +71,7 @@ void CRandomBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
         if (state == RANDOMBRICK_STATE_TOUCHED && type == 2 && mario->GetLevel() == MARIO_LEVEL_SMALL)
         {
-            CRandomMushroom* mushroom = new CRandomMushroom(x, y);
+            CRandomMushroom* mushroom = new CRandomMushroom(x, y - 2);
             scene->AddObject(mushroom);
         }
         y = startY;
