@@ -557,7 +557,9 @@ void CGame::SwitchScene()
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	if (next_scene != first_scene)
+	bool isFirstLoad = (next_scene == -1);
+
+	if (!isFirstLoad && next_scene != first_scene)
 	{
 		auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
 		if (curPlay)
@@ -565,6 +567,8 @@ void CGame::SwitchScene()
 	}
 
 	scenes[current_scene]->Unload();
+
+
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
@@ -573,7 +577,7 @@ void CGame::SwitchScene()
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 
-	if (next_scene != first_scene)
+	if (!isFirstLoad && next_scene != first_scene)
 	{
 		auto* newPlay = dynamic_cast<CPlayScene*>(s);
 		if (newPlay)

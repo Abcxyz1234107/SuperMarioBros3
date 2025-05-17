@@ -71,7 +71,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			isTeleporting = false;
 
 			if (teleportSceneId >= 0)
+			{
 				CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
+				if (desX != -1) 
+				{
+					x = desX;
+					y = desY;
+
+					arrived = true;
+					desX = desY = -1;
+				}
+			}
+				
 			else SetState(MARIO_STATE_IDLE);
 
 		}
@@ -417,7 +428,13 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	float distance = (level == MARIO_LEVEL_SMALL) ? MARIO_SMALL_BBOX_HEIGHT :MARIO_BIG_BBOX_HEIGHT;
 
 	if (p->GetDesX() == -1) p->SetSceneId(-1);
+	else
+	{
+		desX = p->GetDesX();
+		desY = p->GetDesY();
+	}
 
+	p->SetPosition(-10, -10);
 	StartTeleport(dir, p->GetSceneId(), distance);
 }
 

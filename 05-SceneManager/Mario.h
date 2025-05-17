@@ -42,6 +42,8 @@
 
 #define MARIO_STATE_TELEPORT		800
 
+#define MARIO_STATE_VICTORY			900
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_TELEPORT  399
@@ -169,6 +171,8 @@ class CMario : public CGameObject
 	int  teleportDir;       // 1: xuống, -1: lên
 	float teleportTargetY;
 	int  teleportSceneId;
+	float desX, desY;
+	bool arrived;
 
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -218,6 +222,8 @@ public:
 		teleportDir = 0;
 		teleportTargetY = 0.0f;
 		teleportSceneId = -1;
+		desX = desY = -1;
+		arrived = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -261,4 +267,6 @@ public:
 	void SetTimer(int c) { timer = c; ref = GetTickCount64(); }
 
 	void StartTeleport(int dir, int sceneId, float distance);
+	bool IsArrived() { return arrived; }
+	void SetArrived(bool i) { arrived = i; }
 };
