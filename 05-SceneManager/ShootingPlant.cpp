@@ -72,31 +72,23 @@ void CShootingPlant::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
             case 2: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPLEFT;   break;
             case 3: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
             }
-            head->UseStatic(sprId);  // <-- Gọi duy nhất khi vừa lên tới đỉnh
+            head->UseStatic(sprId);  // <-- Chuẩn bị băn thì dừng animation
         }
 
         if (!hasShot && GetTickCount64() - stateTimer >= SPLANT_TIME_TOP_WAIT)
         {
             float bx = head->GetX(), by = head->GetY();
 
-            /* Đầu cây tới Mario */
-            float tx = mx - bx;
-            float ty = my - by;
+            float v = SHOOTINGPLANT_BULLET_SPEED;
+            float vxb = 0, vyb = 0;
 
-            /* xác định phía trái/ phải và chiều lên/ xuống */
-            float side = (tx < 0) ? -1.0f : 1.0f;
-            float signY = (ty < 0) ? -1.0f : 1.0f;
-
-            float abs_dx = fabsf(tx);
-            float abs_dy = fabsf(ty);
-
-            /* góc chết so với trục ngang, giới hạn ±45° (điều chỉnh theo rad) */
-            float angle = atan2f(abs_dy, abs_dx);
-            if (angle > SPLANT_BULLET_MAX_ANGLE_RAD) angle = SPLANT_BULLET_MAX_ANGLE_RAD;
-
-            /* vận tốc đạn */
-            float vxb = SHOOTINGPLANT_BULLET_SPEED * cosf(angle) * side;
-            float vyb = SHOOTINGPLANT_BULLET_SPEED * sinf(angle) * signY;
+            switch (head->GetOrient())
+            {
+            case 2: vxb = -v; vyb = -v; break;   // ↖ 45°
+            case 1: vxb = v; vyb = -v; break;   // ↗ 45°
+            case 0: vxb = -v; vyb = v; break;   // ↙ 45°
+            case 3: vxb = v; vyb = v; break;   // ↘ 45°
+            }
 
             CShootingPlantBullet* b = new CShootingPlantBullet(bx, by, vxb, vyb);
             scene->AddObject(b);

@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #define SHOOTINGPLANTBULLET_W 8
 #define SHOOTINGPLANTBULLET_H 8
-#define SHOOTINGPLANT_BULLET_SPEED 0.1f
+#define SHOOTINGPLANT_BULLET_SPEED 0.075f
 
 class CShootingPlantBullet :
     public CGameObject
