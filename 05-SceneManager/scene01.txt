@@ -37,7 +37,7 @@ scoreboard.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	20	60
+0	1400	60
 
 #Goomba
 2	200	90 #Floor 1
@@ -146,6 +146,13 @@ scoreboard.txt
 
 16	2144	80	#Floor 5, above the coinbrick
 
+#Green Koopas, all on floor 5
+24	1380	30	1
+24	1420	30	1
+24	1460	30	1
+
+24	1500	100	0
+
 #Platform  id x y bboxWidth bboxHeight Number spriteID_Megin spriteID_Middle spriteID_End
 
 5	200	150	871	16	1	12201	12201	12201	#Floor 1
@@ -222,7 +229,7 @@ id	x	y	bbWidth bbHeight spriteID  z
 11	2312	102	2	1	0	0	#Floor 6
 11	2312	-154	11	0	0	0
 11	2380	118	1	0	0	0
-50	2380	150	-1	-1	2
+50	2380	130	-1	-1	2
 
 # ShootingPlant #Head: 16 16, Body: 16 8
 

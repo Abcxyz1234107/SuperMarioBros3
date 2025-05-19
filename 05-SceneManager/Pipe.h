@@ -15,7 +15,7 @@ private:
 public:
     CPipe(float x, float y,
         int bodyLength, int pType, int pLength, float pRange,
-        float cellWidth = 25, float cellHeight = 16,
+        float cellWidth = 32, float cellHeight = 16,
         int spriteId = ID_SPRITE_PIPEBODY)
         : CGameObject(x, y)
     {

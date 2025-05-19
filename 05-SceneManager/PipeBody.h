@@ -23,7 +23,7 @@ public:
         int spriteId)
         : CGameObject(x, y)
     {
-        z = 3;
+        z = 2;
         this->cellWidth = cellWidth;
         this->totalHeight = cellHeight * (length+1);
         this->cellHeight = cellHeight;
@@ -34,5 +34,6 @@ public:
     void Render();
     virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
     int IsBlocking() { return 1; } 
+    int IsCollidable() { return 0; }
 };
 

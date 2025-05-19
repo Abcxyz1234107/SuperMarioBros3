@@ -187,6 +187,7 @@ class CMario : public CGameObject
 	void OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasShell(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
@@ -195,6 +196,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		z = 3;
 		spawnX = x;
 		spawnY = y;
 
@@ -263,12 +265,16 @@ public:
 	long long GetScore() { return score; }
 	int GetLife() { return life; }
 	int GetTimer() { return timer; }
+	float GetDesX() { return desX; }
+	float GetDesY() { return desY; }
 
 	void SetLevel(int l);
 	void SetCoin(int c) { coin = c; }
 	void SetScore(int c) { score = c; }
 	void SetLife(int c) { life = c; }
 	void SetTimer(int c) { timer = c; ref = GetTickCount64(); }
+	void SetDesX(float c) { desX = c; }
+	void SetDesY(float c) { desY = c; }
 
 	void StartTeleport(int dir, int sceneId, float distance);
 	bool IsArrived() { return arrived; }

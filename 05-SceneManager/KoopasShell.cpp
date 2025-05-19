@@ -4,6 +4,7 @@
 #include "CoinBrick.h"
 #include "PlayScene.h"
 #include "Koopas.h"
+#include "KoopasGreen.h"
 #include "GoombaRed.h"
 
 void CKoopasShell::Render()
@@ -11,12 +12,12 @@ void CKoopasShell::Render()
     if (state == SHELL_STATE_REVIVING)
     {
         CAnimations* animation = CAnimations::GetInstance();
-        animation->Get(ID_ANI_KOOPAS_SHELL_RESPAWN)->Render(x, y);
+        animation->Get(aniId)->Render(x, y);
     }
     else
     {
         CSprites* sprite = CSprites::GetInstance();
-        sprite->Get(ID_SPRITE_KOOPAS_SHELL)->Draw(x, y);
+        sprite->Get(spriteId)->Draw(x, y);
     }
 
     RenderCharacter();
@@ -66,7 +67,9 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     CMario* mario = (CMario*)scene->GetPlayer();
     CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-    AddCharacter(C_100);
+    if (vx != 0)
+    {
+        AddCharacter(C_100);
         if (dynamic_cast<CGoombaRed*>(e->obj))
         {
             CGoombaRed* gr = (CGoombaRed*)e->obj;
@@ -74,8 +77,10 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             AddCharacter(C_200);
             mario->SetScore(mario->GetScore() + 200);
         }
-           
-    goomba->SetState(GOOMBA_STATE_DIE);
+
+        goomba->SetState(GOOMBA_STATE_DIE);
+    }
+    else goomba->SetVx(-goomba->GetVx());
 }
 
 void CKoopasShell::OnCollisionWithRandomBrick(LPCOLLISIONEVENT e)
@@ -134,7 +139,14 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         /* 2. Hết thời gian -> biến lại Koopas */
         if (elapsed >= SHELL_REVIVE_TIMEOUT)
         {
-            scene->AddObject(new CKoopas(x, y - SHELL_BBOX_H));
+            if (type == 0)
+                scene->AddObject(new CKoopas(x, y - SHELL_BBOX_H));
+            else
+            {
+                CKoopasGreen* kg = new CKoopasGreen(x, y - SHELL_BBOX_H);
+                kg->RemoveWing();
+                scene->AddObject(kg);
+            }
             isDeleted = true;
             return;
         }

@@ -171,7 +171,7 @@
     <ClCompile Include="ButtonCoinBrick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Border.cpp">
+    <ClCompile Include="KoopasGreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -427,7 +427,7 @@
     <ClInclude Include="ButtonCoinBrick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Border.h">
+    <ClInclude Include="KoopasGreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

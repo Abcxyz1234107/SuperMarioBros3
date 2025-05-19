@@ -15,10 +15,11 @@ private:
 public:
 	CPipeHead(float x, float y) : CGameObject(x, y) 
 	{
-		z = 3;
+		z = 2;
 	}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	int IsCollidable() { return 0; }
 };
 

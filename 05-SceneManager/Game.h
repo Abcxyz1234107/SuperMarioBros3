@@ -26,6 +26,7 @@ struct PlayerData
 	long long score;
 	int life;
 	int timer = 300;
+	float desX = -1, desY;
 };
 
 /*
@@ -132,6 +133,7 @@ public:
 	void ApplyPlayerState(CMario* mario);
 
 	void SetFirstScene(int i) { first_scene = i; }
+	PlayerData GetSaved() { return saved; }
 
 	~CGame();
 };

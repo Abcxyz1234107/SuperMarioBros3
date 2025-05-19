@@ -38,7 +38,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     /* 1. Turn to Shell */
     if (state == GOOMBA_STATE_DIE && sleep == false)
     {
-        CKoopasShell* fakeShell = new CKoopasShell(x, y);
+        CKoopasShell* fakeShell = new CKoopasShell(x, y, type);
         scene->AddObject(fakeShell);
         shell = fakeShell;
         sleep = true;

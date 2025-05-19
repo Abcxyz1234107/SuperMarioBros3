@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Textures.h"
 
-#define P_W 1
+#define P_W 10
 #define P_H 16
 
 CPortal::CPortal(float l, float t, float dX, float dY, int scene_id )
@@ -12,6 +12,7 @@ CPortal::CPortal(float l, float t, float dX, float dY, int scene_id )
 	y = t;
 	desX = dX;
 	desY = dY;
+	z = 3;
 }
 
 void CPortal::RenderBoundingBox()

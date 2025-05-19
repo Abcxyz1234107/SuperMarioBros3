@@ -42,6 +42,8 @@ public:
 	float GetY() { return y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	float GetZ() { return z; } 
+	float GetVx() { return vx; }
+	float GetVy() { return vy; }
 	void SetZ(float z) { this->z = z; }
 	void SetVy(float vy) { this->vy = vy; }
 	void SetVx(float vx) { this->vx = vx; }

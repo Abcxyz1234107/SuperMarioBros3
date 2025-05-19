@@ -539,6 +539,9 @@ void CGame::SavePlayerState(CMario* mario)          // hàm mới
 	saved.timer = mario->GetTimer();
 	saved.life = mario->GetLife();
 	saved.score = mario->GetScore();
+	saved.desX = mario->GetDesX();
+	saved.desY = mario->GetDesY();
+	
 }
 
 void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
@@ -549,6 +552,8 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 	mario->SetTimer(saved.timer);
 	mario->SetLife(saved.life);
 	mario->SetScore(saved.score);
+	mario->SetDesX(saved.desX);
+	mario->SetDesY(saved.desY);
 }
 
 bool isFirstLoad = true;
@@ -563,6 +568,14 @@ void CGame::SwitchScene()
 		auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
 		if (curPlay)
 			SavePlayerState(dynamic_cast<CMario*>(curPlay->GetPlayer()));
+
+		CMario* mario = dynamic_cast<CMario*>(curPlay->GetPlayer());
+		if (mario->GetDesX() != -1)
+		{
+			mario->SetPosition(mario->GetDesX(), mario->GetDesY());
+			mario->SetArrived(true);
+			DebugOut(L"[INFO] Mario teleport to x: %.2f, y: %.2f\n", mario->GetDesX(), mario->GetDesY());
+		}
 	}
 
 	scenes[current_scene]->Unload();

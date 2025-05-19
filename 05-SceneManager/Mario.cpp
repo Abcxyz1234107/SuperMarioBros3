@@ -13,6 +13,7 @@
 #include "CRandomBrick.h"
 #include "CoinBrick.h"
 #include "Koopas.h"
+#include "KoopasGreen.h"
 #include "RandomLeaf.h"
 #include "GoombaRed.h"
 #include "ButtonCoinBrick.h"
@@ -81,6 +82,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (state == MARIO_STATE_TELEPORT && isTeleporting)
 	{
+		vy = teleportDir * MARIO_TELEPORT_SPEED;
 		y += vy * dt;
 
 		if ((teleportDir == 1 && y >= teleportTargetY) ||
@@ -100,7 +102,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					y = desY;
 
 					arrived = true;
-					desX = desY = -1;
 				}
 			}
 				
@@ -177,7 +178,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CKoopas*>(goomba))
 	{
-		OnCollisionWithKoopas(e);
+		if (dynamic_cast<CKoopasGreen*>(goomba))
+			OnCollisionWithKoopasGreen(e);
+		else
+			OnCollisionWithKoopas(e);
 	}
 	else if (dynamic_cast<CKoopasShell*>(goomba))
 	{
@@ -399,6 +403,47 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e)
+{
+	CKoopasGreen* koopas = (CKoopasGreen*)e->obj;
+	if (e->ny < 0)
+	{
+		if (koopas->HasWings()) 
+		{
+			score += 100;
+			koopas->AddCharacter(C_100);
+			koopas->RemoveWing();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopas->GetState() != GOOMBA_STATE_DIE)  // lần 2
+		{
+			score += 200;
+			koopas->AddCharacter(C_200);
+			koopas->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else
+	{
+		if (untouchable == 0)
+		{
+			if (koopas->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level--;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
 void CMario::OnCollisionWithRandomShootingPlant(LPCOLLISIONEVENT e)
 {
 	if (dynamic_cast<CShootingPlantBullet*>(e->obj)) e->obj->Delete();
@@ -441,7 +486,7 @@ void CMario::OnCollisionWithRandomLeaf(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	if (isTeleporting || e->ny == 0) return;
+	if (isTeleporting) return;
 
 	CPortal* p = (CPortal*)e->obj;
 

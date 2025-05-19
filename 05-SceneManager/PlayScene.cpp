@@ -26,6 +26,7 @@
 #include "ScoreBoard.h"
 #include "ButtonCoinBrick.h"
 #include "BlackPipe.h"
+#include "KoopasGreen.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -119,6 +120,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject* obj = NULL;
+	CGame* game = CGame::GetInstance();
+	PlayerData s = game->GetSaved();
 
 	switch (object_type)
 	{
@@ -128,7 +131,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
+
+		DebugOut(L"%.4f, %.4f,", s.desX, s.desY);
+		if (s.desX == -1)
+			obj = new CMario(x, y);
+		else
+			obj = new CMario(s.desX, s.desY);
+
 		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
@@ -263,6 +272,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case OBJECT_TYPE_GREEN_KOOPAS:
+	{
+		int hasWing = atoi(tokens[3].c_str()); //1: yes, others: no
+		obj = new CKoopasGreen(x, y, hasWing);
+
+		break;
+	}
 	case OBJECT_TYPE_REDGOOMBA:
 	{
 		obj = new CGoombaRed(x, y);
@@ -336,7 +352,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
+	if (object_type != OBJECT_TYPE_MARIO)
+		obj->SetPosition(x, y);
 
 
 	objects.push_back(obj);
@@ -436,6 +453,7 @@ void CPlayScene::Update(DWORD dt)
 	float px, py, cx, cy;
 	CMario* mario = (CMario*)player;
 	CGame* game = CGame::GetInstance();
+
 	player->GetPosition(px, py);
 	game->GetCamPos(cx, cy);
 
