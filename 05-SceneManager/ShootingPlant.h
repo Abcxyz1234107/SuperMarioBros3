@@ -23,6 +23,7 @@ private:
     CShootingPlantHead* head;
     CShootingPlantBody* body;
     float detectRange;
+    float distToMario = 0;
 
     float startY, topY;
     ULONGLONG stateTimer;
@@ -49,6 +50,9 @@ public:
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
     void Render();
     void GetBoundingBox(float& l, float& t, float& r, float& b) {}
+
+    virtual void WAIT_TOP();
+    virtual void Detect_Mario();
 
     CShootingPlantHead* GetHead() { return head; }
     CShootingPlantBody* GetBody() { return body; }
