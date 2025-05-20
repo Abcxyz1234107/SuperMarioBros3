@@ -190,11 +190,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			objects.push_back(pipe->GetHead());
 		}
 		
-		if (pType == 2 || pType == 3)
+		if (pType >= 2)
 		{
 			objects.push_back(pipe->GetSPlant()->GetHead());
 			objects.push_back(pipe->GetSPlant()->GetBody());
-			objects.push_back(pipe->GetSPlant());
+			if (pType < 4) objects.push_back(pipe->GetSPlant());
+			else objects.push_back(pipe->GetEPlant());
 		}
 
 		objects.push_back(pipe->GetBody());

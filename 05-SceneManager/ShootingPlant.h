@@ -3,6 +3,7 @@
 #include "ShootingPlantBody.h"
 #include "ShootingPlantHead.h"
 #include "ShootingPlantBullet.h"
+#include "debug.h"
 
 #define SPLANT_SPEED_EMERGE   0.05f
 #define SPLANT_SPEED_RETRACT  0.05f
@@ -19,7 +20,7 @@ enum SPLANT_STATE {
 class CShootingPlant :
     public CGameObject
 {
-private:
+protected:
     CShootingPlantHead* head;
     CShootingPlantBody* body;
     float detectRange;
@@ -32,20 +33,7 @@ private:
 public:
     CShootingPlant(float x, float y,
         int bodyLength,
-        float detectRange, int type = 2) :
-        CGameObject(x, y)
-    {
-        z = 2;
-        this->detectRange = detectRange;
-        head = new CShootingPlantHead(x, y-4, type);
-        body = new CShootingPlantBody(x, y, 16, 8, bodyLength);
-
-        startY = y;
-        topY = y - bodyLength * 8 - 20;   // vượt khỏi Pipe
-        state = SPLANT_HIDDEN;
-        hasShot = false;
-        stateTimer = 0;
-    }
+        float detectRange, int type = 2);
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
     void Render();

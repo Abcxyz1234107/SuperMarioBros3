@@ -37,7 +37,7 @@ scoreboard.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	1400	60
+0	1875	60
 
 #Goomba
 2	200	90 #Floor 1
@@ -224,8 +224,8 @@ id	x	y	bbWidth bbHeight spriteID  z
 #id	x	y	Len	type	pLen	range	
 11	380	102	2	2	2	110
 
-11	1850	118	1	0	0	0	#Floor 5
-11	1915	102	2	0	0	0
+11	1850	118	1	4	1	90	#Floor 5
+11	1915	102	2	3	1	100
 
 11	2312	102	2	1	0	0	#Floor 6
 11	2312	-154	11	0	0	0

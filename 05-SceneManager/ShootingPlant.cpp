@@ -8,6 +8,23 @@ void CShootingPlant::Render()
 	body->Render();
 }
 
+CShootingPlant::CShootingPlant(float x, float y,
+    int bodyLength,
+    float detectRange, int type) :
+    CGameObject(x, y)
+{
+    z = 2;
+    this->detectRange = detectRange;
+    head = new CShootingPlantHead(x, y - 4, type);
+    body = new CShootingPlantBody(x, y, 16, 8, bodyLength);
+
+    startY = y;
+    topY = y - bodyLength * 8 - 20;   // vượt khỏi Pipe
+    state = SPLANT_HIDDEN;
+    hasShot = false;
+    stateTimer = 0;
+}
+
 void CShootingPlant::WAIT_TOP()
 {
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();

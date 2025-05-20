@@ -24,6 +24,9 @@ void CShootingPlantHead::Render()
     else
     {
         aniId_bottomLeft = ID_ANI_EATINGPLANT_GREEN;
+        aniId_topRight = ID_ANI_EATINGPLANT_GREEN;
+        aniId_topLeft = ID_ANI_EATINGPLANT_GREEN;
+        aniId_bottomRight = ID_ANI_EATINGPLANT_GREEN;
     }
 
     if (useStatic)

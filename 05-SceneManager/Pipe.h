@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "PipeBody.h"
 #include "PipeHead.h"
 #include "ShootingPlant.h"
+#include "EatingPlant.h"
 
 class CPipe : public CGameObject
 {
@@ -9,7 +10,8 @@ private:
 	CPipeBody* body;
 	CPipeHead* head = nullptr;
     CShootingPlant* splant = nullptr;
-    int plantType; //0: normal, 1: splant, 2: cplant
+    CEatingPlant* eplant = nullptr;
+    int plantType; //0 normal, 1 no head, 2 shootingPlant, 3 GREEN splant, 4 GREEN eating plant
     int plantLength;
     float plantRange;
 public:
@@ -24,10 +26,19 @@ public:
         if (pType != 1) 
             this->head = new CPipeHead(x - 1, y);
 
-        if (pType == 2)
+        if (pType >= 2)
         {
-            this->splant = new CShootingPlant(x, y + 10, pLength, pRange, pType);
+            if (pType == 4)
+            {
+                splant = new CEatingPlant(x, y + 10, pLength, pRange, pType);
+                eplant = static_cast<CEatingPlant*>(splant);
+            }
+            else
+            {
+                splant = new CShootingPlant(x, y + 10, pLength, pRange, pType);
+            }
         }
+        
 
         body = new CPipeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId);
         plantType = pType;
@@ -39,6 +50,8 @@ public:
 
     CPipeHead* GetHead() { return head; }
     CPipeBody* GetBody() { return body; }
+
     CShootingPlant* GetSPlant() { return splant; }
+    CEatingPlant* GetEPlant() { return eplant; }
 };
 

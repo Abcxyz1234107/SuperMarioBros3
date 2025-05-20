@@ -1,5 +1,6 @@
 #pragma once
 #include "ShootingPlant.h"
+
 class CEatingPlant :
     public CShootingPlant
 

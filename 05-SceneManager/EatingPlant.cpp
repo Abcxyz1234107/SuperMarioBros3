@@ -1,7 +1,7 @@
 ﻿#include "EatingPlant.h"
 #include "PlayScene.h"
 
-void CShootingPlant::WAIT_TOP()
+void CEatingPlant::WAIT_TOP()
 {
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
@@ -12,7 +12,7 @@ void CShootingPlant::WAIT_TOP()
         vy = SPLANT_SPEED_RETRACT;
     }
 }
-void CShootingPlant::Detect_Mario()
+void CEatingPlant::Detect_Mario()
 {
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
