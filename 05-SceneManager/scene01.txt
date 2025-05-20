@@ -219,7 +219,8 @@ id	x	y	bbWidth bbHeight spriteID  z
 
 10	1775	135	3	#Floor 5
 
-# PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included	
+# PIPE #32 16 Head. If type = 0 (normal) then the next parameters are not IMPORTANT, but MUST be included
+#Type: 0 normal, 1 no head, 2 shootingPlant, 3 GREEN splant, 4 GREEN eating plant	
 #id	x	y	Len	type	pLen	range	
 11	380	102	2	2	2	110
 

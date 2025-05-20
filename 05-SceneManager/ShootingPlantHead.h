@@ -14,15 +14,19 @@ private:
 	// 1‑TopRight
 	// 2‑TopLeft
 	// 3‑BottomRight
+
+	int type = 2;
 public:
-	CShootingPlantHead(float x, float y) : CGameObject(x, y) 
+	CShootingPlantHead(float x, float y, int type = 2) : CGameObject(x, y)
 	{
 		z = 2;
-		this->orient = 0;
+		orient = 0;
+		this->type = type;
 	}
 
 	void SetOrient(int o) { orient = o; }
 	int GetOrient() { return orient; }
+	int GetType() { return type; }
 	void UseStatic(int id) { useStatic = true;  staticSpriteId = id; }
 	void ClearStatic() { useStatic = false; }
 	void Render();

@@ -16,13 +16,28 @@ void CShootingPlant::WAIT_TOP()
     if (!hasShot)
     {
         int sprId = -1;
-        switch (head->GetOrient())
+
+        if (head->GetType() == 2)
         {
-        case 0: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMLEFT;      break;
-        case 1: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPRIGHT;     break;
-        case 2: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPLEFT;   break;
-        case 3: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+            switch (head->GetOrient())
+            {
+            case 0: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMLEFT;      break;
+            case 1: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPRIGHT;     break;
+            case 2: sprId = ID_SPRITE_SHOOTINGPLANT_RED_TOPLEFT;   break;
+            case 3: sprId = ID_SPRITE_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+            }
         }
+        else
+        {
+            switch (head->GetOrient())
+            {
+            case 0: sprId = ID_SPRITE_SHOOTINGPLANT_GREEN_BOTTOMLEFT;      break;
+            case 1: sprId = ID_SPRITE_SHOOTINGPLANT_GREEN_TOPRIGHT;     break;
+            case 2: sprId = ID_SPRITE_SHOOTINGPLANT_GREEN_TOPLEFT;   break;
+            case 3: sprId = ID_SPRITE_SHOOTINGPLANT_GREEN_BOTTOMRIGHT;  break;
+            }
+        }
+
         head->UseStatic(sprId);  // <-- Chuẩn bị băn thì dừng animation
     }
 

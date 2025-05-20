@@ -30,14 +30,14 @@ private:
     SPLANT_STATE state;
     bool hasShot;
 public:
-    CShootingPlant(float x, float y, 
+    CShootingPlant(float x, float y,
         int bodyLength,
-        float detectRange) :
+        float detectRange, int type = 2) :
         CGameObject(x, y)
     {
         z = 2;
         this->detectRange = detectRange;
-        head = new CShootingPlantHead(x, y-4);
+        head = new CShootingPlantHead(x, y-4, type);
         body = new CShootingPlantBody(x, y, 16, 8, bodyLength);
 
         startY = y;
@@ -52,7 +52,9 @@ public:
     void GetBoundingBox(float& l, float& t, float& r, float& b) {}
 
     virtual void WAIT_TOP();
-    virtual void Detect_Mario();
+    virtual void Detect_Mario(); //virtual hàm này để tách playscene, mario
+                                 //ra khỏi Update thì mới đặt wait_top
+                                 //thành virtual được
 
     CShootingPlantHead* GetHead() { return head; }
     CShootingPlantBody* GetBody() { return body; }

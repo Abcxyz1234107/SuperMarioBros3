@@ -2,6 +2,30 @@
 
 void CShootingPlantHead::Render() 
 {
+    int aniId_bottomLeft;
+    int aniId_topLeft;
+    int aniId_bottomRight;
+    int aniId_topRight;
+
+    if (type == 2)
+    {
+        aniId_bottomLeft = ID_ANI_SHOOTINGPLANT_RED_BOTTOMLEFT;
+        aniId_topRight = ID_ANI_SHOOTINGPLANT_RED_TOPRIGHT;
+        aniId_topLeft = ID_ANI_SHOOTINGPLANT_RED_TOPLEFT;
+        aniId_bottomRight = ID_ANI_SHOOTINGPLANT_RED_BOTTOMRIGHT;
+    }
+    else if (type == 3)
+    {
+        aniId_bottomLeft = ID_ANI_SHOOTINGPLANT_GREEN_BOTTOMLEFT;
+        aniId_topRight = ID_ANI_SHOOTINGPLANT_GREEN_TOPRIGHT;
+        aniId_topLeft = ID_ANI_SHOOTINGPLANT_GREEN_TOPLEFT;
+        aniId_bottomRight = ID_ANI_SHOOTINGPLANT_GREEN_BOTTOMRIGHT;
+    }
+    else
+    {
+        aniId_bottomLeft = ID_ANI_EATINGPLANT_GREEN;
+    }
+
     if (useStatic)
     {
         CSprites::GetInstance()->Get(staticSpriteId)->Draw(x, y);
@@ -10,12 +34,12 @@ void CShootingPlantHead::Render()
     else 
     {
         CAnimations* animations = CAnimations::GetInstance();
-        int ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMLEFT;
+        int ani = aniId_bottomLeft;
         switch (orient)
         {
-        case 1: ani = ID_ANI_SHOOTINGPLANT_RED_TOPRIGHT;  break;
-        case 2: ani = ID_ANI_SHOOTINGPLANT_RED_TOPLEFT;    break;
-        case 3: ani = ID_ANI_SHOOTINGPLANT_RED_BOTTOMRIGHT;  break;
+        case 1: ani = aniId_topRight;  break;
+        case 2: ani = aniId_topLeft;    break;
+        case 3: ani = aniId_bottomRight;  break;
         }
         animations->Get(ani)->Render(x, y);
     }

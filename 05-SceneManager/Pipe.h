@@ -26,7 +26,7 @@ public:
 
         if (pType == 2)
         {
-            this->splant = new CShootingPlant(x, y + 10, pLength, pRange);
+            this->splant = new CShootingPlant(x, y + 10, pLength, pRange, pType);
         }
 
         body = new CPipeBody(x, y, cellWidth, cellHeight, bodyLength, spriteId);
