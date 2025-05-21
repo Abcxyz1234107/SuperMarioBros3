@@ -47,6 +47,55 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	vx += ax * dt;
 
+	//-------------------------------------FLY------------------------//
+	bool isRunning =
+		abs(ax) == MARIO_ACCEL_RUN_X &&            // đang giữ A/D
+		abs(vx) >= MARIO_RUNNING_SPEED * 0.9f;     // đạt speed chạy
+
+	ULONGLONG now = GetTickCount64();
+
+	if (isRunning)                    // ---- TĂNG POWER ----
+	{
+		powerDelay = 0;
+		if (power < MARIO_POWER_MAX &&
+			now - powerTick >= MARIO_POWER_INC_TIME)
+		{
+			power++;
+			powerTick = now;
+			if (power == MARIO_POWER_MAX) powerFull = true;
+		}
+	}
+	else                              // ---- GIẢM POWER ----
+	{
+		if (power > 0)
+		{
+			if (powerDelay == 0) powerDelay = now;
+			else if (now - powerDelay >= MARIO_POWER_DEC_DELAY &&
+				now - powerTick >= MARIO_POWER_DEC_TIME)
+			{
+				power--;
+				powerTick = now;
+				if (power == 0)
+				{
+					powerFull = false;
+					powerDelay = 0;
+				}
+			}
+		}
+		else powerFull = false;
+	}
+
+	if (level == MARIO_LEVEL_FLY && powerFull)
+	{
+		bool recentlyPressed = now - lastFlyPress <= MARIO_FLY_PRESS_TIMEOUT;
+		isFly = recentlyPressed;              // bay khi còn spam Space
+	}
+	else isFly = false;
+
+	if (power < MARIO_POWER_MAX) powerFull = false;
+
+	//-------------------------------------GLIDE------------------------//
+
 	if (level == MARIO_LEVEL_FLY && !isOnPlatform)
 	{
 		if (isFly)
@@ -64,6 +113,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vy += ay * dt;
 	}
 
+	//-------------------------------------TIME_OUT------------------------//
+
 	if (timer > 0)
 	{
 		ULONGLONG now = GetTickCount64();
@@ -79,6 +130,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				SetState(MARIO_STATE_DIE);
 		}
 	}
+
+	//-------------------------------------TELEPORT------------------------//
 
 	if (state == MARIO_STATE_TELEPORT && isTeleporting)
 	{

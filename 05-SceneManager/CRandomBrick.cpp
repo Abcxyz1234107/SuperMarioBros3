@@ -40,7 +40,7 @@ void CRandomBrick::Activate()
 
         if (type == 3)
         {
-            CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y - 2);
+            CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y);
             scene->AddObject(mushroom);
         }
         else

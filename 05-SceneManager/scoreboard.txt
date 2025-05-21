@@ -2,6 +2,12 @@
 [SPRITES]
 71230	4	81	353	124	40 #350 44, background
 
+10310	96	129	105	136	40 #8, 7 arrow Black
+10311	107	129	116	136	40 #8, 7 arrow White
+
+10312	119	129	134	136	40 #15, 7 power Black
+10313	137	129	152	136	40 #15, 7 power White
+
 #7 number in score
 #3 number in timer
 #1 number in coin, but could be more if > 10

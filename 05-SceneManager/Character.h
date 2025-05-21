@@ -18,6 +18,12 @@
 #define C_8 10308
 #define C_9 10309
 
+#define C_ARROW_BLACK 10310
+#define C_ARROW_WHITE 10311
+
+#define C_POWER_BLACK 10312
+#define C_POWER_WHITE 10313
+
 #define C_SPEED 0.05f
 #define C_TIMEOUT 750
 

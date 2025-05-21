@@ -6,6 +6,12 @@
 
 #include "debug.h"
 
+#define MARIO_POWER_MAX          6           // 6 arrow
+#define MARIO_POWER_INC_TIME   300           // ms/arrow khi CHẠY
+#define MARIO_POWER_DEC_DELAY  500           // ms chờ mới bắt đầu tụt
+#define MARIO_POWER_DEC_TIME   250           // ms/arrow khi ĐỨNG
+#define MARIO_FLY_PRESS_TIMEOUT 300          // ms kể từ lần nhấn Space cuối
+
 #define MARIO_INITIAL_TIME 300 //s
 #define MARIO_TELEPORT_SPEED	0.01f
 
@@ -157,6 +163,12 @@ class CMario : public CGameObject
 	int timer;
 	ULONGLONG ref;
 
+	int   power;            // 0‒6
+	bool  powerFull;        // true khi power==6
+	ULONGLONG powerTick;    // mốc cộng/trừ gần nhất
+	ULONGLONG powerDelay;   // mốc bắt đầu chờ giảm
+	ULONGLONG lastFlyPress; // lần nhấn Space gần nhất
+
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
@@ -196,7 +208,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		z = 3;
+		z = 2;
 		spawnX = x;
 		spawnY = y;
 
@@ -214,6 +226,9 @@ public:
 		life = 4;
 		timer = MARIO_INITIAL_TIME;
 		ref = GetTickCount64();
+
+		power = 0; powerFull = false;
+		powerTick = powerDelay = lastFlyPress = 0;
 
 		holdingShell = false;
 		isFly = false;
@@ -279,4 +294,10 @@ public:
 	void StartTeleport(int dir, int sceneId, float distance);
 	bool IsArrived() { return arrived; }
 	void SetArrived(bool i) { arrived = i; }
+
+	int  GetPower() { return power; }
+	bool IsPowerFull() { return powerFull; }
+	void AddFlyPress() { lastFlyPress = GetTickCount64(); }
+	ULONGLONG GetLastFlyPress() { return lastFlyPress; }
+
 };

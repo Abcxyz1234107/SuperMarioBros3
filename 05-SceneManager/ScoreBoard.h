@@ -12,6 +12,8 @@
 #define SB_TIMER_X       5
 #define SB_TEXT_Y        -1
 
+#define SB_POWER_X       -83
+
 
 class CScoreBoard :
     public CGameObject
@@ -24,6 +26,9 @@ private:
     int coin;
     long long score;
     int life;
+
+    int power;
+    bool powerFull;
 
 public:
     CScoreBoard(float x, float y) : CGameObject(x, y), offsetX(x), offsetY(y)
