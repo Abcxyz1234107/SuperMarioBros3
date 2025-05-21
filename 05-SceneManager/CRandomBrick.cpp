@@ -43,6 +43,7 @@ void CRandomBrick::Activate()
             CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y - 2);
             scene->AddObject(mushroom);
         }
+        else
         if (type == 1)
         {
             CRandomCoin* coin = new CRandomCoin(x, y - 16.0f);
