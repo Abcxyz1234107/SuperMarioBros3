@@ -51,5 +51,5 @@ void CRandomMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
     l = x - RandomMushroom_BBOX_WIDTH / 2;
     t = y - RandomMushroom_BBOX_HEIGHT / 2;
     r = l + RandomMushroom_BBOX_WIDTH;
-    b = t + RandomMushroom_BBOX_HEIGHT;
+    b = t + RandomMushroom_BBOX_HEIGHT - 1;
 }

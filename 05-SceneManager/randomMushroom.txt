@@ -2,6 +2,9 @@
 [SPRITES]
 31101	299	187	316	204	20
 
+##GREEN
+31301	318	189	334	205	20
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 31111	31101	1000

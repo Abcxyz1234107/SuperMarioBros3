@@ -3,6 +3,7 @@
 #include "RandomCoin.h"
 #include "RandomMushroom.h"
 #include "RandomLeaf.h"
+#include "RandomMushroomGreen.h"
 
 #define RB_MAX_Y 8.0f
 #define RB_SPEED_Y 0.1f
@@ -15,7 +16,7 @@ class CRandomBrick :
     public CPlatform
 {
 private:
-	int type; //1 for coin, 2 for mushroom
+	int type; //1 for coin, 2 for red_mushroom, 3 for green_mushroom
 	float startY;
 	bool  isBouncing = false;
 

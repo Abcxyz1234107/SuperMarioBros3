@@ -497,7 +497,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (py <= MAX_MAP_Y * 0.8 && MAX_MAP_Y != 0) cy = MAX_MAP_Y;
 	else if (MAX_MAP_Y == 0) cy = 0;
-	else if (mario->GetState() == MARIO_STATE_DIE || py >= screenH * 0.4 || mario->GetLevel() != 3)
+	else if (mario->GetState() == MARIO_STATE_DIE || py >= screenH * 0.4)
 		    cy = 0;
 	else	cy += dy;
 

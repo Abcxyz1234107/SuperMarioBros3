@@ -10,11 +10,11 @@
 class CRandomMushroom :
     public CGoomba
 {
-private:
+protected:
 	float spawnY;    
 	bool emerging; // flag cho biết đang trồi lên
 
-	void OnCollisionWithMario(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithMario(LPCOLLISIONEVENT e);
 public:
 	CRandomMushroom(float x, float y) : CGoomba(x, y)
 	{
@@ -27,10 +27,10 @@ public:
 		nx = 1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
-	void Render();
+	virtual void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
-	void OnCollisionWith(LPCOLLISIONEVENT e) override;
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e) override;
 	bool IsEmerging() { return emerging; }
 };
 

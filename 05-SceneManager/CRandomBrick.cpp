@@ -17,13 +17,13 @@ void CRandomBrick::SetState(int state)
 
 void CRandomBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    if (dynamic_cast<CRandomMushroom*>(e->obj))
-        OnCollisionWithRandomMushroom(e);
+    //if (dynamic_cast<CRandomMushroom*>(e->obj))
+    //    OnCollisionWithRandomMushroom(e);
 }
 
 void CRandomBrick::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
 {
-    e->obj->SetVy(-0.25f);
+    //e->obj->SetVy(-0.25f);
 }
 
 void CRandomBrick::Activate()
@@ -38,6 +38,11 @@ void CRandomBrick::Activate()
         vy = -RB_SPEED_Y;
         isBouncing = true;
 
+        if (type == 3)
+        {
+            CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y - 2);
+            scene->AddObject(mushroom);
+        }
         if (type == 1)
         {
             CRandomCoin* coin = new CRandomCoin(x, y - 16.0f);

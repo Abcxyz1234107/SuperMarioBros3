@@ -331,12 +331,29 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	}
 
 	/* 3. Shell đang chạy */
-	if (e->ny < 0)                          // nhảy lên để dừng
+	if (e->ny < 0)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
-		shell->SetVx(0);
-		score += 100;
-		shell->AddCharacter(C_100);
+
+		if (shell->GetVx() == 0)
+		{
+			float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
+
+			if (!hitShellOnce)
+			{
+				score += 200;
+				shell->AddCharacter(C_200);
+				hitShellOnce = true;
+			}
+			else
+			{
+				score += 100;
+				shell->AddCharacter(C_100);
+			}
+
+			shell->Activate(dir);
+			return;
+		}
 	}
 	else if (untouchable == 0)              // va chạm 
 	{
@@ -356,6 +373,18 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
 {
 	CRandomMushroom* mushroom = (CRandomMushroom*)e->obj;
+	if (dynamic_cast<CRandomMushroomGreen*>(mushroom))
+	{
+		CRandomMushroomGreen* mg = dynamic_cast<CRandomMushroomGreen*>(mushroom);
+		if (mg->IsEmerging() == false)
+		{
+			score += 1000;
+			life++;
+			mg->AddCharacter(C_1000);
+			mg->Delete();
+		}
+	}
+	else
 	if (mushroom->IsEmerging() == false)
 	{
 		score += 1000;
