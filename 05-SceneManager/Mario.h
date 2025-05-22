@@ -7,10 +7,12 @@
 #include "debug.h"
 
 #define MARIO_POWER_MAX          6           // 6 arrow
-#define MARIO_POWER_INC_TIME   300           // ms/arrow khi CHẠY
-#define MARIO_POWER_DEC_DELAY  500           // ms chờ mới bắt đầu tụt
-#define MARIO_POWER_DEC_TIME   250           // ms/arrow khi ĐỨNG
+#define MARIO_POWER_INC_TIME   300           // ms/arrow
+#define MARIO_POWER_DEC_DELAY  500           // ms chờ trước khi giảm power
+#define MARIO_POWER_DEC_TIME   250           // ms/arrow
 #define MARIO_FLY_PRESS_TIMEOUT 300          // ms kể từ lần nhấn Space cuối
+
+#define MARIO_GLIDE_PRESS_TIMEOUT   200		// ms
 
 #define MARIO_INITIAL_TIME 300 //s
 #define MARIO_TELEPORT_SPEED	0.01f
@@ -168,6 +170,7 @@ class CMario : public CGameObject
 	ULONGLONG powerTick;    // mốc cộng/trừ gần nhất
 	ULONGLONG powerDelay;   // mốc bắt đầu chờ giảm
 	ULONGLONG lastFlyPress; // lần nhấn Space gần nhất
+	ULONGLONG lastGlidePress; // Glide
 
 	int untouchable;
 	ULONGLONG untouchable_start;
@@ -233,6 +236,8 @@ public:
 		holdingShell = false;
 		isFly = false;
 		hitShellOnce = false;
+
+		lastGlidePress = 0;
 		isGlide = false;
 
 		immortal = false;
@@ -299,5 +304,8 @@ public:
 	bool IsPowerFull() { return powerFull; }
 	void AddFlyPress() { lastFlyPress = GetTickCount64(); }
 	ULONGLONG GetLastFlyPress() { return lastFlyPress; }
+
+	void AddGlidePress() { lastGlidePress = GetTickCount64(); }
+	ULONGLONG GetLastGlidePress() { return lastGlidePress; }
 
 };

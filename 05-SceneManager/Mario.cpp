@@ -96,18 +96,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	//-------------------------------------GLIDE------------------------//
 
+	bool glideCandidate = level == MARIO_LEVEL_FLY          // có cánh
+		&& !isOnPlatform                    // đang trên không
+		&& !isFly;                          // KHÔNG bay
+
+	bool glideActive = glideCandidate &&
+		(now - lastGlidePress <= MARIO_GLIDE_PRESS_TIMEOUT);
+
+	isGlide = glideActive;
+
 	if (level == MARIO_LEVEL_FLY && !isOnPlatform)
 	{
-		if (isFly)
+		if (isFly)                       // đang bay
 			vy = -MARIO_RUNNING_SPEED;
-		else
+		else                             // rơi / glide
 		{
-			ay = isGlide && vy > 0 ? MARIO_GLIDE_GRAVITY   // nhấn C
+			ay = (isGlide && vy > 0) ? MARIO_GLIDE_GRAVITY     // giảm rơi
 				: MARIO_GRAVITY;
 			vy += ay * dt;
 		}
 	}
-	else
+	else                                 // các level khác
 	{
 		ay = immortal ? 0.0f : MARIO_GRAVITY;
 		vy += ay * dt;
