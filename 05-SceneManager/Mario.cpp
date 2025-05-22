@@ -48,19 +48,16 @@ void CMario::StartTailHit()
 	tailHit_start = GetTickCount64();
 }
 
-void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper giúp gọi gián tiếp onCollisionWithGoomba
+void CMario::TailHitGoomba(LPGAMEOBJECT goomba)
 {
-	float dummyT = 0.0f;
 	float nxTail = (nx > 0) ? 1.0f : -1.0f;
-	float nyTail = 0.0f;
+	float nyTail = -1.0f; 	/*  ny = -1 vì các OnCollisionWithGoomba() chỉ nhận đòn có ny < 0 (đạp đầu) */
 
-	float dx = 0.0f;    // thêm cho đủ
-	float dy = 0.0f;
-
-	CCollisionEvent tailEvt(dummyT, nxTail, nyTail, dx, dy, goomba, this);
+	CCollisionEvent tailEvt(0.0f, nxTail, nyTail, 0.0f, 0.0f, goomba, this);
 
 	OnCollisionWithGoomba(&tailEvt);
 }
+
 
 void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 {
@@ -73,7 +70,7 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 
 	for (auto obj : *coObjects)
 	{
-		if (!obj->IsBlocking()) continue;
+		if (!dynamic_cast<CGoomba*>(obj)) continue;
 
 		float el, et, er, eb;
 		obj->GetBoundingBox(el, et, er, eb);
@@ -83,8 +80,7 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 
 		if (overlapX && overlapY)
 		{
-			if (dynamic_cast<CGoomba*>(obj))
-				TailHitGoomba(obj);
+			TailHitGoomba(obj);
 		}
 	}
 }
@@ -320,7 +316,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				score += 100;
 				goomba->AddCharacter(C_100);
 				goomba->SetState(GOOMBA_STATE_DIE);
-				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 			}
 		}
 		else
@@ -385,14 +381,14 @@ void CMario::OnCollisionWithGoombaRed(LPCOLLISIONEVENT e)
 			score += 100;
 			rg->AddCharacter(C_100);
 			rg->RemoveWing();
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (rg->GetState() != GOOMBA_STATE_DIE)  // lần 2
 		{
 			score += 200;
 			rg->AddCharacter(C_200);
 			rg->SetState(GOOMBA_STATE_DIE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else
@@ -528,7 +524,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			score += 100;
 			koopas->AddCharacter(C_100);
 			koopas->SetState(GOOMBA_STATE_DIE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else
@@ -562,14 +558,14 @@ void CMario::OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e)
 			score += 100;
 			koopas->AddCharacter(C_100);
 			koopas->RemoveWing();
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (koopas->GetState() != GOOMBA_STATE_DIE)  // lần 2
 		{
 			score += 200;
 			koopas->AddCharacter(C_200);
 			koopas->SetState(GOOMBA_STATE_DIE);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			if (!isTailHit) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else

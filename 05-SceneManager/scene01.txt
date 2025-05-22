@@ -40,7 +40,12 @@ scoreboard.txt
 0	800	100
 
 #Goomba
+2	200	90 #Floor 1
+2	500	100
 
+2	900	90 #Floor 2
+2	1000	90 #Floor 2
+19	1100	90 #Floor 2 #Red goomba
 
 #Score Board
 20	165	181
