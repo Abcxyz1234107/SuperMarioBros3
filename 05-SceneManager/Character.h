@@ -18,6 +18,8 @@
 #define C_8 10308
 #define C_9 10309
 
+#define C_1UP 10710
+
 #define C_ARROW_BLACK 10310
 #define C_ARROW_WHITE 10311
 

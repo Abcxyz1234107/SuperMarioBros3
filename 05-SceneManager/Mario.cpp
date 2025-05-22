@@ -497,6 +497,7 @@ void CMario::OnCollisionWithRandomMushroom(LPCOLLISIONEVENT e)
 			score += 1000;
 			life++;
 			mg->AddCharacter(C_1000);
+			mg->AddCharacter(C_1UP);
 			mg->Delete();
 		}
 	}

@@ -20,4 +20,7 @@ void CRandomMushroomGreen::OnCollisionWithMario(LPCOLLISIONEVENT e)
     CMario* mario = dynamic_cast<CMario*>(e->obj);
     mario->SetScore(mario->GetScore() + 1000);
     mario->SetLife(mario->GetLife() + 1);
+
+    //AddCharacter(C_1000);
+    AddCharacter(C_1UP);
 }
