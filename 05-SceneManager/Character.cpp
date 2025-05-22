@@ -8,17 +8,29 @@ void Character::OnNoCollision(DWORD dt)
 
 void Character::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
 {
-	OnNoCollision(dt);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-
-	vy *= C_SLOWING;
-
-	if (vy <= C_MIN_VY)
-		this->Delete();
+	if (score != C_ANI_HIT)
+	{
+		vy *= C_SLOWING;
+		if (vy <= C_MIN_VY)
+			this->Delete();
+		OnNoCollision(dt);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
+	else
+	{
+		ULONGLONG now = GetTickCount64();
+		if (now - timer >= 200) this->Delete();
+	}
 }
 
 void Character::Render()
 {
+	if (score == C_ANI_HIT)
+	{
+		CAnimations::GetInstance()->Get(score)->Render(x, y);
+		return;
+	}
+
 	CSprites* sprites = CSprites::GetInstance();
 	sprites->Get(score)->Draw(x, y);
 }

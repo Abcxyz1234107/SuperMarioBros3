@@ -19,6 +19,11 @@
 
 10710	608	190	627	199	20 #18 9, 1UP!
 
+10811	576	40	592	56	10 #16 16, hit white right
+10812	601	40	617	56	10 #16 16, hit red right
+10813	627	40	643	56	10 #16 16, hit white left
+10814	657	40	673	56	10 #16 16, hit red left
+
 #Coin: 50 (not show), brick coin: 100
 #Koopas: 100, shell: 200. Stop shell: 100, hit again: 100
 #Red mushroom, leaf: 1000
@@ -28,3 +33,4 @@
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
+10810	10811	50	10812	50	10813	50	10814	50	10811	50	10812	50

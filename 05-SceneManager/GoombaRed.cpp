@@ -111,8 +111,10 @@ void CGoombaRed::Render()
     if (!spawned) return;
 
     CAnimations* animations = CAnimations::GetInstance();
-    int aniId = (this->GetState() != GOOMBA_STATE_DIE) ? ID_ANI_RED_GOOMBA_WALK 
-        : ID_ANI_RED_GOOMBA_DIE;
+    int aniId = 
+        (this->GetState() != GOOMBA_STATE_DIE) ? ID_ANI_RED_GOOMBA_WALK : ID_ANI_RED_GOOMBA_DIE;
+
+    if (state == GOOMBA_STATE_FLIPPED) aniId = ID_ANI_REDGOOMBA_FLIPPED;
     animations->Get(aniId)->Render(x, y);
 
     RenderWing();

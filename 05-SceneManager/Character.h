@@ -20,6 +20,8 @@
 
 #define C_1UP 10710
 
+#define C_ANI_HIT 10810
+
 #define C_ARROW_BLACK 10310
 #define C_ARROW_WHITE 10311
 

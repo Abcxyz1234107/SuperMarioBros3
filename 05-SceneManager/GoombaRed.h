@@ -10,6 +10,8 @@
 #define REDGOOMBA_SHORT_JUMP_COUNT 3
 #define REDGOOMBA_CYCLE_COOLDOWN   500
 
+#define ID_ANI_REDGOOMBA_FLIPPED   5701
+
 class CGoombaRed :
     public CGoomba
 {

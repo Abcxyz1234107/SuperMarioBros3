@@ -48,14 +48,19 @@ void CMario::StartTailHit()
 	tailHit_start = GetTickCount64();
 }
 
-void CMario::TailHitGoomba(LPGAMEOBJECT goomba)
+void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiếp OnCollisionWithGoomba
 {
+	CGoomba* g = dynamic_cast<CGoomba*>(goomba);
+	if (!g || g->GetState() == GOOMBA_STATE_FLIPPED) return;
+
 	float nxTail = (nx > 0) ? 1.0f : -1.0f;
 	float nyTail = -1.0f; 	/*  ny = -1 vì các OnCollisionWithGoomba() chỉ nhận đòn có ny < 0 (đạp đầu) */
 
 	CCollisionEvent tailEvt(0.0f, nxTail, nyTail, 0.0f, 0.0f, goomba, this);
-
 	OnCollisionWithGoomba(&tailEvt);
+
+	g->SetState(GOOMBA_STATE_FLIPPED);
+	g->AddCharacter(C_ANI_HIT);
 }
 
 

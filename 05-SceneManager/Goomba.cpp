@@ -1,5 +1,7 @@
 ﻿#include "Goomba.h"
+#include "Game.h"
 #include "VoidSpike.h"
+#include <d3dx9.h>
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -63,6 +65,20 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (state == GOOMBA_STATE_FLIPPED)
+	{
+		vy += ay * dt;
+		x += vx * dt;
+		y += vy * dt;
+
+		/* Khi rơi quá đáy -> xoá */
+		float camX, camY; CGame::GetInstance()->GetCamPos(camX, camY);
+		if (y - camY > CGame::GetInstance()->GetBackBufferHeight() + 100)
+			isDeleted = true;
+
+		return;
+	}
+
 	if (!spawned)
 	{
 		LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
@@ -93,18 +109,15 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
-
 void CGoomba::Render()
 {
-	if (!spawned) return;
-
+	CAnimations* ani = CAnimations::GetInstance();
 	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE) 
-	{
-		aniId = ID_ANI_GOOMBA_DIE;
-	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
+	if (state == GOOMBA_STATE_DIE) aniId = ID_ANI_GOOMBA_DIE;
+	else if (state == GOOMBA_STATE_FLIPPED) aniId = ID_ANI_GOOMBA_FLIPPED;
+
+	ani->Get(aniId)->Render(x, y);
 
 	RenderCharacter();
 	//RenderBoundingBox();
@@ -127,6 +140,11 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_SLEEPING:
 			vx = vy = 0;
+			break;
+		case GOOMBA_STATE_FLIPPED:
+			vx = 0;
+			vy = -0.25f;          // văng lên
+			ay = GOOMBA_GRAVITY;  // rồi rơi xuống
 			break;
 	}
 }

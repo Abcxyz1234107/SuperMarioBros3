@@ -17,9 +17,11 @@ class Character;
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
 #define GOOMBA_STATE_SLEEPING 300
+#define GOOMBA_STATE_FLIPPED  400
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
+#define ID_ANI_GOOMBA_FLIPPED  5700
 
 class CGoomba : public CGameObject
 {
