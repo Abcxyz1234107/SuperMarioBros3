@@ -6,6 +6,9 @@
 
 #include "debug.h"
 
+#define MARIO_TAIL_HIT_DURATION 200      // ms
+#define MARIO_TAIL_HIT_RANGE     9       // px
+
 #define MARIO_POWER_MAX          6           // 6 arrow
 #define MARIO_POWER_INC_TIME   300           // ms/arrow
 #define MARIO_POWER_DEC_DELAY  500           // ms chờ trước khi giảm power
@@ -124,6 +127,9 @@
 #define ID_ANI_MARIO_BIG_FLY_BRACE_LEFT        312
 #define ID_ANI_MARIO_BIG_FLY_BRACE_RIGHT       313
 
+#define ID_ANI_MARIO_BIG_FLY_TAIL_HIT_LEFT        314 //Left to right
+#define ID_ANI_MARIO_BIG_FLY_TAIL_HIT_RIGHT       315 //Right to left
+
 
 #pragma endregion
 
@@ -172,6 +178,9 @@ class CMario : public CGameObject
 	ULONGLONG lastFlyPress; // lần nhấn Space gần nhất
 	ULONGLONG lastGlidePress; // Glide
 
+	bool        isTailHit;
+	ULONGLONG   tailHit_start;
+
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
@@ -204,6 +213,8 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasShell(LPCOLLISIONEVENT e);
+
+	void TailHitGoomba(LPGAMEOBJECT goomba);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -239,6 +250,9 @@ public:
 
 		lastGlidePress = 0;
 		isGlide = false;
+
+		isTailHit = false;
+		tailHit_start = 0;
 
 		immortal = false;
 
@@ -307,5 +321,8 @@ public:
 
 	void AddGlidePress() { lastGlidePress = GetTickCount64(); }
 	ULONGLONG GetLastGlidePress() { return lastGlidePress; }
+
+	void  StartTailHit();
+	void  TailAttack(const vector<LPGAMEOBJECT>* coObjects);
 
 };

@@ -17,6 +17,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_SPACE:
+		mario->AddFlyPress();
 		if (mario->GetLevel() == MARIO_LEVEL_FLY && mario->IsPowerFull())
 			mario->SetState(MARIO_STATE_FLY);
 		else
@@ -51,6 +52,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_C:
 		mario->AddGlidePress();     // ghi thời điểm
+		break;
+	case DIK_M: // quất đuôi
+		mario->StartTailHit();
 		break;
 	}
 }

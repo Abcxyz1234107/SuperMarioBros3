@@ -41,6 +41,55 @@ void CMario::SetGlide(bool g)
 	isGlide = g;
 }
 
+void CMario::StartTailHit()
+{
+	if (level != MARIO_LEVEL_FLY || isTailHit) return;   // chỉ level 3
+	isTailHit = true;
+	tailHit_start = GetTickCount64();
+}
+
+void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper giúp gọi gián tiếp onCollisionWithGoomba
+{
+	float dummyT = 0.0f;
+	float nxTail = (nx > 0) ? 1.0f : -1.0f;
+	float nyTail = 0.0f;
+
+	float dx = 0.0f;    // thêm cho đủ
+	float dy = 0.0f;
+
+	CCollisionEvent tailEvt(dummyT, nxTail, nyTail, dx, dy, goomba, this);
+
+	OnCollisionWithGoomba(&tailEvt);
+}
+
+void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
+{
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+
+	float tailL, tailR;
+	if (nx > 0) { tailL = r; tailR = r + MARIO_TAIL_HIT_RANGE; }
+	else { tailR = l; tailL = l - MARIO_TAIL_HIT_RANGE; }
+
+	for (auto obj : *coObjects)
+	{
+		if (!obj->IsBlocking()) continue;
+
+		float el, et, er, eb;
+		obj->GetBoundingBox(el, et, er, eb);
+
+		bool overlapX = !(tailR < el || tailL > er);
+		bool overlapY = !(b    < et || t    > eb);
+
+		if (overlapX && overlapY)
+		{
+			if (dynamic_cast<CGoomba*>(obj))
+				TailHitGoomba(obj);
+		}
+	}
+}
+
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (immortal) return;
@@ -104,6 +153,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		(now - lastGlidePress <= MARIO_GLIDE_PRESS_TIMEOUT);
 
 	isGlide = glideActive;
+
+	//-------------------------------------TAIL_HIT------------------------//
+	if (isTailHit)
+	{
+		ULONGLONG now = GetTickCount64();
+		TailAttack(coObjects);
+		if (now - tailHit_start >= MARIO_TAIL_HIT_DURATION)
+			isTailHit = false;  // hết 200 ms
+	}
 
 	if (level == MARIO_LEVEL_FLY && !isOnPlatform)
 	{
@@ -717,6 +775,7 @@ int CMario::GetAniIdFly()
 					aniId = ID_ANI_MARIO_BIG_FLY_WALKING_LEFT;
 			}
 
+	if (isTailHit) aniId = (nx >= 0) ? ID_ANI_MARIO_BIG_FLY_TAIL_HIT_RIGHT : ID_ANI_MARIO_BIG_FLY_TAIL_HIT_LEFT;
 	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_FLY_IDLE_RIGHT;
 
 	return aniId;

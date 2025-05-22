@@ -65,7 +65,8 @@ void CScoreBoard::Render()
     const int P_FLASH_TIME = 120; // ms
     ULONGLONG now = GetTickCount64();
     ULONGLONG lastPress = mario->GetLastFlyPress();
-    bool pActive = powerFull && (now - lastPress <= P_FLASH_TIME);
+    int level = mario->GetLevel();
+    bool pActive = powerFull && (now - lastPress <= P_FLASH_TIME) && (level == MARIO_LEVEL_FLY);
 
     int sprP = pActive ? C_POWER_WHITE : C_POWER_BLACK;
     CSprites::GetInstance()->Get(sprP) ->Draw(drawX + SB_POWER_X + MARIO_POWER_MAX * SB_DIGIT_W + 5, offset_text_Y - 8);
