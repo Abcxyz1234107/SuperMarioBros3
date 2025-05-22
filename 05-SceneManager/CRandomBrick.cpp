@@ -38,12 +38,6 @@ void CRandomBrick::Activate()
         vy = -RB_SPEED_Y;
         isBouncing = true;
 
-        if (type == 3)
-        {
-            CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y);
-            scene->AddObject(mushroom);
-        }
-        else
         if (type == 1)
         {
             CRandomCoin* coin = new CRandomCoin(x, y - 16.0f);
@@ -51,7 +45,7 @@ void CRandomBrick::Activate()
             scene->AddObject(coin);
         }
         else
-        if (mario->GetLevel() > MARIO_LEVEL_SMALL) // Leaf
+        if (mario->GetLevel() > MARIO_LEVEL_SMALL && type != 3) // Leaf
         {
             CRandomLeaf* leaf = new CRandomLeaf(x, y - 16.0f);
             leaf->SetVy(-0.125f);
@@ -78,6 +72,11 @@ void CRandomBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (state == RANDOMBRICK_STATE_TOUCHED && type == 2 && mario->GetLevel() == MARIO_LEVEL_SMALL)
         {
             CRandomMushroom* mushroom = new CRandomMushroom(x, y - 2);
+            scene->AddObject(mushroom);
+        }
+        if (state == RANDOMBRICK_STATE_TOUCHED && type == 3)
+        {
+            CRandomMushroomGreen* mushroom = new CRandomMushroomGreen(x, y - 2);
             scene->AddObject(mushroom);
         }
         y = startY;
