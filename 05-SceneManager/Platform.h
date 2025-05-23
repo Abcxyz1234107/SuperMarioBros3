@@ -19,7 +19,6 @@ public:
 		float cell_width, float cell_height, int length,
 		int sprite_id_begin, int sprite_id_middle, int sprite_id_end, int isAni = 0) :CGameObject(x, y)
 	{
-		z = 1;
 		this->length = length;
 		this->cellWidth = cell_width;
 		this->cellHeight = cell_height;

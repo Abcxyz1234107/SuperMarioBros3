@@ -53,7 +53,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_C:
 		mario->AddGlidePress();     // ghi thời điểm
 		break;
-	case DIK_M: // quất đuôi
+	case DIK_Z: // quất đuôi
 		mario->StartTailHit();
 		break;
 	}

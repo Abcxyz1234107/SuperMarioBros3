@@ -50,6 +50,18 @@ void CMario::StartTailHit()
 
 void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiếp OnCollisionWithGoomba
 {
+	CGoombaRed* rg = dynamic_cast<CGoombaRed*>(goomba);
+	if (rg)
+	{
+		if (rg->HasWings())
+		{
+			score += 100;
+			rg->AddCharacter(C_100);
+			rg->RemoveWing();
+			return; // không flip
+		}
+	}
+
 	CGoomba* g = dynamic_cast<CGoomba*>(goomba);
 	if (!g || g->GetState() == GOOMBA_STATE_FLIPPED) return;
 
@@ -57,6 +69,7 @@ void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiế
 	float nyTail = -1.0f; 	/*  ny = -1 vì các OnCollisionWithGoomba() chỉ nhận đòn có ny < 0 (đạp đầu) */
 
 	CCollisionEvent tailEvt(0.0f, nxTail, nyTail, 0.0f, 0.0f, goomba, this);
+
 	OnCollisionWithGoomba(&tailEvt);
 
 	g->SetState(GOOMBA_STATE_FLIPPED);
@@ -73,6 +86,9 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 	if (nx > 0) { tailL = r; tailR = r + MARIO_TAIL_HIT_RANGE; }
 	else { tailR = l; tailL = l - MARIO_TAIL_HIT_RANGE; }
 
+	float tailT = t - MARIO_TAIL_HIT_RANGE_Y;
+	float tailB = b + MARIO_TAIL_HIT_RANGE_Y;
+
 	for (auto obj : *coObjects)
 	{
 		if (!dynamic_cast<CGoomba*>(obj)) continue;
@@ -81,7 +97,7 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 		obj->GetBoundingBox(el, et, er, eb);
 
 		bool overlapX = !(tailR < el || tailL > er);
-		bool overlapY = !(b    < et || t    > eb);
+		bool overlapY = !(tailB < et || tailT > eb);
 
 		if (overlapX && overlapY)
 		{

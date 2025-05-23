@@ -142,6 +142,7 @@ void CGoomba::SetState(int state)
 			vx = vy = 0;
 			break;
 		case GOOMBA_STATE_FLIPPED:
+			z = 4;
 			vx = 0;
 			vy = -0.25f;          // văng lên
 			ay = GOOMBA_GRAVITY;  // rồi rơi xuống

@@ -106,20 +106,6 @@ void CGoombaRed::DetectMario()
     }
 }
 
-void CGoombaRed::Render()
-{
-    if (!spawned) return;
-
-    CAnimations* animations = CAnimations::GetInstance();
-    int aniId = 
-        (this->GetState() != GOOMBA_STATE_DIE) ? ID_ANI_RED_GOOMBA_WALK : ID_ANI_RED_GOOMBA_DIE;
-
-    if (state == GOOMBA_STATE_FLIPPED) aniId = ID_ANI_REDGOOMBA_FLIPPED;
-    animations->Get(aniId)->Render(x, y);
-
-    RenderWing();
-    RenderCharacter();
-}
 void CGoombaRed::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     CGoomba::OnCollisionWith(e);
@@ -136,6 +122,23 @@ void CGoombaRed::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     DetectMario();
 
     UpdateWing();
+}
+
+void CGoombaRed::Render()
+{
+    CAnimations* animations = CAnimations::GetInstance();
+    int aniId = ID_ANI_RED_GOOMBA_WALK;
+
+    if (this->GetState() == GOOMBA_STATE_DIE) aniId = ID_ANI_RED_GOOMBA_DIE;
+    else if (state == GOOMBA_STATE_FLIPPED)
+    {
+        aniId = ID_ANI_REDGOOMBA_FLIPPED;
+        DebugOut(L"%d\n", aniId);
+    }
+    animations->Get(aniId)->Render(x, y);
+
+    RenderWing();
+    RenderCharacter();
 }
 
 void CGoombaRed::GetBoundingBox(float& l, float& t, float& r, float& b)

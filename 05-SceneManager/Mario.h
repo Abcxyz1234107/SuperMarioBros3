@@ -8,6 +8,7 @@
 
 #define MARIO_TAIL_HIT_DURATION 200      // ms
 #define MARIO_TAIL_HIT_RANGE     9       // px
+#define MARIO_TAIL_HIT_RANGE_Y   12
 
 #define MARIO_POWER_MAX          6           // 6 arrow
 #define MARIO_POWER_INC_TIME   300           // ms/arrow
