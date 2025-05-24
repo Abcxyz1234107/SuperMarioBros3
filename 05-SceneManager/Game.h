@@ -35,6 +35,8 @@ struct PlayerData
 class CGame
 {
 	PlayerData saved;
+	bool retryPrompt = false;
+	ID3DX10Font* pFont = nullptr;
 
 	static CGame* __instance;
 	HWND hWnd;									// Window handle
@@ -126,6 +128,11 @@ public:
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
 	void ReloadScene(int scene_id); //For loading a scene manually
+
+	void ShowRetryPrompt();
+	bool IsRetryPromptActive() const { return retryPrompt; }
+	void ReloadCurrentScene();
+	void RenderRetryPrompt();
 
 	void _ParseSection_TEXTURES(string line);
 

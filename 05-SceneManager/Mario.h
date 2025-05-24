@@ -11,12 +11,12 @@
 #define MARIO_TAIL_HIT_RANGE_Y   12
 
 #define MARIO_POWER_MAX          6           // 6 arrow
-#define MARIO_POWER_INC_TIME   300           // ms/arrow
+#define MARIO_POWER_INC_TIME   200           // ms/arrow
 #define MARIO_POWER_DEC_DELAY  500           // ms chờ trước khi giảm power
 #define MARIO_POWER_DEC_TIME   250           // ms/arrow
 #define MARIO_FLY_PRESS_TIMEOUT 300          // ms kể từ lần nhấn Space cuối
 
-#define MARIO_GLIDE_PRESS_TIMEOUT   200		// ms
+#define MARIO_GLIDE_PRESS_TIMEOUT   400		// ms
 
 #define MARIO_INITIAL_TIME 300 //s
 #define MARIO_TELEPORT_SPEED	0.01f

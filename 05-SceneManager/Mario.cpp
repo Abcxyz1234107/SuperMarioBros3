@@ -977,6 +977,8 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_DIE:
+		CGame::GetInstance()->ShowRetryPrompt();
+		life--;
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;

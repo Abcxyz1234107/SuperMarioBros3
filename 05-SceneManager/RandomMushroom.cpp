@@ -20,6 +20,7 @@ void CRandomMushroom::OnCollisionWithMario(LPCOLLISIONEVENT e)
     CMario* mario = dynamic_cast<CMario*>(e->obj);
     if (mario->GetLevel() == MARIO_LEVEL_SMALL)
     {
+        AddCharacter(C_1000);
         mario->SetScore(mario->GetScore() + 1000);
         mario->SetLevel(MARIO_LEVEL_BIG);
     }

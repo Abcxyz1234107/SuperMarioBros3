@@ -8,6 +8,19 @@
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
+	CGame* game = CGame::GetInstance();
+	if (game->IsRetryPromptActive())
+	{
+		if (KeyCode == DIK_R)
+		{
+			DebugOut(L"11111");
+			game->ReloadCurrentScene();
+		}
+		else if (KeyCode == DIK_ESCAPE)
+			PostQuitMessage(0);
+		return;
+	}
+
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 
@@ -47,7 +60,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
-	case DIK_R: // reset
+	case DIK_X: // reset
 		CGame::GetInstance()->ReloadScene(1);
 		break;
 	case DIK_C:

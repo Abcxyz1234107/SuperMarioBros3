@@ -150,7 +150,13 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	StateDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
 	pD3DDevice->CreateBlendState(&StateDesc, &this->pBlendStateAlpha);
 
-	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
+	/*D3DXFONT_DESC  fd{};
+	fd.Height = 26;
+	fd.Weight = 700;
+	wcscpy_s(fd.FaceName, L"Arial");
+	D3DX10CreateFontIndirect(pD3DDevice, &fd, &pFont);
+
+	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");*/
 
 	return;
 }
@@ -556,6 +562,49 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 	mario->SetDesY(saved.desY);
 }
 
+void CGame::RenderRetryPrompt()
+{
+	if (!retryPrompt || !pFont) return;
+
+	// 1. Vẽ nền mờ (hình chữ nhật bán-trong suốt)
+	D3DXCOLOR bg(0.f, 0.f, 0.f, 0.6f);
+	RECT rcBg{ backBufferWidth / 2 - 140, backBufferHeight / 2 - 60,
+			   backBufferWidth / 2 + 140, backBufferHeight / 2 + 60 };
+	// Vẽ bằng sprite trắng 1×1 nếu bạn đã có (ví dụ ID_TEXTURE_WHITE);
+	// nếu chưa có sprite trắng, bỏ qua bước nền cũng được.
+
+	// 2. Vẽ chuỗi hướng dẫn
+	const wchar_t* msg = L"Retry?\n(R)  Tiếp tục\n(ESC)  Thoát";
+	pFont->DrawTextW(nullptr, msg, -1, &rcBg,
+		DT_CENTER | DT_VCENTER, D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+}
+
+void CGame::ShowRetryPrompt()
+{
+	retryPrompt = true;
+	DebugOut(L"[INFO] Mario died - press R to retry\n");
+}
+
+void CGame::ReloadCurrentScene()
+{
+	if (!retryPrompt) return;
+	retryPrompt = false;
+
+	auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
+	if (curPlay)
+		SavePlayerState(dynamic_cast<CMario*>(curPlay->GetPlayer()));
+
+	if (saved.life == 0)
+	{
+		
+	}
+	
+	saved.timer = MARIO_INITIAL_TIME;
+	saved.level = MARIO_LEVEL_SMALL;
+
+	ReloadScene(current_scene);
+}
+
 bool isFirstLoad = true;
 void CGame::SwitchScene()
 {
@@ -614,6 +663,10 @@ void CGame::ReloadScene(int scene_id)
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+
+	auto* newPlay = dynamic_cast<CPlayScene*>(s);
+	if (newPlay)
+		ApplyPlayerState(dynamic_cast<CMario*>(newPlay->GetPlayer()));
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
@@ -642,6 +695,7 @@ CGame::~CGame()
 	pRenderTargetView->Release();
 	pSwapChain->Release();
 	pD3DDevice->Release();
+	if (pFont) pFont->Release();
 }
 
 CGame* CGame::GetInstance()
