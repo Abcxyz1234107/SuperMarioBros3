@@ -9,7 +9,7 @@
 
 void CKoopasShell::Render()
 {
-    if (state == SHELL_STATE_REVIVING)
+    if (state == SHELL_STATE_PRE_REVIVING)
     {
         CAnimations* animation = CAnimations::GetInstance();
         animation->Get(aniId)->Render(x, y);
@@ -29,7 +29,6 @@ void CKoopasShell::Activate(float dir)
     vx = dir * SHELL_MOVE_SPEED;
     ay = GOOMBA_GRAVITY;
     this->SetState(SHELL_STATE_NORMAL);
-    revive_start = 0;
 }
 
 void CKoopasShell::SetHeld()
@@ -69,6 +68,7 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
     if (vx != 0)
     {
+        goomba->AddCharacter(C_ANI_HIT);
         AddCharacter(C_100);
         if (dynamic_cast<CGoombaRed*>(e->obj))
         {
@@ -78,7 +78,7 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             mario->SetScore(mario->GetScore() + 200);
         }
 
-        goomba->SetState(GOOMBA_STATE_DIE);
+        goomba->SetState(GOOMBA_STATE_FLIPPED);
     }
     else goomba->SetVx(-goomba->GetVx());
 }
@@ -111,9 +111,8 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
     CMario* mario = (CMario*)scene->GetPlayer();
-    
-    // Ko xét abs(vx) == 0 vì thực tế vx không thực sự = 0
-    bool isReviving = (isHeld || abs(vx) < SHELL_MOVE_SPEED);
+
+    bool isReviving = isHeld || (abs(vx) <= 0.1f && state != SHELL_STATE_NORMAL);
 
     if (isReviving)
     {
@@ -124,16 +123,15 @@ void CKoopasShell::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         /* 1. Hiệu ứng rung trong 3.5s cuối & đổi animation trong 3 s cuối */
         if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING - SHELL_REVIVE_PREWARNING)
         {
-            float dir = ((elapsed / 100) & 1) ? 1.f : -1.f;
+            float dir = ((elapsed / 100) & 1) ? 1.f : -1.f; //rung
             x += dir * SHELL_SHAKE_SPEED * dt;
 
-            if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING)
-                if (state != SHELL_STATE_REVIVING) this->SetState(SHELL_STATE_REVIVING);
+            if (elapsed >= SHELL_REVIVE_TIMEOUT - SHELL_REVIVE_WARNING) //đổi animation
+                if (state != SHELL_STATE_PRE_REVIVING) SetState(SHELL_STATE_PRE_REVIVING);
         }
         else
         {
-            if (state != SHELL_STATE_NORMAL) this->SetState(SHELL_STATE_NORMAL);
-            vx = 0;
+            if (state != SHELL_STATE_REVIVING) SetState(SHELL_STATE_REVIVING);
         }
 
         /* 2. Hết thời gian -> biến lại Koopas */
@@ -200,9 +198,16 @@ void CKoopasShell::SetState(int state)
     switch (state)
     {
     case SHELL_STATE_REVIVING:
+        vx = vy = ax = 0.0f;
+        break;
+    case SHELL_STATE_PRE_REVIVING:
+        vx = vy = ax = 0.0f;
         break;
 
     case SHELL_STATE_NORMAL:
+        vx = SHELL_MOVE_SPEED;
+        ay = GOOMBA_GRAVITY;
+        revive_start = 0;
         break;
     }
 }

@@ -27,7 +27,7 @@ void Character::Render()
 {
 	if (score == C_ANI_HIT)
 	{
-		CAnimations::GetInstance()->Get(score)->Render(x, y);
+		CAnimations::GetInstance()->Get(score)->Render(x, y - 3);
 		return;
 	}
 

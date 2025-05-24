@@ -439,29 +439,26 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	if (shell->IsHeld()) return;
 
 	/* 1. Mario chạy & shell đứng yên  ->  nhặt */
-	if (shell->GetVx() == 0 && abs(ax) == MARIO_ACCEL_RUN_X)
+	if (shell->GetState() != SHELL_STATE_NORMAL && abs(ax) == MARIO_ACCEL_RUN_X)
 	{
 		shell->SetHeld();
 		this->SetHoldingShell(true);
 		return;
 	}
 
-	/* 2. Shell đứng yên nhưng Mario không chạy -> đá */
-	if (shell->GetVx() == 0)
+	/* 2. Shell đứng yên nhưng Mario chạy -> đá */
+	if (shell->GetState() != SHELL_STATE_NORMAL)
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
 
-		if (!hitShellOnce)
+		if (e->ny < 0)
 		{
-			score += 200;
-			shell->AddCharacter(C_200);
-			hitShellOnce = true;
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
-		else
-		{
-			score += 100;
-			shell->AddCharacter(C_100);
-		}
+
+		score += hitShellOnce ? 100 : 200;
+		shell->AddCharacter(hitShellOnce ? C_100 : C_200);
+		hitShellOnce = true;
 
 		shell->Activate(dir);
 		return;
@@ -471,28 +468,15 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	if (e->ny < 0)
 	{
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		shell->SetState(SHELL_STATE_REVIVING);
 
-		if (shell->GetVx() == 0)
-		{
-			float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
-
-			if (!hitShellOnce)
-			{
-				score += 200;
-				shell->AddCharacter(C_200);
-				hitShellOnce = true;
-			}
-			else
-			{
-				score += 100;
-				shell->AddCharacter(C_100);
-			}
-
-			shell->Activate(dir);
-			return;
-		}
+		score += hitShellOnce ? 100 : 200;
+		shell->AddCharacter(hitShellOnce ? C_100 : C_200);
+		hitShellOnce = true;
+		return;
 	}
-	else if (untouchable == 0)              // va chạm 
+
+	if (untouchable == 0)              // va chạm mario
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
