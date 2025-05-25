@@ -1,0 +1,6 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#31101: Mushroom
+
+31171	493	482	508	497	20 #16  16
+31181	519	482	534	497	20 #16  16

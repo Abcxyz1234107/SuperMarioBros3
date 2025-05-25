@@ -9,6 +9,14 @@
 #include "PlayScene.h"
 
 CGame * CGame::__instance = NULL;
+struct VictoryStat {
+	int         coin;
+	int         timeLeft;
+	int         life;
+	long long   score;
+} gVictory;
+
+static bool victoryPrompt = false;
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
@@ -150,13 +158,13 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	StateDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
 	pD3DDevice->CreateBlendState(&StateDesc, &this->pBlendStateAlpha);
 
-	/*D3DXFONT_DESC  fd{};
+	D3DX10_FONT_DESCW  fd{};
 	fd.Height = 26;
 	fd.Weight = 700;
 	wcscpy_s(fd.FaceName, L"Arial");
 	D3DX10CreateFontIndirect(pD3DDevice, &fd, &pFont);
 
-	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");*/
+	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
 
 	return;
 }
@@ -562,16 +570,58 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 	mario->SetDesY(saved.desY);
 }
 
+void CGame::RenderVictoryPrompt()
+{
+	if (!victoryPrompt || !pFont) return;
+
+	wchar_t buf[256];
+	swprintf_s(buf,
+		L"CHIẾN THẮNG!\n"
+		L"Thời gian: %d s\n"
+		L"Điểm: %lld\n"
+		L"Tiền: %d\n"
+		L"Mạng còn: %d\n\n"
+		L"(R)  Chơi lại     (ESC)  Thoát",
+		MARIO_INITIAL_TIME - gVictory.timeLeft,
+		gVictory.score,
+		gVictory.coin,
+		gVictory.life);
+
+	RECT rc{ backBufferWidth / 2 - 160, backBufferHeight / 2 - 90,
+			 backBufferWidth / 2 + 160, backBufferHeight / 2 + 90 };
+
+	pFont->DrawTextW(nullptr, buf, -1, &rc,
+		DT_CENTER | DT_VCENTER,
+		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+}
+
+void CGame::ShowVictoryPrompt(CMario* mario)
+{
+	victoryPrompt = true;
+	retryPrompt = true; // sử dụng R/ ESC có sẵn
+
+	gVictory.coin = mario->GetCoin();
+	gVictory.life = mario->GetLife();
+	gVictory.score = mario->GetScore();
+	gVictory.timeLeft = mario->GetTimer();
+
+	RenderVictoryPrompt();
+}
+
 void CGame::RenderRetryPrompt()
 {
+	if (victoryPrompt)
+	{
+		RenderVictoryPrompt();
+		return;
+	}
+
 	if (!retryPrompt || !pFont) return;
 
-	// 1. Vẽ nền mờ (hình chữ nhật bán-trong suốt)
+	// 1. Vẽ nền hình chữ nhật
 	D3DXCOLOR bg(0.f, 0.f, 0.f, 0.6f);
 	RECT rcBg{ backBufferWidth / 2 - 140, backBufferHeight / 2 - 60,
 			   backBufferWidth / 2 + 140, backBufferHeight / 2 + 60 };
-	// Vẽ bằng sprite trắng 1×1 nếu bạn đã có (ví dụ ID_TEXTURE_WHITE);
-	// nếu chưa có sprite trắng, bỏ qua bước nền cũng được.
 
 	// 2. Vẽ chuỗi hướng dẫn
 	const wchar_t* msg = L"Retry?\n(R)  Tiếp tục\n(ESC)  Thoát";
@@ -588,13 +638,12 @@ void CGame::ShowRetryPrompt()
 void CGame::ReloadCurrentScene()
 {
 	if (!retryPrompt) return;
-	retryPrompt = false;
 
 	auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
 	if (curPlay)
 		SavePlayerState(dynamic_cast<CMario*>(curPlay->GetPlayer()));
 
-	if (saved.life <= 0)
+	if (saved.life <= 0 || victoryPrompt)
 	{
 		saved.life = 4;
 		saved.coin = 0;
@@ -605,6 +654,9 @@ void CGame::ReloadCurrentScene()
 	
 	saved.timer = MARIO_INITIAL_TIME;
 	saved.level = MARIO_LEVEL_SMALL;
+
+	retryPrompt = false;
+	victoryPrompt = false;
 
 	ReloadScene(current_scene);
 }

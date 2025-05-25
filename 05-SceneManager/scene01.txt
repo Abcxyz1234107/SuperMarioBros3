@@ -23,6 +23,7 @@ coinbrick.txt
 character.txt
 wing.txt
 scoreboard.txt
+victorycard.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -38,6 +39,9 @@ scoreboard.txt
 #2100: Floor 5
 #2400: Floor 6
 0	20	100
+
+#Victory Card
+25	2750	69
 
 #Goomba
 2	200	90 #Floor 1

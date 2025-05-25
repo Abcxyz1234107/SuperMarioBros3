@@ -172,6 +172,8 @@ class CMario : public CGameObject
 	int timer;
 	ULONGLONG ref;
 
+	bool victoryLanded = false;
+
 	int   power;            // 0‒6
 	bool  powerFull;        // true khi power==6
 	ULONGLONG powerTick;    // mốc cộng/trừ gần nhất
@@ -214,6 +216,7 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasShell(LPCOLLISIONEVENT e);
+	void OnCollisionWithVictoryCard(LPCOLLISIONEVENT e);
 
 	void TailHitGoomba(LPGAMEOBJECT goomba);
 

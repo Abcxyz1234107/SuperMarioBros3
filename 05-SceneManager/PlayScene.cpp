@@ -27,6 +27,7 @@
 #include "ButtonCoinBrick.h"
 #include "BlackPipe.h"
 #include "KoopasGreen.h"
+#include "VictoryCard.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -209,6 +210,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		obj = pipe;
 
+		break;
+	}
+	case OBJECT_TYPE_VICTORY_CARD:
+	{
+		obj = new CVictoryCard(x, y);
 		break;
 	}
 	case OBJECT_TYPE_BGTREE:

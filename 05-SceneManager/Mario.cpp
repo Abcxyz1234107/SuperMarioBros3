@@ -18,6 +18,7 @@
 #include "GoombaRed.h"
 #include "ButtonCoinBrick.h"
 #include "BlackPipe.h"
+#include "VictoryCard.h"
 
 #include "Collision.h"
 
@@ -72,7 +73,7 @@ void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiế
 	if (!g || g->GetState() == GOOMBA_STATE_FLIPPED) return;
 
 	float nxTail = (nx > 0) ? 1.0f : -1.0f;
-	float nyTail = -1.0f; 	/*  ny = -1 vì các OnCollisionWithGoomba() chỉ nhận đòn có ny < 0 (đạp đầu) */
+	float nyTail = -1.0f; 	/*  ny = -1 vì các OnCollisionWithGoomba() chỉ nhận đòn có ny < 0 (đạp) */
 
 	CCollisionEvent tailEvt(0.0f, nxTail, nyTail, 0.0f, 0.0f, goomba, this);
 
@@ -117,6 +118,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (immortal) return;
 
+	//-------------------------------------VICTORY------------------------//
+	if (state == MARIO_STATE_VICTORY)
+	{
+		if (!victoryLanded)
+		{
+			ax = vx = 0.0f;
+			ay = MARIO_GRAVITY;
+			vy += ay * dt;
+			if (isOnPlatform)
+			{
+				victoryLanded = true;
+				vy = 0.0f;
+			}
+		}
+
+		if (victoryLanded)
+		{
+			isOnPlatform = true;
+			ay = vy = 0.0f;
+			ax = MARIO_ACCEL_WALK_X;
+			vx = MARIO_WALKING_SPEED;
+		}
+
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		return;
+	}
 	vx += ax * dt;
 
 	//-------------------------------------FLY------------------------//
@@ -192,12 +219,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			vy = -MARIO_RUNNING_SPEED;
 		else                             // rơi / glide
 		{
-			ay = (isGlide && vy > 0) ? MARIO_GLIDE_GRAVITY     // giảm rơi
+			ay = (isGlide && vy > 0) ? MARIO_GLIDE_GRAVITY
 				: MARIO_GRAVITY;
 			vy += ay * dt;
 		}
 	}
-	else                                 // các level khác
+	else  // các level khác
 	{
 		ay = immortal ? 0.0f : MARIO_GRAVITY;
 		vy += ay * dt;
@@ -284,7 +311,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				/* xuống dir = 1, lên dir = -1  */
 				int dir = (b1 <= t2) ? 1 : -1;
 				float dist = (level == MARIO_LEVEL_SMALL)
-					? MARIO_SMALL_BBOX_HEIGHT
+					? MARIO_SMALL_BBOX_HEIGHT * 2.25
 					: MARIO_BIG_BBOX_HEIGHT * 1.4;
 
 				if (p->GetDesX() == -1)
@@ -335,6 +362,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithButton(e);
 	else if (dynamic_cast<CRandomBrick*>(e->obj))
 		OnCollisionWithRandomBrick(e);
+	else if (dynamic_cast<CVictoryCard*>(e->obj))
+		OnCollisionWithVictoryCard(e);
 	else if (dynamic_cast<CRandomLeaf*>(e->obj))
 		OnCollisionWithRandomLeaf(e);
 	else if (dynamic_cast<CoinBrick*>(e->obj))
@@ -408,6 +437,13 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	coin++;
 	score += 50;
+}
+
+void CMario::OnCollisionWithVictoryCard(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();              // ăn thẻ
+	score += 12550;
+	SetState(MARIO_STATE_VICTORY);
 }
 
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
@@ -708,6 +744,13 @@ int CMario::GetAniIdSmall()
 	else
 	if (!isOnPlatform)
 	{
+		if (state == MARIO_STATE_VICTORY)
+		{
+			aniId = (nx >= 0)
+				? ID_ANI_MARIO_SMALL_WALKING_RIGHT
+				: ID_ANI_MARIO_SMALL_WALKING_LEFT;
+		}
+		else
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
@@ -770,6 +813,13 @@ int CMario::GetAniIdFly()
 	else
 	if (!isOnPlatform)
 	{
+		if (state == MARIO_STATE_VICTORY)
+		{
+			aniId = (nx >= 0)
+				? ID_ANI_MARIO_BIG_FLY_WALKING_RIGHT
+				: ID_ANI_MARIO_BIG_FLY_WALKING_LEFT;
+		}
+		else
 		if (abs(ax) == MARIO_ACCEL_RUN_X || isFly || isGlide)
 		{
 			if (nx >= 0)
@@ -837,6 +887,13 @@ int CMario::GetAniIdBig()
 	else
 	if (!isOnPlatform)
 	{
+		if (state == MARIO_STATE_VICTORY)  // ép animation
+		{
+			aniId = (nx >= 0)
+				? ID_ANI_MARIO_WALKING_RIGHT
+				: ID_ANI_MARIO_WALKING_LEFT;
+		}
+		else
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
@@ -925,11 +982,20 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return;
-	if (this->state == MARIO_STATE_TELEPORT && isTeleporting) return;
+	if (this->state == MARIO_STATE_VICTORY || this->state == MARIO_STATE_DIE) return;
+	if (state == MARIO_STATE_TELEPORT && isTeleporting) return;
 
 	switch (state)
 	{
+	case MARIO_STATE_VICTORY:
+		ax = 0.0f;
+		vx = 0.0f;
+		victoryLanded = false;
+		ay = MARIO_GRAVITY;
+		vy = 0.0f;
+		CGame::GetInstance()->ShowVictoryPrompt(this);
+		break;
+
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;

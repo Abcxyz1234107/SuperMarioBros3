@@ -180,6 +180,9 @@
     <ClCompile Include="RandomMushroomGreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VictoryCard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -440,6 +443,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RandomMushroomGreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VictoryCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
