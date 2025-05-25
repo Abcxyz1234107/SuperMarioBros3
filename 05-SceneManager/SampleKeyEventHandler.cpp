@@ -13,7 +13,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if (KeyCode == DIK_R)
 		{
-			DebugOut(L"11111");
 			game->ReloadCurrentScene();
 		}
 		else if (KeyCode == DIK_ESCAPE)

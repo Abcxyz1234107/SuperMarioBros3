@@ -594,9 +594,13 @@ void CGame::ReloadCurrentScene()
 	if (curPlay)
 		SavePlayerState(dynamic_cast<CMario*>(curPlay->GetPlayer()));
 
-	if (saved.life == 0)
+	if (saved.life <= 0)
 	{
-		
+		saved.life = 4;
+		saved.coin = 0;
+		saved.score = 0;
+		saved.timer = MARIO_INITIAL_TIME;
+		saved.level = MARIO_LEVEL_SMALL;
 	}
 	
 	saved.timer = MARIO_INITIAL_TIME;

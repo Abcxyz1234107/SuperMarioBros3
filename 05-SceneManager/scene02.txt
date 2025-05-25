@@ -29,8 +29,9 @@ scoreboard.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+#152	-5
 # MARIO
-0	152	-5
+0	200	20
 
 #Score Board
 20	165	181

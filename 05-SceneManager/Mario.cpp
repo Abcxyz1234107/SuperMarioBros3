@@ -21,6 +21,12 @@
 
 #include "Collision.h"
 
+static bool IsAABBOverlap(float l1, float t1, float r1, float b1,
+						  float l2, float t2, float r2, float b2)
+{
+	return !(r1 < l2 || r2 < l1 || b1 < t2 || b2 < t1);
+}
+
 void CMario::StartTeleport(int dir, int sceneId, float distance)
 {
 	teleportDir = dir;
@@ -260,6 +266,41 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (level == MARIO_LEVEL_FLY && isFly)
 		vy = -MARIO_RUNNING_SPEED;
+
+	//-------------------------------------TELEPORT_ANIMATION_PORTAL------------------------//
+	if (!isTeleporting)
+	{
+		for (auto obj : *coObjects)
+		{
+			CPortal* p = dynamic_cast<CPortal*>(obj);
+			if (!p) continue;
+
+			float l1, t1, r1, b1, l2, t2, r2, b2;
+			GetBoundingBox(l1, t1, r1, b1);
+			p->GetBoundingBox(l2, t2, r2, b2);
+
+			if (IsAABBOverlap(l1, t1, r1, b1, l2, t2, r2, b2))
+			{
+				/* xuống dir = 1, lên dir = -1  */
+				int dir = (b1 <= t2) ? 1 : -1;
+				float dist = (level == MARIO_LEVEL_SMALL)
+					? MARIO_SMALL_BBOX_HEIGHT
+					: MARIO_BIG_BBOX_HEIGHT * 1.4;
+
+				if (p->GetDesX() == -1)
+					p->SetSceneId(-1);
+				else
+				{
+					desX = p->GetDesX();
+					desY = p->GetDesY();
+				}
+
+				p->SetPosition(-10.f, -10.f);     // xóa portal cũ
+				StartTeleport(dir, p->GetSceneId(), dist);
+				break;
+			}
+		}
+	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
