@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "debug.h"
 #include "Utils.h"
+#include "Character.h"
 
 #include "Texture.h"
 #include "Animations.h"

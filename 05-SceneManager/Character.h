@@ -24,9 +24,17 @@
 
 #define C_ARROW_BLACK 10310
 #define C_ARROW_WHITE 10311
-
 #define C_POWER_BLACK 10312
 #define C_POWER_WHITE 10313
+
+#define C_PAUSE 10230
+#define C_TIMEUP 10240
+#define C_COURSECLEAR 10250
+
+#define C_YOUGOTACARD 10260
+#define C_MUSHROOM 10270
+#define C_FLOWER 10280
+#define C_STAR 10290
 
 #define C_SPEED 0.05f
 #define C_TIMEOUT 750
