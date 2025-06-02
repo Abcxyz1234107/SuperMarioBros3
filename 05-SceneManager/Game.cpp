@@ -606,7 +606,7 @@ void CGame::ShowVictoryPrompt(CMario* mario)
 	gVictory.score = mario->GetScore();
 	gVictory.timeLeft = mario->GetTimer();
 
-	DebugOut(L"[VICTORY] Time:%d  Score:%lld  Coin:%d  Life:%d\n",
+	DebugOut(L"[VICTORY] Time used:%d  Score:%lld  Coin:%d  Life left:%d\n",
 		MARIO_INITIAL_TIME - gVictory.timeLeft,
 		gVictory.score, gVictory.coin, gVictory.life);
 }
@@ -620,16 +620,6 @@ void CGame::RenderRetryPrompt()
 	}
 
 	if (!retryPrompt || !pFont) return;
-
-	// 1. Vẽ nền hình chữ nhật
-	D3DXCOLOR bg(0.f, 0.f, 0.f, 0.6f);
-	RECT rcBg{ backBufferWidth / 2 - 140, backBufferHeight / 2 - 60,
-			   backBufferWidth / 2 + 140, backBufferHeight / 2 + 60 };
-
-	// 2. Vẽ chuỗi hướng dẫn
-	const wchar_t* msg = L"Retry?\n(R)  Tiếp tục\n(ESC)  Thoát";
-	pFont->DrawTextW(nullptr, msg, -1, &rcBg,
-		DT_CENTER | DT_VCENTER, D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 }
 
 void CGame::ShowRetryPrompt()

@@ -353,7 +353,7 @@ void CMario::UpdateVictorySequence()
 	switch (victoryPhase)
 	{
 	case 0:     // COURSECLEAR
-		sc->AddObject(new Character(x, y - 16, C_COURSECLEAR));
+		sc->AddObject(new Character(x - 16, y - 64, C_COURSECLEAR));
 		victoryPhase = 1;
 		victoryTick = now;
 		break;
@@ -361,9 +361,9 @@ void CMario::UpdateVictorySequence()
 	case 1:     // “YOU GOT A CARD” + icon
 		if (now - victoryTick >= 800)
 		{
-			sc->AddObject(new Character(x, y - 32, C_YOUGOTACARD));
-			sc->AddObject(new Character(x + 64.0f, y - 32, victoryCard));
-			victoryPhase = 2;          // kết thúc chuỗi
+			sc->AddObject(new Character(x - 91, y - 96, C_YOUGOTACARD));
+			sc->AddObject(new Character(x - 4, y - 96, victoryCard));
+			victoryPhase = 2;
 		}
 		break;
 	}
