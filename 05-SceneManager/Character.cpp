@@ -8,6 +8,11 @@ void Character::OnNoCollision(DWORD dt)
 
 void Character::Update(DWORD dt, std::vector<LPGAMEOBJECT>* coObjects)
 {
+	if (score == C_COURSECLEAR || score == C_YOUGOTACARD || score == C_MUSHROOM || score == C_FLOWER || score == C_STAR)
+	{
+		return;
+	}
+
 	if (score != C_ANI_HIT)
 	{
 		vy *= C_SLOWING;

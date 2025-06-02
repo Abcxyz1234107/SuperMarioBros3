@@ -170,6 +170,9 @@ class CMario : public CGameObject
 	ULONGLONG ref;
 
 	bool victoryLanded = false;
+	int         victoryPhase = -1;     // -1: chưa khởi tạo
+	ULONGLONG   victoryTick = 0;
+	int         victoryCard = 0;
 
 	int   power;            // 0‒6
 	bool  powerFull;        // true khi power==6
@@ -214,6 +217,8 @@ class CMario : public CGameObject
 	void OnCollisionWithKoopasGreen(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopasShell(LPCOLLISIONEVENT e);
 	void OnCollisionWithVictoryCard(LPCOLLISIONEVENT e);
+
+	void UpdateVictorySequence();
 
 	void TailHitGoomba(LPGAMEOBJECT goomba);
 

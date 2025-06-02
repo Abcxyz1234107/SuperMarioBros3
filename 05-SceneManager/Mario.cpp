@@ -220,6 +220,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 
 		CCollision::GetInstance()->Process(this, dt, coObjects);
+		UpdateVictorySequence();
 		return;
 	}
 	vx += ax * dt;
@@ -342,6 +343,33 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+void CMario::UpdateVictorySequence()
+{
+	if (victoryPhase < 0) return;
+
+	ULONGLONG now = GetTickCount64();
+	LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+
+	switch (victoryPhase)
+	{
+	case 0:     // COURSECLEAR
+		sc->AddObject(new Character(x, y - 16, C_COURSECLEAR));
+		victoryPhase = 1;
+		victoryTick = now;
+		break;
+
+	case 1:     // “YOU GOT A CARD” + icon
+		if (now - victoryTick >= 800)
+		{
+			sc->AddObject(new Character(x, y - 32, C_YOUGOTACARD));
+			sc->AddObject(new Character(x + 64.0f, y - 32, victoryCard));
+			victoryPhase = 2;          // kết thúc chuỗi
+		}
+		break;
+	}
+}
+
+
 void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
@@ -451,7 +479,15 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithVictoryCard(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();              // ăn thẻ
+	CVictoryCard* vc = dynamic_cast<CVictoryCard*>(e->obj);
+	if (vc)
+	{
+		int sprite = vc->GetCurrentSprite();
+		victoryCard = (sprite == ID_SPRITE_STARCARD) ? C_STAR :
+			(sprite == ID_SPRITE_FLOWERCARD) ? C_FLOWER : C_MUSHROOM;
+	}
+
+	e->obj->Delete();
 	score += 12550;
 	SetState(MARIO_STATE_VICTORY);
 }
@@ -1001,6 +1037,8 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		victoryLanded = false;
+		victoryPhase = 0; // bắt đầu chuỗi victory
+		victoryTick = GetTickCount64();
 		ay = MARIO_GRAVITY;
 		vy = 0.0f;
 		CGame::GetInstance()->ShowVictoryPrompt(this);

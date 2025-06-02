@@ -573,7 +573,7 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 
 void CGame::RenderVictoryPrompt()
 {
-	if (!victoryPrompt || !pFont) return;
+	/*if (!victoryPrompt || !pFont) return;
 
 	wchar_t buf[256];
 	swprintf_s(buf,
@@ -593,20 +593,22 @@ void CGame::RenderVictoryPrompt()
 
 	pFont->DrawTextW(nullptr, buf, -1, &rc,
 		DT_CENTER | DT_VCENTER,
-		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));*/
 }
 
 void CGame::ShowVictoryPrompt(CMario* mario)
 {
 	victoryPrompt = true;
-	retryPrompt = true; // sử dụng R/ ESC có sẵn
+	retryPrompt = true;        // tái sử dụng phím R/ESC
 
 	gVictory.coin = mario->GetCoin();
 	gVictory.life = mario->GetLife();
 	gVictory.score = mario->GetScore();
 	gVictory.timeLeft = mario->GetTimer();
 
-	RenderVictoryPrompt();
+	DebugOut(L"[VICTORY] Time:%d  Score:%lld  Coin:%d  Life:%d\n",
+		MARIO_INITIAL_TIME - gVictory.timeLeft,
+		gVictory.score, gVictory.coin, gVictory.life);
 }
 
 void CGame::RenderRetryPrompt()
