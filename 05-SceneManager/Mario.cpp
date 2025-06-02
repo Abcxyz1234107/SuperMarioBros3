@@ -22,12 +22,6 @@
 
 #include "Collision.h"
 
-static bool IsAABBOverlap(float l1, float t1, float r1, float b1,
-						  float l2, float t2, float r2, float b2)
-{
-	return !(r1 < l2 || r2 < l1 || b1 < t2 || b2 < t1);
-}
-
 void CMario::StartTeleport(int dir, int sceneId, float distance)
 {
 	teleportDir = dir;
@@ -39,7 +33,6 @@ void CMario::StartTeleport(int dir, int sceneId, float distance)
 	teleportTargetY = y + dir * distance;
 
 	isOnPlatform = false;
-
 	SetState(MARIO_STATE_TELEPORT);
 }
 
@@ -117,6 +110,91 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (immortal) return;
+
+	//-------------------------------------TELEPORT------------------------//
+	if (isTeleporting)
+	{
+		y += vy * dt;
+
+		if ((teleportDir == 1 && y >= teleportTargetY) ||
+			(teleportDir == -1 && y <= teleportTargetY))
+		{
+			y = teleportTargetY;
+			vy = 0.f;
+			ay = MARIO_GRAVITY;
+			isTeleporting = false;
+
+			if (teleportSceneId >= 0)
+			{
+				CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
+				if (desX != -1) { x = desX; y = desY; arrived = true; }
+			}
+			else
+			{
+				if (desX != -1) { x = desX; y = desY; desX = desY = -1; }
+				SetState(MARIO_STATE_IDLE);
+			}
+
+			LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			for (auto o : sc->GetObjects())
+			{
+				CPortal* p = dynamic_cast<CPortal*>(o);
+				if (!p) continue;
+
+				float l, t, r, b, pl, pt, pr, pb;
+				GetBoundingBox(l, t, r, b);
+				p->GetBoundingBox(pl, pt, pr, pb);
+
+				const float EPS = 1.0f;
+				bool overlap = !(r + EPS < pl || l - EPS > pr || b + EPS < pt || t - EPS > pb);
+				if (overlap)
+				{
+					p->SetPosition(-10.f, -10.f);
+
+					int dir = -teleportDir;
+					float dst = (level == MARIO_LEVEL_SMALL) ?
+						MARIO_SMALL_BBOX_HEIGHT :
+						MARIO_BIG_BBOX_HEIGHT;
+
+					StartTeleport(dir, p->GetSceneId(), dst);
+					break;
+				}
+			}
+			return;
+		}
+		return;
+	}
+
+	if (arrived && !isTeleporting)
+	{
+		LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		float ml, mt, mr, mb;
+		GetBoundingBox(ml, mt, mr, mb);
+
+		for (auto o : sc->GetObjects())
+		{
+			CPortal* p = dynamic_cast<CPortal*>(o);
+			if (!p) continue;
+
+			float pl, pt, pr, pb;
+			p->GetBoundingBox(pl, pt, pr, pb);
+
+			if (!(mr < pl || ml > pr || mb < pt || mt > pb))
+			{
+				p->SetPosition(-10.0f, -10.0f);
+
+				int dir = (mb <= pt) ? -1 : 1;
+
+				float distance = (level == MARIO_LEVEL_SMALL)
+					? MARIO_SMALL_BBOX_HEIGHT
+					: MARIO_BIG_BBOX_HEIGHT;
+
+				StartTeleport(dir, p->GetSceneId(), distance);
+				break;
+			}
+		}
+		arrived = false;
+	}
 
 	//-------------------------------------VICTORY------------------------//
 	if (state == MARIO_STATE_VICTORY)
@@ -248,40 +326,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
-	//-------------------------------------TELEPORT------------------------//
-
-	if (state == MARIO_STATE_TELEPORT && isTeleporting)
-	{
-		vy = teleportDir * MARIO_TELEPORT_SPEED;
-		y += vy * dt;
-
-		if ((teleportDir == 1 && y >= teleportTargetY) ||
-			(teleportDir == -1 && y <= teleportTargetY))
-		{
-			y = teleportTargetY;
-			vy = 0;
-			ay = MARIO_GRAVITY;
-			isTeleporting = false;
-
-			if (teleportSceneId >= 0)
-			{
-				CGame::GetInstance()->InitiateSwitchScene(teleportSceneId);
-				if (desX != -1) 
-				{
-					x = desX;
-					y = desY;
-
-					arrived = true;
-				}
-			}
-				
-			else SetState(MARIO_STATE_IDLE);
-
-		}
-		return;	// bỏ qua xử lý va chạm khi đang dịch chuyển
-	}
-
-
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -293,41 +337,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (level == MARIO_LEVEL_FLY && isFly)
 		vy = -MARIO_RUNNING_SPEED;
-
-	//-------------------------------------TELEPORT_ANIMATION_PORTAL------------------------//
-	if (!isTeleporting)
-	{
-		for (auto obj : *coObjects)
-		{
-			CPortal* p = dynamic_cast<CPortal*>(obj);
-			if (!p) continue;
-
-			float l1, t1, r1, b1, l2, t2, r2, b2;
-			GetBoundingBox(l1, t1, r1, b1);
-			p->GetBoundingBox(l2, t2, r2, b2);
-
-			if (IsAABBOverlap(l1, t1, r1, b1, l2, t2, r2, b2))
-			{
-				/* xuống dir = 1, lên dir = -1  */
-				int dir = (b1 <= t2) ? 1 : -1;
-				float dist = (level == MARIO_LEVEL_SMALL)
-					? MARIO_SMALL_BBOX_HEIGHT * 2.25
-					: MARIO_BIG_BBOX_HEIGHT * 1.4;
-
-				if (p->GetDesX() == -1)
-					p->SetSceneId(-1);
-				else
-				{
-					desX = p->GetDesX();
-					desY = p->GetDesY();
-				}
-
-				p->SetPosition(-10.f, -10.f);     // xóa portal cũ
-				StartTeleport(dir, p->GetSceneId(), dist);
-				break;
-			}
-		}
-	}
+	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -718,7 +728,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 	CPortal* p = (CPortal*)e->obj;
 
-	int dir = (e->ny > 0) ? -1 : 1;	// đụng dưới -> lên, đụng trên -> xuống
+	int dir = (e->ny >= 0) ? -1 : 1;	// đụng dưới -> lên, đụng trên -> xuống
 	float distance = (level == MARIO_LEVEL_SMALL) ? MARIO_SMALL_BBOX_HEIGHT :MARIO_BIG_BBOX_HEIGHT;
 
 	if (p->GetDesX() == -1) p->SetSceneId(-1);
@@ -983,7 +993,7 @@ void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_VICTORY || this->state == MARIO_STATE_DIE) return;
-	if (state == MARIO_STATE_TELEPORT && isTeleporting) return;
+	if (isTeleporting && state != MARIO_STATE_TELEPORT) return;
 
 	switch (state)
 	{

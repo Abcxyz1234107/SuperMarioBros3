@@ -31,7 +31,7 @@ scoreboard.txt
 
 #152	-5
 # MARIO
-0	200	20
+0	152	-5
 
 #Score Board
 20	165	181

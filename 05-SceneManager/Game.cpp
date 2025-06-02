@@ -699,7 +699,10 @@ void CGame::SwitchScene()
 	{
 		auto* newPlay = dynamic_cast<CPlayScene*>(s);
 		if (newPlay)
+		{
 			ApplyPlayerState(dynamic_cast<CMario*>(newPlay->GetPlayer()));
+			dynamic_cast<CMario*>(newPlay->GetPlayer())->SetArrived(true);
+		}
 	}
 
 	isFirstLoad = false;

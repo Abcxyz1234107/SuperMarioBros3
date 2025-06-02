@@ -477,22 +477,10 @@ void CPlayScene::Update(DWORD dt)
 	float halfW = screenW * 0.5f;
 	float halfH = screenH * 0.5f;
 
-	float dx = px - lastPx; // Tính quãng đường Mario vừa di chuyển
+    // Tính quãng đường Mario vừa di chuyển
 	float dy = py - lastPy;
 
-	
-	if (!camStarted)
-	{
-		if (px >= halfW)
-		{
-			camStarted = true;
-			cx = px - halfW;  // căn Mario vào giữa
-		}
-	}
-	else
-	{
-		cx += dx; // Camera di chuyển theo dx Mario đi
-	}
+	cx = px - halfW;
 
 	// ------------------------------------------------------------
 	float MAX_MAP_X = game->GetCurrentScene()->GetMaxMapX();
@@ -513,7 +501,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (mario->IsArrived()) cx = px - halfW;
 	game->SetCamPos(cx, cy);
-	mario->SetArrived(false);
+	//mario->SetArrived(false);
 
 	PurgeDeletedObjects();
 }

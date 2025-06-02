@@ -136,9 +136,6 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_FLY		3
@@ -313,6 +310,7 @@ public:
 	void SetTimer(int c) { timer = c; ref = GetTickCount64(); }
 	void SetDesX(float c) { desX = c; }
 	void SetDesY(float c) { desY = c; }
+	void SetTeleportDir(int i) { teleportDir = i; }
 
 	void StartTeleport(int dir, int sceneId, float distance);
 	bool IsArrived() { return arrived; }
