@@ -10,6 +10,7 @@
 #include "PlayScene.h"
 
 CGame * CGame::__instance = NULL;
+Character* pauseText;
 struct VictoryStat {
 	int         coin;
 	int         timeLeft;
@@ -546,6 +547,34 @@ void CGame::Load(LPCWSTR gameFile)
 	SwitchScene();
 }
 
+// ========== PAUSE ==========
+void CGame::Pause()
+{
+	if (pauseActive) return;
+	pauseActive = true;
+
+	LPPLAYSCENE sc = (LPPLAYSCENE)GetCurrentScene();
+	if (sc)
+	{
+		float cx, cy;  GetCamPos(cx, cy);
+		// 320×240
+		pauseText = new Character(cx + 160, cy + 100, C_PAUSE);
+		sc->AddObject(pauseText);
+	}
+}
+
+void CGame::Resume()
+{
+	if (!pauseActive) return;
+	pauseActive = false;
+	if (pauseText) { pauseText->Delete(); pauseText = nullptr; }
+}
+
+void CGame::TogglePause() { pauseActive ? Resume() : Pause(); }
+bool CGame::IsPaused() { return pauseActive; }
+
+
+// ========== SAVE ==========
 void CGame::SavePlayerState(CMario* mario)          // hàm mới
 {
 	if (!mario) return;

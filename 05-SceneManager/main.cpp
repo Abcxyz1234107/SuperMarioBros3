@@ -71,6 +71,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void Update(DWORD dt)
 {
+	if (CGame::GetInstance()->IsPaused()) return;
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
@@ -96,7 +97,14 @@ void Render()
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-	CGame::GetInstance()->GetCurrentScene()->Render();
+	g->GetCurrentScene()->Render();
+
+	if (g->IsPaused())
+	{
+		LPTEXTURE dim = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+		RECT rc{ 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
+		g->Draw(160, 120, dim, &rc, 0.40f);   // trong suốt 40 %
+	}
 
 	spriteHandler->End();
 	pSwapChain->Present(0, 0);

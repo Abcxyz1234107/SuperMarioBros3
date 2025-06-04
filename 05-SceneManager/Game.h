@@ -38,6 +38,8 @@ class CGame
 	bool retryPrompt = false;
 	ID3DX10Font* pFont = nullptr;
 
+	bool pauseActive = false;
+
 	static CGame* __instance;
 	HWND hWnd;									// Window handle
 
@@ -145,6 +147,11 @@ public:
 
 	void SetFirstScene(int i) { first_scene = i; }
 	PlayerData GetSaved() { return saved; }
+
+	void Pause();
+	void Resume();
+	void TogglePause();
+	bool IsPaused();
 
 	~CGame();
 };

@@ -9,6 +9,14 @@
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame* game = CGame::GetInstance();
+	switch (KeyCode)
+	{
+	case DIK_ESCAPE:
+		game->TogglePause();
+		break;
+	}
+	if (game->IsPaused()) return;
+	
 	if (game->IsRetryPromptActive())
 	{
 		if (KeyCode == DIK_R)
@@ -74,7 +82,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 void CSampleKeyHandler::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-
+	if (CGame::GetInstance()->IsPaused()) return;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (KeyCode)
 	{
@@ -98,6 +106,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 
 void CSampleKeyHandler::KeyState(BYTE *states)
 {
+	if (CGame::GetInstance()->IsPaused()) return;
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
