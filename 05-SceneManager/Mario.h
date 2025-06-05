@@ -173,11 +173,12 @@ class CMario : public CGameObject
 	int         victoryPhase = -1;     // -1: chưa khởi tạo
 	ULONGLONG   victoryTick = 0;
 	int         victoryCard = 0;
+	bool        hasVictoryCard = false;
 
 	int   power;            // 0‒6
 	bool  powerFull;        // true khi power==6
 	ULONGLONG powerTick;    // mốc cộng/trừ gần nhất
-	ULONGLONG powerDelay;   // mốc bắt đầu chờ giảm
+	ULONGLONG powerDelay;   // chờ giảm
 	ULONGLONG lastFlyPress; // lần nhấn Space gần nhất
 	ULONGLONG lastGlidePress; // Glide
 

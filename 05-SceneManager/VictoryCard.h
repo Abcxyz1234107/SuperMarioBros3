@@ -31,5 +31,6 @@ public:
     void GetBoundingBox(float& l, float& t, float& r, float& b) override;
 
     int GetCurrentSprite() { return sprites[current]; }
+    int IsBlocking() override { return 0; }
 };
 

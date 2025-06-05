@@ -109,6 +109,42 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	//-------------------------------------VICTORY------------------------//
+	if (hasVictoryCard && state != MARIO_STATE_VICTORY && isOnPlatform)
+	{
+		SetState(MARIO_STATE_VICTORY);
+		hasVictoryCard = false;          // reset cờ
+	}
+
+	if (state == MARIO_STATE_VICTORY)
+	{
+		if (!victoryLanded)
+		{
+			ax = vx = 0.0f;
+			ay = MARIO_GRAVITY;
+			vy += ay * dt;
+			if (isOnPlatform)
+			{
+				victoryLanded = true;
+				vy = 0.0f;
+			}
+		}
+
+		if (victoryLanded)
+		{
+			isOnPlatform = true;
+			ay = vy = 0.0f;
+			if (nx < 0) nx = -nx;
+			ax = MARIO_ACCEL_WALK_X;
+			vx = MARIO_WALKING_SPEED;
+		}
+
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+		UpdateVictorySequence();
+		return;
+	}
+	vx += ax * dt;
+
 	if (immortal) return;
 
 	//-------------------------------------TELEPORT------------------------//
@@ -195,35 +231,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		arrived = false;
 	}
-
-	//-------------------------------------VICTORY------------------------//
-	if (state == MARIO_STATE_VICTORY)
-	{
-		if (!victoryLanded)
-		{
-			ax = vx = 0.0f;
-			ay = MARIO_GRAVITY;
-			vy += ay * dt;
-			if (isOnPlatform)
-			{
-				victoryLanded = true;
-				vy = 0.0f;
-			}
-		}
-
-		if (victoryLanded)
-		{
-			isOnPlatform = true;
-			ay = vy = 0.0f;
-			ax = MARIO_ACCEL_WALK_X;
-			vx = MARIO_WALKING_SPEED;
-		}
-
-		CCollision::GetInstance()->Process(this, dt, coObjects);
-		UpdateVictorySequence();
-		return;
-	}
-	vx += ax * dt;
 
 	//-------------------------------------FLY------------------------//
 	bool isRunning =
@@ -345,6 +352,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CMario::UpdateVictorySequence()
 {
+	//Victory card: 2750	69
+	int vc_x = 2750;
+	int vc_y = 69;
+	if (!victoryLanded) return;
 	if (victoryPhase < 0) return;
 
 	ULONGLONG now = GetTickCount64();
@@ -352,8 +363,8 @@ void CMario::UpdateVictorySequence()
 
 	switch (victoryPhase)
 	{
-	case 0:     // COURSECLEAR
-		sc->AddObject(new Character(x - 16, y - 64, C_COURSECLEAR));
+	case 0:     // COURSECLEAR 
+		sc->AddObject(new Character(vc_x - 16, vc_y - 48, C_COURSECLEAR));
 		victoryPhase = 1;
 		victoryTick = now;
 		break;
@@ -361,8 +372,8 @@ void CMario::UpdateVictorySequence()
 	case 1:     // “YOU GOT A CARD” + icon
 		if (now - victoryTick >= 800)
 		{
-			sc->AddObject(new Character(x - 91, y - 96, C_YOUGOTACARD));
-			sc->AddObject(new Character(x - 4, y - 96, victoryCard));
+			sc->AddObject(new Character(vc_x - 32, vc_y - 24, C_YOUGOTACARD));
+			sc->AddObject(new Character(vc_x + 54, vc_y - 24, victoryCard));
 			victoryPhase = 2;
 		}
 		break;
@@ -489,7 +500,9 @@ void CMario::OnCollisionWithVictoryCard(LPCOLLISIONEVENT e)
 
 	e->obj->Delete();
 	score += 12550;
-	SetState(MARIO_STATE_VICTORY);
+
+	hasVictoryCard = true;
+	isOnPlatform = false;
 }
 
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
@@ -1034,13 +1047,13 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_VICTORY:
+		isOnPlatform = false;
 		ax = 0.0f;
 		vx = 0.0f;
 		victoryLanded = false;
 		victoryPhase = 0; // bắt đầu chuỗi victory
 		victoryTick = GetTickCount64();
 		ay = MARIO_GRAVITY;
-		vy = 0.0f;
 		CGame::GetInstance()->ShowVictoryPrompt(this);
 		break;
 
