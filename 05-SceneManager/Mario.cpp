@@ -54,7 +54,7 @@ void CMario::SetGlide(bool g)
 
 void CMario::StartTailHit()
 {
-	if (level != MARIO_LEVEL_FLY || isTailHit) return;   // chỉ level 3
+	if (level != MARIO_LEVEL_FLY || isTailHit) return;
 	isTailHit = true;
 	tailHit_start = GetTickCount64();
 }

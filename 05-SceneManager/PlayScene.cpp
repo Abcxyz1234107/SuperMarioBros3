@@ -498,14 +498,15 @@ void CPlayScene::Update(DWORD dt)
 
 	if (py <= MAX_MAP_Y * 0.8 && MAX_MAP_Y != 0) cy = MAX_MAP_Y;
 	else if (MAX_MAP_Y == 0) cy = 0;
-	else if (mario->GetState() == MARIO_STATE_DIE || py >= screenH * 0.5 || mario->GetLevel() != 3)
+	else if (mario->GetState() == MARIO_STATE_DIE || mario->GetLevel() != 3)
 		    cy = 0;
-	else	cy += dy;
 
 	lastPx = px;
 	lastPy = py;
 
 	if (mario->IsArrived()) cx = px - halfW;
+	if ((py <= 10 || mario->IsFly()) && mario->GetLevel() == 3) cy = py - halfH;
+	else cy = 0;
 	game->SetCamPos(cx, cy);
 	//mario->SetArrived(false);
 
