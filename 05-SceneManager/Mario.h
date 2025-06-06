@@ -55,7 +55,6 @@
 #define MARIO_STATE_TELEPORT		800
 
 #define MARIO_STATE_VICTORY			900
-#define MARIO_STATE_TRANSFORM		901
 
 #pragma region ANIMATION_ID
 
@@ -206,11 +205,11 @@ class CMario : public CGameObject
 	bool arrived;
 
 	bool blinkSmall = false;
-	bool pendingSmallTransform = false;
+	bool pendingSmallTransform = false; //small->big
 	ULONGLONG transformBlinkStart = 0;
-	bool pendingBigTransform = false;
+	bool pendingBigTransform = false; //big -> small
 	ULONGLONG bigTransformStart = 0;
-	bool pendingFlyTransform = false;
+	bool pendingFlyTransform = false; //big ->fly
 	ULONGLONG flyTransformStart = 0;
 
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
@@ -342,5 +341,7 @@ public:
 
 	void  StartTailHit();
 	void  TailAttack(const vector<LPGAMEOBJECT>* coObjects);
+
+	bool IsLevelChanging() { return pendingBigTransform || pendingFlyTransform; }
 
 };

@@ -451,7 +451,11 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (freeze && objects[i] != mario) continue;
+		if (freeze) 
+		{
+			if (objects[i] == mario && mario->GetState() != MARIO_STATE_DIE) continue;
+			if (objects[i] != mario) continue;
+		}
 		objects[i]->Update(dt, &coObjects);
 	}
 

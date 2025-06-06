@@ -52,7 +52,7 @@ victorycard.txt
 19	1100	90 #Floor 2 #Red goomba
 
 #Score Board
-20	165	181
+20	165	180
 
 #BGCLOUD
 #id	x	y	bW	bH	Len	s1	s2	s3

@@ -155,11 +155,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 	vx += ax * dt;
-	blinkSmall = ((GetTickCount64() / 100) % 2 == 0);
-	if (pendingBigTransform && GetTickCount64() - bigTransformStart >= 1000)
-	{
-		pendingBigTransform = false;
-	}
 
 	if (immortal) return;
 
@@ -361,16 +356,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (level == MARIO_LEVEL_FLY && isFly)
 		vy = -MARIO_RUNNING_SPEED;
-	
-	if (pendingSmallTransform && !CGame::GetInstance()->IsOthersPaused())
-	{
-		pendingSmallTransform = false;
-		transformBlinkStart = 0;
-
-		level = MARIO_LEVEL_SMALL;
-		untouchable = 1;
-		untouchable_start = GetTickCount64();
-	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -497,8 +482,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					}
 					else
 					{
-						DebugOut(L">>> Mario DIE >>> \n");
 						SetState(MARIO_STATE_DIE);
+						DebugOut(L">>> Mario DIE >>> \n");
 					}
 				}
 			}
@@ -1037,36 +1022,62 @@ void CMario::Render()
 	int aniId = -1;
 	float renderY = y;
 
-
-	if (state == MARIO_STATE_DIE) aniId = ID_ANI_MARIO_DIE;
-	else
+	if (state == MARIO_STATE_DIE)
 	{
-		if (pendingSmallTransform)
-		{
-			if (blinkSmall)
-			{
-				aniId = GetAniIdSmall();
-				renderY -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT * 3) / 2.0f;
-			}
-			else  aniId = GetAniIdBig();
-		}
-		else if (pendingBigTransform)
-		{
-			if (blinkSmall)
-				aniId = GetAniIdBig();
-			else
-			{
-				aniId = GetAniIdSmall();
-				renderY += (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2.0f;
-			}
-		}
-		else if (level == MARIO_LEVEL_BIG)   aniId = GetAniIdBig();
-		else if (level == MARIO_LEVEL_SMALL) aniId = GetAniIdSmall();
-		else if (level == MARIO_LEVEL_FLY)   aniId = GetAniIdFly();
+		aniId = ID_ANI_MARIO_DIE;
+		auto ani = animations->Get(aniId);
+		ani->Render(x, renderY);
+		DebugOut(L"\n %d \n", aniId);
+		return;
 	}
 
+	blinkSmall = ((GetTickCount64() / 100) % 2 == 0);
+	if (pendingBigTransform && GetTickCount64() - bigTransformStart >= 1000)
+	{
+		pendingBigTransform = false;
+	}
+	if (pendingFlyTransform &&
+		GetTickCount64() - flyTransformStart >= 300)
+	{
+		pendingFlyTransform = false;
+	}
+	if (pendingSmallTransform && !CGame::GetInstance()->IsOthersPaused())
+	{
+		pendingSmallTransform = false;
+		transformBlinkStart = 0;
+
+		level = MARIO_LEVEL_SMALL;
+		untouchable = 1;
+		untouchable_start = GetTickCount64();
+	}
+
+	if (pendingSmallTransform)
+	{
+		if (blinkSmall)
+		{
+			aniId = GetAniIdSmall();
+			renderY -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT * 3) / 2.0f;
+		}
+		else  aniId = GetAniIdBig();
+	}
+	else if (pendingBigTransform)
+	{
+		if (blinkSmall)
+			aniId = GetAniIdBig();
+		else
+		{
+			aniId = GetAniIdSmall();
+			renderY += (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2.0f;
+		}
+	}
+	else if (pendingFlyTransform)
+		aniId = ID_ANI_MARIO_BIG_TO_FLY_TRANSFORM;
+	else if (level == MARIO_LEVEL_BIG)   aniId = GetAniIdBig();
+	else if (level == MARIO_LEVEL_SMALL) aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_FLY)   aniId = GetAniIdFly();
+
 	bool skipRender = ((untouchable || pendingSmallTransform) && state != MARIO_STATE_TELEPORT && 
-		((GetTickCount64() / 60) % 2 == 0));
+		((GetTickCount64() / 60) % 2 == 0)) && state != MARIO_STATE_DIE;
 	if (skipRender) return;
 
 	auto ani = animations->Get(aniId);
@@ -1083,8 +1094,8 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (state == MARIO_STATE_VICTORY || state == MARIO_STATE_DIE || state == MARIO_STATE_TRANSFORM) return;
-	if (isTeleporting && state != MARIO_STATE_TELEPORT) return;
+	if (this->state == MARIO_STATE_VICTORY || this->state == MARIO_STATE_DIE) return;
+	if (isTeleporting && this->state != MARIO_STATE_TELEPORT) return;
 
 	switch (state)
 	{
@@ -1181,11 +1192,6 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
-	case MARIO_STATE_TRANSFORM:
-		ax = 0.0f;
-		vx = 0.0f;
-		ay = vy = 0.0f;
-		break;
 		
 	case MARIO_STATE_TELEPORT:
 		ax = vx = 0.0f;
@@ -1207,9 +1213,8 @@ void CMario::SetState(int state)
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	bool isCurrentlyBig = (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_FLY);
-	bool isEffecting = pendingSmallTransform;
 
-	if ((isCurrentlyBig || isEffecting))
+	if ((isCurrentlyBig || pendingSmallTransform))
 	{
 		if (isSitting)
 		{
@@ -1260,14 +1265,14 @@ void CMario::SetLevel(int l)
 	{
 		pendingBigTransform = true;
 		bigTransformStart = GetTickCount64();
-		ax = ay = vx = vy = 0.0f;
+		CGame::GetInstance()->PauseOthers(1000);
 	}
 
 	if (flyTransform)
 	{
 		pendingFlyTransform = true;
 		flyTransformStart = GetTickCount64();
-		ax = ay = vx = vy = 0.0f;
+		CGame::GetInstance()->PauseOthers(400);
 	}
 }
 

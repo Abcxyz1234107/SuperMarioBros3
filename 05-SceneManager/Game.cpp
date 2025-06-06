@@ -677,6 +677,16 @@ void CGame::ShowRetryPrompt()
 	retryPrompt = true;
 	DebugOut(L"[INFO] Mario died - press R to retry\n");
 }
+bool CGame::IsLevelChanging()
+{
+	LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(GetInstance()->GetCurrentScene());
+	if (!scene) return false;
+
+	CMario* mario = dynamic_cast<CMario*>(scene->GetPlayer());
+	if (!mario) return false;
+
+	return mario->IsLevelChanging();
+}
 
 void CGame::ReloadCurrentScene()
 {

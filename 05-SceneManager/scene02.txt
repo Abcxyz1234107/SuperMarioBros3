@@ -34,7 +34,7 @@ scoreboard.txt
 0	152	-5
 
 #Score Board
-20	165	181
+20	165	180
 
 #COIN
 4	216	104	1

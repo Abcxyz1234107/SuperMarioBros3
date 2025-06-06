@@ -159,6 +159,8 @@ public:
 	void ResumeOthers();
 	bool IsOthersPaused();
 
+	bool IsLevelChanging();
+
 	~CGame();
 };
 typedef CGame* LPGAME;
