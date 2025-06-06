@@ -293,7 +293,9 @@ public:
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
-	void StartUntouchable();
+	void StartUntouchable() { StartUntouchable1(); StartUntouchable2(); }
+	void StartUntouchable1();
+	void StartUntouchable2() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	bool IsUntouchable() { if (untouchable == 1) return true; else return false; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -342,6 +344,6 @@ public:
 	void  StartTailHit();
 	void  TailAttack(const vector<LPGAMEOBJECT>* coObjects);
 
-	bool IsLevelChanging() { return pendingBigTransform || pendingFlyTransform; }
+	bool IsLevelChanging() { return pendingBigTransform || pendingFlyTransform || pendingSmallTransform; }
 
 };

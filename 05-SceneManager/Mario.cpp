@@ -22,7 +22,7 @@
 
 #include "Collision.h"
 
-void CMario::StartUntouchable()
+void CMario::StartUntouchable1()
 {
 	if (!pendingSmallTransform)
 	{
@@ -479,6 +479,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					{
 						level--;
 						StartUntouchable();
+						CGame::GetInstance()->PauseOthers(1000);
 					}
 					else
 					{
@@ -627,7 +628,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 		if (level > MARIO_LEVEL_SMALL)
 		{
 			level--;
-			StartUntouchable();
+			StartUntouchable2();
 		}
 		else
 		{
@@ -688,7 +689,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				if (level > MARIO_LEVEL_SMALL)
 				{
 					level--;
-					StartUntouchable();
+					StartUntouchable2();
 				}
 				else
 				{
@@ -1027,7 +1028,6 @@ void CMario::Render()
 		aniId = ID_ANI_MARIO_DIE;
 		auto ani = animations->Get(aniId);
 		ani->Render(x, renderY);
-		DebugOut(L"\n %d \n", aniId);
 		return;
 	}
 

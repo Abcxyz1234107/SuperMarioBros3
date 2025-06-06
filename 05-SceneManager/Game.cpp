@@ -623,27 +623,7 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 
 void CGame::RenderVictoryPrompt()
 {
-	/*if (!victoryPrompt || !pFont) return;
-
-	wchar_t buf[256];
-	swprintf_s(buf,
-		L"CHIẾN THẮNG!\n"
-		L"Thời gian: %d s\n"
-		L"Điểm: %lld\n"
-		L"Tiền: %d\n"
-		L"Mạng còn: %d\n\n"
-		L"(R)  Chơi lại     (ESC)  Thoát",
-		MARIO_INITIAL_TIME - gVictory.timeLeft,
-		gVictory.score,
-		gVictory.coin,
-		gVictory.life);
-
-	RECT rc{ backBufferWidth / 2 - 160, backBufferHeight / 2 - 90,
-			 backBufferWidth / 2 + 160, backBufferHeight / 2 + 90 };
-
-	pFont->DrawTextW(nullptr, buf, -1, &rc,
-		DT_CENTER | DT_VCENTER,
-		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));*/
+	
 }
 
 void CGame::ShowVictoryPrompt(CMario* mario)
@@ -675,7 +655,13 @@ void CGame::RenderRetryPrompt()
 void CGame::ShowRetryPrompt()
 {
 	retryPrompt = true;
-	DebugOut(L"[INFO] Mario died - press R to retry\n");
+	LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(GetInstance()->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(scene->GetPlayer());
+	if (mario->GetLife() == 1)
+	{
+		DebugOut(L"You lost all lives! Your data will be reset at the next retry!\n");
+	}
+	else DebugOut(L"[INFO] Mario died - press R to retry\n");
 }
 bool CGame::IsLevelChanging()
 {
