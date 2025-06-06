@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <d3d10.h>
 #include <d3dx10.h>
@@ -39,6 +39,8 @@ class CGame
 	ID3DX10Font* pFont = nullptr;
 
 	bool pauseActive = false;
+	bool pauseOthersActive = false;   // pause mọi thứ trừ Mario
+	ULONGLONG pauseOthersEnd = 0;
 
 	static CGame* __instance;
 	HWND hWnd;									// Window handle
@@ -152,6 +154,10 @@ public:
 	void Resume();
 	void TogglePause();
 	bool IsPaused();
+
+	void PauseOthers(DWORD duration = 0);   // 0 = vô hạn
+	void ResumeOthers();
+	bool IsOthersPaused();
 
 	~CGame();
 };

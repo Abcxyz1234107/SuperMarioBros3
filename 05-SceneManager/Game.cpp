@@ -548,6 +548,27 @@ void CGame::Load(LPCWSTR gameFile)
 }
 
 // ========== PAUSE ==========
+void CGame::PauseOthers(DWORD duration /*=0*/)
+{
+	if (pauseOthersActive) return;
+	pauseOthersActive = true;
+	pauseOthersEnd = (duration > 0) ? GetTickCount64() + duration : 0;
+}
+
+void CGame::ResumeOthers()
+{
+	pauseOthersActive = false;
+	pauseOthersEnd = 0;
+}
+
+bool CGame::IsOthersPaused()
+{
+	if (pauseOthersActive && pauseOthersEnd &&
+		GetTickCount64() > pauseOthersEnd)
+		ResumeOthers();
+
+	return pauseOthersActive;
+}
 void CGame::Pause()
 {
 	if (pauseActive) return;
@@ -660,6 +681,8 @@ void CGame::ShowRetryPrompt()
 void CGame::ReloadCurrentScene()
 {
 	if (!retryPrompt) return;
+	Resume();
+	ResumeOthers();
 
 	auto* curPlay = dynamic_cast<CPlayScene*>(scenes[current_scene]);
 	if (curPlay)

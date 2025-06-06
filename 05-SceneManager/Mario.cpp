@@ -22,6 +22,17 @@
 
 #include "Collision.h"
 
+void CMario::StartUntouchable()
+{
+	if (!pendingSmallTransform)
+	{
+		pendingSmallTransform = true;
+		transformBlinkStart = GetTickCount64();
+	}
+
+	CGame::GetInstance()->PauseOthers(1000);
+}
+
 void CMario::StartTeleport(int dir, int sceneId, float distance)
 {
 	teleportDir = dir;
@@ -144,6 +155,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 	vx += ax * dt;
+	blinkSmall = ((GetTickCount64() / 100) % 2 == 0);
+	if (pendingBigTransform && GetTickCount64() - bigTransformStart >= 1000)
+	{
+		pendingBigTransform = false;
+	}
 
 	if (immortal) return;
 
@@ -346,6 +362,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (level == MARIO_LEVEL_FLY && isFly)
 		vy = -MARIO_RUNNING_SPEED;
 	
+	if (pendingSmallTransform && !CGame::GetInstance()->IsOthersPaused())
+	{
+		pendingSmallTransform = false;
+		transformBlinkStart = 0;
+
+		level = MARIO_LEVEL_SMALL;
+		untouchable = 1;
+		untouchable_start = GetTickCount64();
+	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -1010,19 +1035,38 @@ void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
+	float renderY = y;
 
-	if (state == MARIO_STATE_DIE)
-		aniId = ID_ANI_MARIO_DIE;
-	else if (level == MARIO_LEVEL_BIG)
-		aniId = GetAniIdBig();
-	else if (level == MARIO_LEVEL_SMALL)
-		aniId = GetAniIdSmall();
-	else if (level == MARIO_LEVEL_FLY)
-		aniId = GetAniIdFly();
 
-	bool skipRender = (untouchable && state != MARIO_STATE_TELEPORT &&
-		((GetTickCount64() / 100) % 2 == 0));
+	if (state == MARIO_STATE_DIE) aniId = ID_ANI_MARIO_DIE;
+	else
+	{
+		if (pendingSmallTransform)
+		{
+			if (blinkSmall)
+			{
+				aniId = GetAniIdSmall();
+				renderY -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT * 3) / 2.0f;
+			}
+			else  aniId = GetAniIdBig();
+		}
+		else if (pendingBigTransform)
+		{
+			if (blinkSmall)
+				aniId = GetAniIdBig();
+			else
+			{
+				aniId = GetAniIdSmall();
+				renderY += (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2.0f;
+			}
+		}
+		else if (level == MARIO_LEVEL_BIG)   aniId = GetAniIdBig();
+		else if (level == MARIO_LEVEL_SMALL) aniId = GetAniIdSmall();
+		else if (level == MARIO_LEVEL_FLY)   aniId = GetAniIdFly();
+	}
 
+	bool skipRender = ((untouchable || pendingSmallTransform) && state != MARIO_STATE_TELEPORT && 
+		((GetTickCount64() / 60) % 2 == 0));
 	if (skipRender) return;
 
 	auto ani = animations->Get(aniId);
@@ -1031,17 +1075,15 @@ void CMario::Render()
 		DebugOut(L"[ERROR] Animation %d not found\n", aniId);
 		return;
 	}
-	ani->Render(x, y);
-
-	//RenderBoundingBox();
-	
-	
+	ani->isMarioAnimation = true;
+	ani->Render(x, renderY);
 }
+
 
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_VICTORY || this->state == MARIO_STATE_DIE) return;
+	if (state == MARIO_STATE_VICTORY || state == MARIO_STATE_DIE || state == MARIO_STATE_TRANSFORM) return;
 	if (isTeleporting && state != MARIO_STATE_TELEPORT) return;
 
 	switch (state)
@@ -1139,12 +1181,18 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
+	case MARIO_STATE_TRANSFORM:
+		ax = 0.0f;
+		vx = 0.0f;
+		ay = vy = 0.0f;
+		break;
 		
 	case MARIO_STATE_TELEPORT:
 		ax = vx = 0.0f;
 		break;
 
 	case MARIO_STATE_DIE:
+		CGame::GetInstance()->PauseOthers();
 		CGame::GetInstance()->ShowRetryPrompt();
 		life--;
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -1156,9 +1204,12 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level==MARIO_LEVEL_BIG || level == MARIO_LEVEL_FLY)
+	bool isCurrentlyBig = (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_FLY);
+	bool isEffecting = pendingSmallTransform;
+
+	if ((isCurrentlyBig || isEffecting))
 	{
 		if (isSitting)
 		{
@@ -1167,36 +1218,57 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
-		else 
+		else
 		{
-			left = x - MARIO_BIG_BBOX_WIDTH/2;
-			top = y - MARIO_BIG_BBOX_HEIGHT/2;
+			left = x - MARIO_BIG_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
 	else
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
+		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
 
 	if (holdingShell)
 	{
-		if (nx > 0)  right += SHELL_BBOX_W;     // hướng phải
-		else         left -= SHELL_BBOX_W;     // hướng trái
+		if (nx > 0)  right += SHELL_BBOX_W;
+		else         left -= SHELL_BBOX_W;
 	}
 }
 
 void CMario::SetLevel(int l)
 {
-	// Adjust position to avoid falling off platform
-	if (this->level == MARIO_LEVEL_SMALL)
-	{
+	bool growTransform = (this->level == MARIO_LEVEL_SMALL && l != MARIO_LEVEL_SMALL);
+
+	if (this->level != MARIO_LEVEL_SMALL && l == MARIO_LEVEL_SMALL)
+		y += (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	else if (growTransform)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
-	}
+
+	bool flyTransform =
+		(this->level == MARIO_LEVEL_BIG && l == MARIO_LEVEL_FLY) ||
+		(this->level == MARIO_LEVEL_FLY && l == MARIO_LEVEL_BIG);
+
 	level = l;
+
+	if (growTransform)
+	{
+		pendingBigTransform = true;
+		bigTransformStart = GetTickCount64();
+		ax = ay = vx = vy = 0.0f;
+	}
+
+	if (flyTransform)
+	{
+		pendingFlyTransform = true;
+		flyTransformStart = GetTickCount64();
+		ax = ay = vx = vy = 0.0f;
+	}
 }
+
 

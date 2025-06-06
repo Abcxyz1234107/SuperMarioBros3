@@ -25,7 +25,13 @@ void CAnimation::Render(float x, float y)
 	}
 	else
 	{
-		if (!CGame::GetInstance()->IsPaused())
+		CGame* game = CGame::GetInstance();
+		bool globalPaused = game->IsPaused();
+		bool othersPaused = game->IsOthersPaused();
+
+		bool allowFrameChange = !globalPaused && (!othersPaused || this->isMarioAnimation);
+
+		if (allowFrameChange)
 		{
 			DWORD t = frames[currentFrame]->GetTime();
 			if (now - lastFrameTime > t)

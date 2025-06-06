@@ -55,6 +55,7 @@
 #define MARIO_STATE_TELEPORT		800
 
 #define MARIO_STATE_VICTORY			900
+#define MARIO_STATE_TRANSFORM		901
 
 #pragma region ANIMATION_ID
 
@@ -105,6 +106,7 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
 // FLY MARIO
+#define ID_ANI_MARIO_BIG_TO_FLY_TRANSFORM	   11025
 #define ID_ANI_MARIO_BIG_FLY_TELEPORT		   299
 
 #define ID_ANI_MARIO_BIG_FLY_IDLE_LEFT         300
@@ -203,6 +205,14 @@ class CMario : public CGameObject
 	float desX, desY;
 	bool arrived;
 
+	bool blinkSmall = false;
+	bool pendingSmallTransform = false;
+	ULONGLONG transformBlinkStart = 0;
+	bool pendingBigTransform = false;
+	ULONGLONG bigTransformStart = 0;
+	bool pendingFlyTransform = false;
+	ULONGLONG flyTransformStart = 0;
+
 	void OnCollisionWithVoidSpike(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoombaRed(LPCOLLISIONEVENT e);
@@ -284,7 +294,7 @@ public:
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable();
 	bool IsUntouchable() { if (untouchable == 1) return true; else return false; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
