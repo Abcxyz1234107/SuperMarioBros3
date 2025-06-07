@@ -229,6 +229,7 @@ class CMario : public CGameObject
 	void OnCollisionWithVictoryCard(LPCOLLISIONEVENT e);
 
 	void UpdateVictorySequence();
+	void TakeDamage();
 
 	void TailHitGoomba(LPGAMEOBJECT goomba);
 
@@ -345,5 +346,6 @@ public:
 	void  TailAttack(const vector<LPGAMEOBJECT>* coObjects);
 
 	bool IsLevelChanging() { return pendingBigTransform || pendingFlyTransform || pendingSmallTransform; }
+	bool IsOnPlatform() { return isOnPlatform; }
 
 };

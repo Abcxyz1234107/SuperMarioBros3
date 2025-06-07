@@ -453,7 +453,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (freeze) 
 		{
-			if (objects[i] == mario && (mario->GetState() != MARIO_STATE_DIE || !mario->IsLevelChanging())) continue;
+			if (objects[i] == mario && (mario->GetState() != MARIO_STATE_DIE )) continue;
 			if (objects[i] != mario) continue;
 		}
 		objects[i]->Update(dt, &coObjects);
