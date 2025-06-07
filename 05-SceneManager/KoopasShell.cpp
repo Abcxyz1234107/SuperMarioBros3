@@ -79,6 +79,13 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             AddCharacter(C_200);
             mario->SetScore(mario->GetScore() + 200);
         }
+        else if (dynamic_cast<CKoopasGreen*>(e->obj))
+        {
+            CKoopasGreen* gr = (CKoopasGreen*)e->obj;
+            gr->RemoveWing();
+            AddCharacter(C_200);
+            mario->SetScore(mario->GetScore() + 200);
+        }
 
         goomba->SetState(GOOMBA_STATE_FLIPPED);
     }
