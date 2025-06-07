@@ -740,8 +740,10 @@ void CGame::SwitchScene()
 		auto* newPlay = dynamic_cast<CPlayScene*>(s);
 		if (newPlay)
 		{
-			ApplyPlayerState(dynamic_cast<CMario*>(newPlay->GetPlayer()));
-			dynamic_cast<CMario*>(newPlay->GetPlayer())->SetArrived(true);
+			CMario* mario = dynamic_cast<CMario*>(newPlay->GetPlayer());
+			ApplyPlayerState(mario);
+			mario->SetArrived(true);
+			mario->SetState(MARIO_STATE_IDLE);
 		}
 	}
 

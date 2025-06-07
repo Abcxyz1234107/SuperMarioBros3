@@ -507,6 +507,8 @@ void CPlayScene::Update(DWORD dt)
 	if (mario->IsArrived()) cx = px - halfW;
 	if ((py <= 10 || mario->IsFly()) && mario->GetLevel() == 3) cy = py - halfH;
 	else cy = 0;
+
+	if (MAX_MAP_X == 500.0) cy = 0;
 	game->SetCamPos(cx, cy);
 	//mario->SetArrived(false);
 
