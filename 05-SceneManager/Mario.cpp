@@ -329,7 +329,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	//-------------------------------------TIME_OUT------------------------//
 
-	if (timer > 0)
+	if (timer > 0 && this->state != MARIO_STATE_DIE)
 	{
 		ULONGLONG now = GetTickCount64();
 		ULONGLONG delta = now - ref;
@@ -341,7 +341,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			ref += secPassed * 1000;   // tham chiếu
 
 			if (timer == 0)
+			{
 				SetState(MARIO_STATE_DIE);
+				LPPLAYSCENE sc = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+				float cx, cy;
+				CGame* game = CGame::GetInstance();
+				game->GetCamPos(cx, cy);
+				sc->AddObject(new Character(cx + game->GetBackBufferWidth() * 0.5, 
+											cy + game->GetBackBufferHeight() * 0.4, C_TIMEUP));
+			}
 		}
 	}
 
