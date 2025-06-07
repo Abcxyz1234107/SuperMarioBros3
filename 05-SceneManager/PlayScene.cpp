@@ -528,8 +528,6 @@ void CPlayScene::Render()
 	{
 		objects[i]->Render();
 	}
-
-	CGame::GetInstance()->RenderRetryPrompt();
 }
 
 /*

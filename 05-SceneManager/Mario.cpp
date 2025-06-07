@@ -1111,7 +1111,7 @@ void CMario::SetState(int state)
 		victoryPhase = 0; // bắt đầu chuỗi victory
 		victoryTick = GetTickCount64();
 		ay = MARIO_GRAVITY;
-		CGame::GetInstance()->ShowVictoryPrompt(this);
+		CGame::GetInstance()->ShowVictoryPrompt();
 		break;
 
 	case MARIO_STATE_RUNNING_RIGHT:

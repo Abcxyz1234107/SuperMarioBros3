@@ -621,35 +621,23 @@ void CGame::ApplyPlayerState(CMario* mario)         // hàm mới
 	mario->SetDesY(saved.desY);
 }
 
-void CGame::RenderVictoryPrompt()
-{
-	
-}
-
-void CGame::ShowVictoryPrompt(CMario* mario)
+void CGame::ShowVictoryPrompt()
 {
 	victoryPrompt = true;
 	retryPrompt = true;        // tái sử dụng phím R/ESC
+	LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(GetInstance()->GetCurrentScene());
+	CMario* mario = dynamic_cast<CMario*>(scene->GetPlayer());
 
 	gVictory.coin = mario->GetCoin();
 	gVictory.life = mario->GetLife();
 	gVictory.score = mario->GetScore();
 	gVictory.timeLeft = mario->GetTimer();
+	mario->SetDesX(20);
+	mario->SetDesY(80);
 
 	DebugOut(L"[VICTORY] Time used:%d  Score:%lld  Coin:%d  Life left:%d\n",
 		MARIO_INITIAL_TIME - gVictory.timeLeft,
 		gVictory.score, gVictory.coin, gVictory.life);
-}
-
-void CGame::RenderRetryPrompt()
-{
-	if (victoryPrompt)
-	{
-		RenderVictoryPrompt();
-		return;
-	}
-
-	if (!retryPrompt || !pFont) return;
 }
 
 void CGame::ShowRetryPrompt()

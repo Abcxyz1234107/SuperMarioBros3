@@ -137,10 +137,7 @@ public:
 	bool IsRetryPromptActive() const { return retryPrompt; }
 	void ReloadCurrentScene();
 
-	void ShowVictoryPrompt(CMario* mario);
-	void RenderVictoryPrompt();
-
-	void RenderRetryPrompt();
+	void ShowVictoryPrompt();
 
 	void _ParseSection_TEXTURES(string line);
 
