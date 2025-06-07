@@ -621,7 +621,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	}
 
 	/* 2. Shell đứng yên nhưng Mario chạy -> đá */
-	if (shell->GetState() != SHELL_STATE_NORMAL || shell->isHitByTail())
+	if (shell->GetState() != SHELL_STATE_NORMAL)
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
 
@@ -642,7 +642,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	/* 3. Shell đang chạy */
 	if (e->ny < 0)
 	{
-		if (!shell->isHitByTail()) vy = -MARIO_JUMP_DEFLECT_SPEED;
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		shell->SetState(SHELL_STATE_REVIVING);
 
 		score += hitShellOnce ? 100 : 200;
