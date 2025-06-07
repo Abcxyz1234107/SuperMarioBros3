@@ -27,6 +27,7 @@ class CGoomba : public CGameObject
 {
 protected:
 	bool spawned = false;
+	bool hitByTail = false;
 
 	float ax;				
 	float ay; 
@@ -50,4 +51,7 @@ public:
 
 	void AddCharacter(int c);
 	void RenderCharacter();
+
+	void setHitByTail(bool i) { hitByTail = i; }
+	bool isHitByTail() { return hitByTail; }
 };

@@ -36,7 +36,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     }
 
     /* 1. Turn to Shell */
-    if (state == GOOMBA_STATE_DIE && sleep == false)
+    if ((state == GOOMBA_STATE_DIE || state == GOOMBA_STATE_FLIPPED) && sleep == false)
     {
         CKoopasShell* fakeShell = new CKoopasShell(x, y, type);
         scene->AddObject(fakeShell);
@@ -49,7 +49,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     /* 2. Respawn */
     if (sleep)
     {
-        if (shell) return;
+        if (shell)
 
         if (!passedSpawn && abs(mario->GetX() - spawnX) > camW * 0.51)
             passedSpawn = true;

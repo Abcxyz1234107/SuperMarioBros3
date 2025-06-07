@@ -21,7 +21,7 @@ private:
     float detectRange;
     int state = 0;
 
-    bool hasWing;
+    bool hasWing = false;
     CWing* leftWing, * rightWing;
 
     int        shortJumpsLeft;

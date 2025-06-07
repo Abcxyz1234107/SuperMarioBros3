@@ -218,5 +218,8 @@ void CKoopasShell::SetState(int state)
         ay = GOOMBA_GRAVITY;
         revive_start = 0;
         break;
+    case GOOMBA_STATE_FLIPPED:
+        
+        break;
     }
 }

@@ -234,6 +234,7 @@ class CMario : public CGameObject
 	void TakeDamage();
 
 	void TailHitGoomba(LPGAMEOBJECT goomba);
+	void TailHitKoopasShell(LPGAMEOBJECT shellObj);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

@@ -65,10 +65,22 @@ void CMario::StartTailHit()
 	isTailHit = true;
 	tailHit_start = GetTickCount64();
 }
+void CMario::TailHitKoopasShell(LPGAMEOBJECT shellObj)
+{
+	CKoopasShell* shell = dynamic_cast<CKoopasShell*>(shellObj);
+	if (!shell || shell->GetState() == SHELL_STATE_NORMAL || shell->isHitByTail()) return;
+
+	float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
+	shell->setHitByTail(true);
+	shell->Activate(dir);
+	shell->AddCharacter(C_100);
+	score += 100;
+}
 
 void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiếp OnCollisionWithGoomba
 {
 	CGoombaRed* rg = dynamic_cast<CGoombaRed*>(goomba);
+	CKoopasGreen* kg = dynamic_cast<CKoopasGreen*>(goomba);
 	if (rg)
 	{
 		if (rg->HasWings())
@@ -76,6 +88,16 @@ void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiế
 			score += 100;
 			rg->AddCharacter(C_100);
 			rg->RemoveWing();
+			return; // không flip
+		}
+	}
+	if (kg)
+	{
+		if (kg->HasWings())
+		{
+			score += 100;
+			kg->AddCharacter(C_100);
+			kg->RemoveWing();
 			return; // không flip
 		}
 	}
@@ -88,9 +110,10 @@ void CMario::TailHitGoomba(LPGAMEOBJECT goomba) //Helper để gọi gián tiế
 
 	CCollisionEvent tailEvt(0.0f, nxTail, nyTail, 0.0f, 0.0f, goomba, this);
 
+	g->setHitByTail(true);
 	OnCollisionWithGoomba(&tailEvt);
 
-	g->SetState(GOOMBA_STATE_FLIPPED);
+	if (!dynamic_cast<CKoopasShell*>(g)) g->SetState(GOOMBA_STATE_FLIPPED);
 	g->AddCharacter(C_ANI_HIT);
 }
 
@@ -109,7 +132,7 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 
 	for (auto obj : *coObjects)
 	{
-		if (!dynamic_cast<CGoomba*>(obj)) continue;
+		if (!dynamic_cast<CGoomba*>(obj) && !dynamic_cast<CKoopasShell*>(obj)) continue;
 
 		float el, et, er, eb;
 		obj->GetBoundingBox(el, et, er, eb);
@@ -119,7 +142,12 @@ void CMario::TailAttack(const vector<LPGAMEOBJECT>* coObjects)
 
 		if (overlapX && overlapY)
 		{
-			TailHitGoomba(obj);
+			if (dynamic_cast<CGoomba*>(obj))
+			{
+				if (dynamic_cast<CKoopasShell*>(obj))
+					TailHitKoopasShell(obj);
+				else TailHitGoomba(obj);
+			}	
 		}
 	}
 }
@@ -593,7 +621,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	}
 
 	/* 2. Shell đứng yên nhưng Mario chạy -> đá */
-	if (shell->GetState() != SHELL_STATE_NORMAL)
+	if (shell->GetState() != SHELL_STATE_NORMAL || shell->isHitByTail())
 	{
 		float dir = (x < shell->GetX()) ? 1.0f : -1.0f;
 
@@ -606,6 +634,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 		shell->AddCharacter(hitShellOnce ? C_100 : C_200);
 		hitShellOnce = true;
 
+		shell->setHitByTail(false);
 		shell->Activate(dir);
 		return;
 	}
@@ -613,7 +642,7 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	/* 3. Shell đang chạy */
 	if (e->ny < 0)
 	{
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		if (!shell->isHitByTail()) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		shell->SetState(SHELL_STATE_REVIVING);
 
 		score += hitShellOnce ? 100 : 200;

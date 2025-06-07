@@ -67,5 +67,7 @@ public:
 
 	void SetHeld();       // gán / hủy trạng thái được cầm
 	bool IsHeld() { return isHeld; }
+
+	ULONGLONG tailHitTime;
 };
 
