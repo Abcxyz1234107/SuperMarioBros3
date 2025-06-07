@@ -44,11 +44,9 @@ void CKoopasShell::OnCollisionWith(LPCOLLISIONEVENT e)
     CMario* mario = (CMario*)scene->GetPlayer();
 
     CGoomba::OnCollisionWith(e);
-
     if (dynamic_cast<CGoomba*>(e->obj))
     {
         OnCollisionWithGoomba(e);
-        mario->SetScore(mario->GetScore() + 100);
     }
     else if (dynamic_cast<CRandomBrick*>(e->obj))
         OnCollisionWithRandomBrick(e);
@@ -66,6 +64,10 @@ void CKoopasShell::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     CMario* mario = (CMario*)scene->GetPlayer();
     CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
+    if (goomba->GetState() == GOOMBA_STATE_DIE || goomba->GetState() == GOOMBA_STATE_FLIPPED)
+        return;
+
+    mario->SetScore(mario->GetScore() + 100);
     if (vx != 0)
     {
         goomba->AddCharacter(C_ANI_HIT);
