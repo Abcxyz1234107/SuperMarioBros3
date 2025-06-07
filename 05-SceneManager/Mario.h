@@ -348,4 +348,6 @@ public:
 	bool IsLevelChanging() { return pendingBigTransform || pendingFlyTransform || pendingSmallTransform; }
 	bool IsOnPlatform() { return isOnPlatform; }
 
+	int GetVictoryCard() { return victoryCard; }
+
 };

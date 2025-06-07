@@ -70,4 +70,27 @@ void CScoreBoard::Render()
 
     int sprP = pActive ? C_POWER_WHITE : C_POWER_BLACK;
     CSprites::GetInstance()->Get(sprP) ->Draw(drawX + SB_POWER_X + MARIO_POWER_MAX * SB_DIGIT_W + 5, offset_text_Y - 8);
+
+    if (mario->GetState() == MARIO_STATE_VICTORY && mario->GetX() >= 2900) 
+        SetVictoryCardType(mario->GetVictoryCard());
+    if (victoryCardType != -1)
+    {
+        int spriteId = 0;
+        switch (victoryCardType)
+        {
+        case C_MUSHROOM: spriteId = C_MUSHROOM; break;
+        case C_FLOWER:   spriteId = C_FLOWER;   break;
+        case C_STAR:     spriteId = C_STAR;     break;
+        default: break;
+        }
+
+        if (spriteId != 0)
+        {
+            const float CARD_X = 33;
+            const float CARD_Y = -6;
+
+            CSprites::GetInstance()->Get(spriteId)
+                ->Draw(drawX + CARD_X, drawY + CARD_Y);
+        }
+    }
 }

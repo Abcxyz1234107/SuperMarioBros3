@@ -30,6 +30,8 @@ private:
     int power;
     bool powerFull;
 
+    int victoryCardType = -1; // -1: chưa ăn card
+
 public:
     CScoreBoard(float x, float y) : CGameObject(x, y), offsetX(x), offsetY(y)
     {
@@ -44,5 +46,7 @@ public:
     void SetLife(int c) { life = c; }
 
     void DrawNumber(long long value, int fixedDigits, float rightX, float y);
+
+    void SetVictoryCardType(int t) { victoryCardType = t; }
 };
 
