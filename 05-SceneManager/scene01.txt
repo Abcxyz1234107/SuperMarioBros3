@@ -38,7 +38,7 @@ victorycard.txt
 #1400: Floor 4 (in front is Hole 3)
 #2100: Floor 5
 #2400: Floor 6
-0	2400	80
+0	20	80
 
 #Victory Card
 25	2750	69

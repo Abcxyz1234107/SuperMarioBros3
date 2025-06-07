@@ -158,6 +158,8 @@ class CMario : public CGameObject
 {
 	float spawnX, spawnY;
 
+	float renderY;
+
 	BOOLEAN isSitting;
 	float maxVx;
 	float ax;				// acceleration on x 

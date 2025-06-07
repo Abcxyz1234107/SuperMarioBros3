@@ -626,8 +626,8 @@ void CMario::OnCollisionWithKoopasShell(LPCOLLISIONEVENT e)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
-			SetLevel(level - 1);
-			StartUntouchable2();
+			SetLevel(this->level - 1);
+			StartUntouchable();
 		}
 		else
 		{
@@ -687,7 +687,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					SetLevel(level - 1);
+					SetLevel(this->level - 1);
 					StartUntouchable();
 				}
 				else
@@ -1021,7 +1021,7 @@ void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-	float renderY = y;
+	renderY = y;
 
 	if (state == MARIO_STATE_DIE)
 	{
