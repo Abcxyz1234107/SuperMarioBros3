@@ -20,7 +20,7 @@ void CGoomba::RenderCharacter() { if (!character) return; if (character->IsDelet
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (state == GOOMBA_STATE_DIE)
+	if (state == GOOMBA_STATE_DIE || state == GOOMBA_STATE_FLIPPED)
 	{
 		/*left = x - GOOMBA_BBOX_WIDTH/2;
 		top = y - GOOMBA_BBOX_HEIGHT_DIE/2;
